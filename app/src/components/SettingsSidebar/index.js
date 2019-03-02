@@ -56,6 +56,14 @@ class SettingsSidebar extends React.Component {
               href="/settings/investments"
               icon={<ArchiveIcon />}
             />
+            <Button
+              className={styles.button}
+              label="Deposit"
+              onClick={e => e}
+              plain
+              href="/deposit"
+              icon={<ArchiveIcon />}
+            />
             {this.props.currentUser.is_public === true && (
               <Button
                 className={styles.button}

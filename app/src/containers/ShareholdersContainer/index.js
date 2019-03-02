@@ -20,7 +20,7 @@ import { Divider, LoadingIndicator, SettingsSidebar } from "components";
 import { Navbar, AppFooter } from "components";
 import regeneratorRuntime from "regenerator-runtime";
 
-class InvestmentsContainer extends Component {
+class ShareholdersContainer extends Component {
   constructor() {
     super();
     this.state = {
@@ -73,7 +73,7 @@ class InvestmentsContainer extends Component {
           });
         });
 
-      const INVESTMENTS_QUERY = `{ getInvestments { id user { id name } amount created_on } }`;
+      const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance }`;
 
       axiosGitHubGraphQL
         .post(
@@ -82,11 +82,11 @@ class InvestmentsContainer extends Component {
               ? "https://jamesg.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
-          { query: INVESTMENTS_QUERY }
+          { query: SHAREHOLDERS_QUERY }
         )
         .then(result => {
           this.setState({
-            investments: result.data.data.getInvestments,
+            shareholders: result.data.data.getShareholders,
             getSecondData: true,
             getData: true,
             isLoading: false
@@ -94,7 +94,7 @@ class InvestmentsContainer extends Component {
         })
         .catch(result => {
           this.setState({
-            investments: "None",
+            shareholders: [],
             getData: true,
             isLoading: false
           });
@@ -118,7 +118,7 @@ class InvestmentsContainer extends Component {
               pad={{ vertical: "large" }}
             >
               <Heading tag="h2" align="center">
-                Investments
+                Shareholders
               </Heading>
               {this.state.investments.length > 0 && (
                 <Table>
@@ -127,23 +127,25 @@ class InvestmentsContainer extends Component {
                       <th>Id</th>
                       <th>Investment</th>
                       <th>Amount</th>
+                      <th>Shares</th>
                       <th>Created on</th>
                     </tr>
                   </thead>
                   <tbody>
-                  {this.state.investments.map((investment) => {
+                  {this.state.shareholders.map((shareholder) => {
                     <TableRow>
-                      <td>#{investment.id}</td>
-                      <td><Anchor href={`/people/${investment.user.id}`} label={investment.user.name}/></td>
-                      <td>{investment.amount}</td>
-                      <td className="secondary">{investment.created_on}</td>
+                      <td>#{shareholder.id}</td>
+                      <td><Anchor href={`/people/${shareholder.id}`} label={shareholder.name}/></td>
+                      <td>{shareholder.shares}</td>
+                      <td>{shareholder.balance}</td>
+                      <td className="secondary">{shareholder.created_on}</td>
                     </TableRow>
                   })}
                   </tbody>
                 </Table>
               )}
-              {this.state.investments.length > 0 && (
-                <Paragraph>You have made no investments yet.</Paragraph>
+              {this.state.shareholders.length > 0 && (
+                <Paragraph>You have no shareholders yet.</Paragraph>
               )}
               <Footer align="center" justify="center">
                 <Menu inline direction="row" responsive={false}>
@@ -163,4 +165,4 @@ class InvestmentsContainer extends Component {
   }
 }
 
-export default InvestmentsContainer;
+export default ShareholdersContainer;
