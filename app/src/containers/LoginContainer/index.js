@@ -79,7 +79,6 @@ class LoginContainer extends Component {
   render() {
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
       <Section
         primary
         pad={{ horizontal: 'large' }}
@@ -173,7 +172,6 @@ class LoginContainer extends Component {
           </Toast>
         )}
       </Section>
-      <AppFooter />
     </div>
     );
   }

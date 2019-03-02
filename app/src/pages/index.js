@@ -1,4 +1,5 @@
 /* GENERATOR: Assemble all pages for export */
+export InvestmentsList from './InvestmentsList';
 export UpdatesPage from './UpdatesPage';
 export RequestPasswordResetPage from './RequestPasswordResetPage';
 export AdminUsersPage from './AdminUsersPage';

@@ -29,13 +29,13 @@ class LeaderboardContainer extends Component {
   render() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
       const MAIN_QUERY = `{ getHighestBalance(limit: 10) { id name balance work_badge friend_badge } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
         .then(result => {
           this.setState({
             highest_balance: result.data.data.getHighestBalance,
@@ -49,7 +49,7 @@ class LeaderboardContainer extends Component {
       const SECOND_QUERY = `{ getMostShares(limit: 10) { id name shares work_badge friend_badge } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
         .then(result => {
           this.setState({
             most_shares: result.data.data.getMostShares,
@@ -63,7 +63,7 @@ class LeaderboardContainer extends Component {
       const THIRD_QUERY = `{ getUsers(limit: 2000) { id name shares work_badge friend_badge } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: THIRD_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: THIRD_QUERY })
         .then(result => {
           this.setState({
             all_shares: result.data.data.getUsers,

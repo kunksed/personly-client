@@ -21,22 +21,10 @@ const AppFooter = () => (
           'grommetux-menu grommetux-menu--row grommetux-menu--inline'
         }
       >
-        <Anchor path="/about">About</Anchor>
-        <Anchor path="/trade">Trade</Anchor>
-        <Anchor path="/questions">Questions</Anchor>
-        <Anchor href="https://twitter.com/jamesg_oca">Twitter</Anchor>
-      </nav>
-      <nav
-        className={
-          'grommetux-box grommetux-box--direction-row ' +
-          'grommetux-box--responsive grommetux-box--pad-none ' +
-          'grommetux-menu grommetux-menu--row grommetux-menu--inline'
-        }
-      >
+        <Anchor path="/people">People</Anchor>
+        <Anchor path="/for-people">For People</Anchor>
+        <Anchor path="/for-investors">For Investors</Anchor>
         <Anchor href="mailto:james@opencommit.com">Contact</Anchor>
-        <Anchor path="/users">Shareholders</Anchor>
-        <Anchor path="/leaderboard">Leaderboard</Anchor>
-        <Anchor path="/updates">Updates</Anchor>
       </nav>
       <nav
         className={
@@ -45,8 +33,7 @@ const AppFooter = () => (
           'grommetux-menu grommetux-menu--row grommetux-menu--inline'
         }
       >
-        {process.env.NAME ? process.env.NAME : "James Gallagher"} Trading, {(new Date()).getFullYear()}<br />
-        Written by <a href="https://twitter.com/jamesg_oca">James Gallagher</a>.
+        Personly Trading, {(new Date()).getFullYear()}<br />
       </nav>
     </Box>
   </Footer>

@@ -24,14 +24,14 @@ class Navbar extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
       const MAIN_QUERY =
         '{ getTradesToday { id trade_type shares price share_price created_at } }';
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
         .then(result => {
           this.setState({ today_trades: result.data.data.getTradesToday });
         });
@@ -40,7 +40,7 @@ class Navbar extends Component {
         '{ getTrades { id trade_type shares price share_price created_at } }';
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTrades });
         });
@@ -49,7 +49,7 @@ class Navbar extends Component {
         '{ getTradesYesterday { id trade_type shares price share_price created_at } }';
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, {
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
           query: YESTERDAY_QUERY,
         })
         .then(result => {
@@ -59,7 +59,7 @@ class Navbar extends Component {
         });
 
       const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -68,7 +68,7 @@ class Navbar extends Component {
       const USER_QUERY = '{ getCurrentUser { id name role balance shares } }';
 
       axiosGitHubGraphQLAuth
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: USER_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ?'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: USER_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
@@ -117,100 +117,43 @@ class Navbar extends Component {
                 responsive
                 className={styles.rightMenu}
               >
-                {this.state.trades && (
-                  <div>
-                    {yesterday_data.length === 0 && (
-                      <div>
-                        {data[0][1] > 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | +$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] < 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | -$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] === 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | $
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                      </div>
-                    )}
-                    {yesterday_data.length > 0 && (
-                      <div>
-                        {data[0][1] - yesterday_data[0][1] > 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | +$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] - yesterday_data[0][1] < 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | -$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] - yesterday_data[0][1] === 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | $
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                      </div>
-                    )}
-                    {yesterday_data.length === 0 && (
-                      <Anchor>
-                        ${parseFloat(data[0][1]).toFixed(2)} | $0.00
-                      </Anchor>
-                    )}
-                  </div>
-                )}
                 <Anchor
-                  href="/trade"
+                  href="/people"
                   primary={false}
-                  className={this.props.pathname === '/trade' ? 'active' : ''}
+                  className={this.props.pathname === '/people' ? 'active' : ''}
                 >
-                  Trade
+                  People
                 </Anchor>
                 <Anchor
-                  path="/questions"
+                  path="/for-people"
                   className={
-                    this.props.pathname === '/questions' ? 'active' : ''
+                    this.props.pathname === '/for-epole' ? 'active' : ''
                   }
                 >
-                  Vote
+                  For People
+                </Anchor>
+                <Anchor
+                  path="/for-investors"
+                  className={
+                    this.props.pathname === '/for-investors' ? 'active' : ''
+                  }
+                >
+                  For Investors
                 </Anchor>
                 <Anchor
                   path="/login"
                   className={this.props.pathname === '/login' ? 'active' : ''}
                 >
-                  Login
+                  Log in
                 </Anchor>
-                <Anchor
+                <Button
+                  primary
+                  label="Sign up"
                   path="/register"
                   className={
                     this.props.pathname === '/register' ? 'active' : ''
                   }
-                >
-                  Open Account
-                </Anchor>
+                />
               </Menu>
             </div>
           )}
@@ -222,89 +165,29 @@ class Navbar extends Component {
                 responsive
                 className={styles.leftMenu}
               >
-                {this.state.trades && (
-                  <div>
-                    {yesterday_data.length === 0 && (
-                      <div>
-                        {data[0][1] > 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | +$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] < 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | -$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] === 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | $
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                      </div>
-                    )}
-                    {yesterday_data.length > 0 && (
-                      <div>
-                        {data[0][1] - yesterday_data[0][1] > 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | +$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] - yesterday_data[0][1] < 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | -$
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                        {data[0][1] - yesterday_data[0][1] === 0 && (
-                          <Anchor>
-                            ${parseFloat(data[0][1]).toFixed(2)} | $
-                            {parseFloat(
-                              data[0][1] - yesterday_data[0][1],
-                            ).toFixed(2)}
-                          </Anchor>
-                        )}
-                      </div>
-                    )}
-                    {yesterday_data.length === 0 && (
-                      <Anchor>
-                        ${parseFloat(data[0][1]).toFixed(2)} | $0.00
-                      </Anchor>
-                    )}
-                  </div>
-                )}
-                <Anchor path="#" primary={false}>
-                  {this.state.currentUser.shares} shares
-                </Anchor>
-                <Anchor
-                  href="/trade"
-                  primary={false}
-                  className={this.props.pathname === '/trade' ? 'active' : ''}
-                >
-                  Trade
-                </Anchor>
-                <Anchor
-                  path="/questions"
-                  className={
-                    this.props.pathname === '/questions' ? 'active' : ''
-                  }
-                >
-                  Vote
-                </Anchor>
+                  <Anchor
+                    href="/people"
+                    primary={false}
+                    className={this.props.pathname === '/people' ? 'active' : ''}
+                  >
+                    People
+                  </Anchor>
+                  <Anchor
+                    path="/for-people"
+                    className={
+                      this.props.pathname === '/for-epole' ? 'active' : ''
+                    }
+                  >
+                    For People
+                  </Anchor>
+                  <Anchor
+                    path="/for-investors"
+                    className={
+                      this.props.pathname === '/for-investors' ? 'active' : ''
+                    }
+                  >
+                    For Investors
+                  </Anchor>
                 <Anchor
                   path="/account/deposit"
                   primary={false}

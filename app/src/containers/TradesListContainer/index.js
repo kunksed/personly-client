@@ -25,13 +25,13 @@ class TradesListContainer extends Component {
   render() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
       const TRADES_QUERY = `{ getTrades(limit: 50) { id trade_type shares user { id name work_badge friend_badge } price share_price created_at closed_by_id { id name work_badge friend_badge } } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTrades, getData: true, isLoading: false });
         })

@@ -30,13 +30,13 @@ class LandingContainer extends Component {
 
   componentDidMount() {
     const axiosGitHubGraphQL = axios.create({
-      baseURL: `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`,
+      baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
     });
 
     const MAIN_QUERY = `{ getQuestions(limit: 5) { id title created_on approved closes } }`;
 
     axiosGitHubGraphQL
-      .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg-test.herokuapp.com/graphql' : `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`}`, { query: MAIN_QUERY })
+      .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
       .then(result => {
         this.setState({ questions: result.data.data.getQuestions });
       });
@@ -44,7 +44,7 @@ class LandingContainer extends Component {
     const TRADES_QUERY = `{ getTrades { id trade_type shares price share_price created_at } }`;
 
     axiosGitHubGraphQL
-      .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
+      .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
       .then(result => {
         this.setState({ trades: result.data.data.getTrades, getData: true, isLoading: false });
       })

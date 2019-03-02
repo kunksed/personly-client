@@ -38,7 +38,7 @@ class EditQuestionContainer extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -47,7 +47,7 @@ class EditQuestionContainer extends Component {
       const USER_QUERY = `{ getCurrentUser { id name role email } }`;
 
       axiosGitHubGraphQLAuth
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, {
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
           query: USER_QUERY,
         })
         .then(result => {
@@ -62,7 +62,7 @@ class EditQuestionContainer extends Component {
         });
 
       var axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
       const MAIN_QUERY = `{ getQuestions(id: ${parseInt(
@@ -70,7 +70,7 @@ class EditQuestionContainer extends Component {
       )}) { id title created_on description approved closes } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? process.env.API_URL : 'https://api.jamesg.app/graphql'}`, {
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
           query: MAIN_QUERY,
         })
         .then(result => {

@@ -1,4 +1,5 @@
 /* GENERATOR: Assemble all containers for export */
+export InvestmentsContainer from './InvestmentsContainer';
 export UpdatesContainer from './UpdatesContainer';
 export RequestPasswordResetContainer from './RequestPasswordResetContainer';
 export AdminGenderContainer from './AdminGenderContainer';
