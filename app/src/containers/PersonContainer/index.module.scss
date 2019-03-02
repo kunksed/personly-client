@@ -1,7 +1,3 @@
-.container {
-  height: 100vh;
-}
-
 .headerText {
   display: flex;
   align-items: center;
@@ -10,4 +6,8 @@
 
 .heroImage {
   opacity: 75%
+}
+
+.layerStyle {
+  padding-top: 50px;
 }

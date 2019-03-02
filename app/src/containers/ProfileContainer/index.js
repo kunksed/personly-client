@@ -67,22 +67,9 @@ class ProfileContainer extends Component {
           });
         });
 
-      const OPEN_TRADES_QUERY = `{ getOpenTrades(id: ${
-        this.props.props.params.id
-      }) { id trade_type shares price share_price created_at } }`;
-
-      axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: OPEN_TRADES_QUERY })
-        .then(result => {
-          this.setState({ open_trades: result.data.data.getOpenTrades });
-        })
-        .catch(error => {
-          this.setState({ open_trades: [] });
-        });
-
       const TRADES_QUERY = `{ getTrades(id: ${
         this.props.props.params.id
-      }) { id shares price trade_type created_at user_balance user_shares } }`;
+      }) { id shares price trade_type created_at user_balance user_shares in_user { id name } } }`;
 
       axiosGitHubGraphQL
         .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
@@ -108,11 +95,6 @@ class ProfileContainer extends Component {
       );
     }
 
-    if (!this.state.open_trades) {
-      return (
-        <div />
-      );
-    }
     if (this.state.not_found === true) {
       return (
         <div>
@@ -129,14 +111,6 @@ class ProfileContainer extends Component {
     var data2 = this.state.trades.map(function(trade) {
       var date = Date.parse(trade.created_at);
       return [date, parseFloat(trade.user_shares)];
-    });
-
-    var buy_trades = this.state.open_trades.filter((trade) => {
-      return trade ? trade.trade_type == "Buy" : null
-    });
-
-    var sell_trades = this.state.open_trades.filter((trade) => {
-      return trade ? trade.trade_type == "Sell" : null
     });
 
     const options = {
@@ -229,86 +203,28 @@ class ProfileContainer extends Component {
                   constructorType={"stockChart"}
                   options={options}
                 />
-                <Heading tag="h3">Open Buy Offers</Heading>
-                {buy_trades && (
-                  <div>
-                        <Table>
-                          <thead>
-                            <tr>
-                              <th>Created at</th>
-                              <th>Price</th>
-                              <th>Price per Share</th>
-                              <th>Shares</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {buy_trades.map(trade => {
-                              return (
-                            <TableRow>
-                            <td><Timestamp value={trade.created_at} /></td>
-                            <td>{trade.price}</td>
-                            <td>{trade.share_price}</td>
-                            <td>{trade.shares} shares / ${parseFloat(trade.price).toFixed(2)}</td>
-                              </TableRow>
-                          );
-                        })}
-                            </tbody>
-                          </Table>
-                  </div>
-                )}
-                {!buy_trades && (
-                  <Paragraph>This user has no open buy offers.</Paragraph>
-                )}
-                <Heading tag="h3">Open Sell Offers</Heading>
-                {sell_trades && (
-                  <div>
-                        <Table>
-                          <thead>
-                            <tr>
-                              <th>Created at</th>
-                              <th>Price</th>
-                              <th>Price per Share</th>
-                              <th>Shares</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {sell_trades.map(trade => {
-                              return (
-                            <TableRow>
-                            <td><Timestamp value={trade.created_at} /></td>
-                            <td>{trade.price}</td>
-                            <td>{trade.share_price}</td>
-                            <td>{trade.shares} shares / ${parseFloat(trade.price).toFixed(2)}</td>
-                              </TableRow>
-                          );
-                        })}
-                            </tbody>
-                          </Table>
-                          </div>
-                  )}
-                  {!sell_trades && (
-                    <Paragraph>This user has no open sell offers.</Paragraph>
-                  )}
-                {this.state.trades && (
+                {this.state.investments && (
                 <div>
-                <Heading tag="h3">Completed Trades</Heading>
-                {this.state.trades.length > 0 && (
+                <Heading tag="h3">Investments</Heading>
+                {this.state.investments.length > 0 && (
                   <div>
                         <Table>
                           <thead>
                             <tr>
-                              <th>Created at</th>
                               <th>Trade Type</th>
                               <th>Shares</th>
+                              <th>Person</th>
+                              <th>Created at</th>
                             </tr>
                           </thead>
                           <tbody>
                             {this.state.trades.map(trade => {
                               return (
                             <TableRow>
-                            <td><Timestamp value={trade.created_at} /></td>
                             <td>{trade.trade_type}</td>
                             <td>{trade.shares} shares / ${parseFloat(trade.price).toFixed(2)}</td>
+                            <td>{trade.in_user.name}</td>
+                            <td><Timestamp value={trade.created_at} /></td>
                               </TableRow>
                           );
                         })}
