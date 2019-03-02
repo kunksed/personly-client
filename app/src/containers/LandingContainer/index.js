@@ -61,32 +61,6 @@ class LandingContainer extends Component {
       return <div />;
     }
 
-    (function(H) {
-      H.seriesTypes.line.prototype.requireSorting = false;
-    })(Highcharts)
-
-    var data = this.state.trades.map(function(vote) {
-      var date = Date.parse(vote.created_at);
-      return [date, parseFloat(vote.share_price)];
-    });
-
-    const options = {
-      rangeSelector: {
-        selected: 1
-      },
-      series: [
-        {
-          data: data,
-          type: 'area',
-          name: 'JG',
-          threshold: null,
-          tooltip: {
-            valueDecimals: 2,
-          },
-        },
-      ],
-    };
-
     return (
       <div>
         <Box className={styles.container}>
@@ -170,14 +144,6 @@ class LandingContainer extends Component {
                 </Box>
                 <Box align="center" pad="medium" margin="small" pad="large">
                   <Heading tag="h2">Stock Price</Heading>
-                  {this.state.isLoading === false && (
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      constructorType={'stockChart'}
-                      options={options}
-                    />
-                  )}
-                  {this.state.isLoading === false && ( <Title tag="h2">${data[0][1]}</Title>)}
                 </Box>
               </Columns>
             </Section>
