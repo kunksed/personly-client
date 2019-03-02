@@ -33,22 +33,37 @@ class ProfileContainer extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${
+          process.env.NODE_ENV === "development"
+            ? "https://personly-api.herokuapp.com/graphql"
+            : "https://api.jamesg.app/graphql"
+        }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
       });
 
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`
+        baseURL: `${
+          process.env.NODE_ENV === "development"
+            ? "https://personly-api.herokuapp.com/graphql"
+            : "https://api.jamesg.app/graphql"
+        }`
       });
 
       const MAIN_QUERY = `{ getUsers(id: ${
         this.props.props.params.id
-      }) { id name role email profile_picture bio position location twitter personal_website created_at balance shares } }`;
+      }) { id name role email profile_picture bio position location twitter personal_website created_at balance shares is_public } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: MAIN_QUERY }
+        )
         .then(result => {
           this.setState({ user: result.data.data.getUsers[0], getData: true });
         })
@@ -59,7 +74,14 @@ class ProfileContainer extends Component {
       const SECOND_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: SECOND_QUERY }
+        )
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
@@ -72,7 +94,14 @@ class ProfileContainer extends Component {
       }) { id shares price trade_type created_at user_balance user_shares in_user { id name } } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: TRADES_QUERY }
+        )
         .then(result => {
           this.setState({ trades: result.data.data.getTrades, getData: true });
         })
@@ -84,15 +113,11 @@ class ProfileContainer extends Component {
 
   render() {
     if (this.state.user === "None") {
-      return (
-        <div />
-      );
+      return <div />;
     }
 
     if (!this.state.trades) {
-      return (
-        <div />
-      );
+      return <div />;
     }
 
     if (this.state.not_found === true) {
@@ -134,116 +159,129 @@ class ProfileContainer extends Component {
 
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
-      <Box className={styles.container}>
-        <Box full="horizontal">
-          <Section align="center" justify="center">
-            <Columns size="large" align="center" justify="center">
-              <Box align="left" pad="medium" margin="small" pad="large">
-                <Image
-                  src={this.state.user.profile_picture}
-                  size="small"
-                  className={styles.userAvatar}
-                />
-                <Heading tag="h4">
-                  Joined on <Timestamp value={this.state.user.created_at} fields='date' />
-                </Heading>
-                {this.state.currentUser && (
-                  <div>
-                    {this.state.currentUser.id === this.state.user.id && (
-                      <Anchor href="/settings" label="Edit your profile" />
-                    )}
-                    <br />
-                    <br />
-                  </div>
-                )}
-                <Heading tag="h4">
-                  Balance: ${parseFloat(this.state.user.balance).toFixed(2)}
-                </Heading>
-                <Heading tag="h4">Shares: {this.state.user.shares}</Heading>
-                {this.state.user.location && (
+        <Box className={styles.container}>
+          <Box full="horizontal">
+            <Section align="center" justify="center">
+              <Columns size="large" align="center" justify="center">
+                <Box align="left" pad="medium" margin="small" pad="large">
+                  <Image
+                    src={this.state.user.profile_picture}
+                    size="small"
+                    className={styles.userAvatar}
+                  />
                   <Heading tag="h4">
-                    Location: {this.state.user.location}
-                  </Heading>
-                )}
-                {this.state.user.position && (
-                  <Heading tag="h4">
-                    Position: {this.state.user.position}
-                  </Heading>
-                )}
-                {this.state.user.gender && (
-                  <Heading tag="h4">
-                    Gender: {this.state.user.gender}
-                  </Heading>
-                )}
-                {this.state.user.twitter && (
-                  <Heading tag="h4">
-                    Twitter:{" "}
-                    <Anchor
-                      label={this.state.user.twitter}
-                      href={`https://twitter.com/${this.state.user.twitter}`}
+                    Joined on{" "}
+                    <Timestamp
+                      value={this.state.user.created_at}
+                      fields="date"
                     />
                   </Heading>
-                )}
-                {this.state.user.personal_website && (
+                  {this.state.currentUser && (
+                    <div>
+                      {this.state.currentUser.id === this.state.user.id && (
+                        <Anchor href="/settings" label="Edit your profile" />
+                      )}
+                      <br />
+                      <br />
+                    </div>
+                  )}
                   <Heading tag="h4">
-                    Personal Website:{" "}
-                    <Anchor
-                      href={this.state.user.personal_website}
-                      label={this.state.user.personal_website}
-                    />
+                    Balance: ${parseFloat(this.state.user.balance).toFixed(2)}
                   </Heading>
-                )}
-              </Box>
-              <Box align="right" pad="medium" margin="small" pad="large">
-                <Heading tag="h2">{this.state.user.name} {this.state.user.work_badge == true ? '💼' : '' } {this.state.user.friend_badge == true ? '🙌' : '' }</Heading>
-                <Paragraph>{this.state.user.bio}</Paragraph>
-                <HighchartsReact
-                  highcharts={Highcharts}
-                  constructorType={"stockChart"}
-                  options={options}
-                />
-                {this.state.investments && (
-                <div>
-                <Heading tag="h3">Investments</Heading>
-                {this.state.investments.length > 0 && (
-                  <div>
-                        <Table>
-                          <thead>
-                            <tr>
-                              <th>Trade Type</th>
-                              <th>Shares</th>
-                              <th>Person</th>
-                              <th>Created at</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {this.state.trades.map(trade => {
-                              return (
-                            <TableRow>
-                            <td>{trade.trade_type}</td>
-                            <td>{trade.shares} shares / ${parseFloat(trade.price).toFixed(2)}</td>
-                            <td>{trade.in_user.name}</td>
-                            <td><Timestamp value={trade.created_at} /></td>
-                              </TableRow>
-                          );
-                        })}
+                  <Heading tag="h4">Shares: {this.state.user.shares}</Heading>
+                  {this.state.user.location && (
+                    <Heading tag="h4">
+                      Location: {this.state.user.location}
+                    </Heading>
+                  )}
+                  {this.state.user.position && (
+                    <Heading tag="h4">
+                      Position: {this.state.user.position}
+                    </Heading>
+                  )}
+                  {this.state.user.gender && (
+                    <Heading tag="h4">Gender: {this.state.user.gender}</Heading>
+                  )}
+                  {this.state.user.twitter && (
+                    <Heading tag="h4">
+                      Twitter:{" "}
+                      <Anchor
+                        label={this.state.user.twitter}
+                        href={`https://twitter.com/${this.state.user.twitter}`}
+                      />
+                    </Heading>
+                  )}
+                  {this.state.user.personal_website && (
+                    <Heading tag="h4">
+                      Personal Website:{" "}
+                      <Anchor
+                        href={this.state.user.personal_website}
+                        label={this.state.user.personal_website}
+                      />
+                    </Heading>
+                  )}
+                  {this.state.user.gender && (
+                    <Button
+                      href={`/people/${this.state.user.id}`}
+                      label="Invest"
+                    />
+                  )}
+                </Box>
+                <Box align="right" pad="medium" margin="small" pad="large">
+                  <Heading tag="h2">{this.state.user.name}</Heading>
+                  <Paragraph>{this.state.user.bio}</Paragraph>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    constructorType={"stockChart"}
+                    options={options}
+                  />
+                  {this.state.investments && (
+                    <div>
+                      <Heading tag="h3">Investments</Heading>
+                      {this.state.investments.length > 0 && (
+                        <div>
+                          <Table>
+                            <thead>
+                              <tr>
+                                <th>Trade Type</th>
+                                <th>Shares</th>
+                                <th>Person</th>
+                                <th>Created at</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.investments.map(trade => {
+                                return (
+                                  <TableRow>
+                                    <td>{trade.trade_type}</td>
+                                    <td>
+                                      {trade.shares} shares / $
+                                      {parseFloat(trade.price).toFixed(2)}
+                                    </td>
+                                    <td>{trade.in_user.name}</td>
+                                    <td>
+                                      <Timestamp value={trade.created_at} />
+                                    </td>
+                                  </TableRow>
+                                );
+                              })}
                             </tbody>
                           </Table>
-                  </div>
-                )}
-                {this.state.trades.length == 0 && (
-                  <Paragraph>This user has no completed trades.</Paragraph>
-                )}
-                </div>
-              )}
-              </Box>
-            </Columns>
-          </Section>
+                        </div>
+                      )}
+                      {this.state.investments.length === 0 && (
+                        <Paragraph>
+                          This user has no completed investments.
+                        </Paragraph>
+                      )}
+                    </div>
+                  )}
+                </Box>
+              </Columns>
+            </Section>
+          </Box>
         </Box>
-      </Box>
-      <AppFooter />
-    </div>
+      </div>
     );
   }
 }

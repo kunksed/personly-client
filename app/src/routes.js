@@ -213,6 +213,14 @@ export const routes = {
           .catch(err => errorLoading(err));
       },
     },
+    {
+      path: '/new/update',
+      getComponent(location, callback) {
+        System.import('./pages/CreateUpdatePage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
 /* GENERATOR: Newly generated Routes go here */
     {
       path: '*',
