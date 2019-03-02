@@ -11,7 +11,6 @@ import Button from 'grommet/components/Button';
 import Status from 'grommet/components/icons/Status';
 import Columns from 'grommet/components/Columns';
 import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
 import { MainBox, FullSection } from './styles';
 import { Navbar, AppFooter } from "components";
 import { Divider, LoadingIndicator, LandingQuestionList } from 'components';
@@ -60,32 +59,6 @@ class ForInvestorsContainer extends Component {
     if (!this.state.questions) {
       return <div />;
     }
-
-    (function(H) {
-      H.seriesTypes.line.prototype.requireSorting = false;
-    })(Highcharts)
-
-    var data = this.state.trades.map(function(vote) {
-      var date = Date.parse(vote.created_at);
-      return [date, parseFloat(vote.share_price)];
-    });
-
-    const options = {
-      rangeSelector: {
-        selected: 1
-      },
-      series: [
-        {
-          data: data,
-          type: 'area',
-          name: 'JG',
-          threshold: null,
-          tooltip: {
-            valueDecimals: 2,
-          },
-        },
-      ],
-    };
 
     return (
       <div>
@@ -170,14 +143,6 @@ class ForInvestorsContainer extends Component {
                 </Box>
                 <Box align="center" pad="medium" margin="small" pad="large">
                   <Heading tag="h2">Stock Price</Heading>
-                  {this.state.isLoading === false && (
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      constructorType={'stockChart'}
-                      options={options}
-                    />
-                  )}
-                  {this.state.isLoading === false && ( <Title tag="h2">${data[0][1]}</Title>)}
                 </Box>
               </Columns>
             </Section>
