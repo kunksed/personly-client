@@ -5,6 +5,7 @@ import Section from "grommet/components/Section";
 import FormField from "grommet/components/FormField";
 import Footer from "grommet/components/Footer";
 import Select from "grommet/components/Select";
+import Paragraph from "grommet/components/Paragraph";
 import CheckmarkIcon from "grommet/components/icons/base/Checkmark";
 import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
@@ -94,7 +95,7 @@ class InvestmentsContainer extends Component {
         })
         .catch(result => {
           this.setState({
-            investments: "None",
+            investments: [],
             getData: true,
             isLoading: false
           });
@@ -131,7 +132,7 @@ class InvestmentsContainer extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                  {this.state.investments.map((investment) => {
+                  {this.state.investments.map(investment => {
                     <TableRow>
                       <td>#{investment.id}</td>
                       <td><Anchor href={`/people/${investment.user.id}`} label={investment.user.name}/></td>
@@ -142,7 +143,7 @@ class InvestmentsContainer extends Component {
                   </tbody>
                 </Table>
               )}
-              {this.state.investments.length > 0 && (
+              {this.state.investments.length === 0 && (
                 <Paragraph>You have made no investments yet.</Paragraph>
               )}
               <Footer align="center" justify="center">

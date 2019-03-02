@@ -5,6 +5,7 @@ import Section from "grommet/components/Section";
 import FormField from "grommet/components/FormField";
 import Footer from "grommet/components/Footer";
 import Select from "grommet/components/Select";
+import Paragraph from "grommet/components/Paragraph";
 import CheckmarkIcon from "grommet/components/icons/base/Checkmark";
 import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
@@ -103,8 +104,17 @@ class ShareholdersContainer extends Component {
   }
 
   render() {
+    if (!localStorage.getItem("auth_token")) {
+      window.location.replace("/login");
+    }
     if (this.state.isLoading === true) {
       return <div />;
+    }
+
+    if (this.state.currentUser !== "None") {
+      if (this.state.currentUser.is_public !== true) {
+        window.location.replace("/");
+      }
     }
 
     return (
@@ -144,7 +154,7 @@ class ShareholdersContainer extends Component {
                   </tbody>
                 </Table>
               )}
-              {this.state.shareholders.length > 0 && (
+              {this.state.shareholders.length === 0 && (
                 <Paragraph>You have no shareholders yet.</Paragraph>
               )}
               <Footer align="center" justify="center">

@@ -88,7 +88,6 @@ class RegisterContainer extends Component {
   render() {
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
       <Section
         primary
         pad={{ horizontal: 'large' }}
@@ -207,7 +206,6 @@ class RegisterContainer extends Component {
           </Toast>
         )}
       </Section>
-      <AppFooter />
     </div>
     );
   }
