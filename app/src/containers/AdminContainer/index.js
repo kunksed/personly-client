@@ -92,17 +92,12 @@ class AdminContainer extends Component {
         .then(result => {
           this.setState({
             users: result.data.data.getUsers,
-            total: result.data.data.getUsers.length,
-            getData: true,
-            isLoading: false
+            total: result.data.data.getUsers.length
           });
         })
         .catch(error => {
           this.setState({
-            users: [],
-            length: 0,
-            getData: true,
-            isLoading: false
+            users: []
           });
         });
 
@@ -119,18 +114,12 @@ class AdminContainer extends Component {
         )
         .then(result => {
           this.setState({
-            public_users: result.data.data.getUsers,
-            total: result.data.data.getUsers.length,
-            getData: true,
-            isLoading: false
+            public_users: result.data.data.getUsers
           });
         })
         .catch(error => {
           this.setState({
-            users: [],
-            length: 0,
-            getData: true,
-            isLoading: false
+            public_users: []
           });
         });
 
@@ -183,43 +172,9 @@ class AdminContainer extends Component {
     }
   }
 
-  toggleBadgeUpdatedLayer(user) {
+  toggleUserDeleted() {
     this.setState({
-      badgeGrantedLayer: !this.state.badgeGrantedLayer,
-      work_badge: user.work_badge,
-      friend_badge: user.friend_badge,
-      user: user
-    });
-  }
-
-  toggleBadgeUpdated() {
-    this.setState({
-      badgeGranted: !this.state.badgeGranted
-    });
-  }
-
-  toggleUpdateCreated() {
-    this.setState({
-      updateCreated: !this.state.updateCreated
-    });
-  }
-
-  toggleUpdateDeleted() {
-    this.setState({
-      updateDeleted: !this.state.updateDeleted
-    });
-  }
-
-  toggleCreateUpdate(update) {
-    this.setState({
-      createUpdate: !this.state.createUpdate,
-      update: update
-    });
-  }
-
-  toggleTransferShares() {
-    this.setState({
-      sharesTransfered: !this.state.sharesTransfered
+      userDeleted: !this.state.userDeleted
     });
   }
 
@@ -227,11 +182,8 @@ class AdminContainer extends Component {
     if (!this.state.currentUser) {
       return <div />;
     }
-    if (!this.state.users) {
-      return <div />;
-    }
 
-    if (!this.state.jamesgFunds) {
+    if (!this.state.users) {
       return <div />;
     }
 
@@ -329,126 +281,9 @@ class AdminContainer extends Component {
                 </Tab>
               </Tabs>
             </Section>
-            {this.state.createUpdate === true && (
-              <Layer
-                closer={true}
-                flush={true}
-                overlayClose={true}
-                onClose={() => this.toggleCreateUpdate(this.state.user)}
-              >
-                <Box pad="large">
-                  <Heading tag="h2">Create update</Heading>
-                  <Section
-                    pad={{ vertical: "medium" }}
-                    align="center"
-                    justify="center"
-                  >
-                    <FormField
-                      label="Title *"
-                      htmlFor="title"
-                      className={styles.formField}
-                      error={
-                        this.state.title_field ? this.state.title_field : ""
-                      }
-                    >
-                      <input
-                        required
-                        id="title"
-                        name="title"
-                        placeholder="Update title"
-                        value={this.state.title}
-                        type="text"
-                        onChange={e => this.setState({ title: e.target.value })}
-                        className={styles.input}
-                      />
-                    </FormField>
-                    <FormField
-                      label="Update URL *"
-                      htmlFor="url"
-                      className={styles.formField}
-                      error={this.state.url_field ? this.state.url_field : ""}
-                    >
-                      <input
-                        required
-                        id="url"
-                        name="url"
-                        placeholder="https://medium.com"
-                        value={this.state.url}
-                        type="text"
-                        onChange={e => this.setState({ url: e.target.value })}
-                        className={styles.input}
-                      />
-                    </FormField>
-                  </Section>
-                  <br />
-                  <br />
-                  <Footer pad={{ vertical: "medium" }}>
-                    <Button
-                      label="Create"
-                      type="submit"
-                      primary={true}
-                      onClick={() => this._createUpdate()}
-                    />
-                  </Footer>
-                </Box>
-              </Layer>
-            )}
-            {this.state.badgeGrantedLayer === true && (
-              <Layer
-                closer={true}
-                flush={true}
-                overlayClose={true}
-                onClose={() => this.toggleBadgeUpdatedLayer(this.state.user)}
-              >
-                <Box pad="large">
-                  <Heading tag="h2">
-                    Update {this.state.user.name}'s badges
-                  </Heading>
-                  <br />
-                  <CheckBox
-                    label="Work badge"
-                    checked={this.state.work_badge ? true : false}
-                    onClick={() =>
-                      this.setState({ work_badge: !this.state.work_badge })
-                    }
-                  />
-                  <CheckBox
-                    label="Friend badge"
-                    checked={this.state.friend_badge ? true : false}
-                    onClick={() =>
-                      this.setState({ friend_badge: !this.state.friend_badge })
-                    }
-                  />
-                  <br />
-                  <Footer pad={{ vertical: "medium" }}>
-                    <Button
-                      label="Update"
-                      type="submit"
-                      primary={true}
-                      onClick={() => this._grantBadge(this.state.user.id)}
-                    />
-                  </Footer>
-                </Box>
-              </Layer>
-            )}
-            {this.state.badgeGranted === true && (
-              <Toast status="ok" onClose={() => this.toggleBadgeUpdated()}>
-                The badges for this user have been updated.
-              </Toast>
-            )}
-            {this.state.updateCreated === true && (
-              <Toast status="ok" onClose={() => this.toggleUpdateCreated()}>
-                The update has been created.
-              </Toast>
-            )}
-            {this.state.updateDeleted === true && (
-              <Toast status="ok" onClose={() => this.toggleUpdateDeleted()}>
-                The update has been deleted.
-              </Toast>
-            )}
-            {this.state.sharesTransfered === true && (
-              <Toast status="ok" onClose={() => this.toggleTransferShares()}>
-                The share transfer has been completed.
+            {this.state.userDeleted === true && (
+              <Toast status="ok" onClose={() => this.toggleUserDeleted()}>
+                The user has been deleted.
               </Toast>
             )}
           </MainContent>
@@ -456,173 +291,11 @@ class AdminContainer extends Component {
       </MainBox>
     );
   }
-  _grantBadge = async function(id) {
-    const user_id = parseInt(id);
-    const { work_badge, friend_badge } = this.state;
-    this.setState({
-      user_id_field: "",
-      share_amount_field: "",
-      errors: ""
-    });
-    await this.props
-      .grantBadge({
-        variables: {
-          user_id,
-          work_badge,
-          friend_badge
-        }
-      })
-      .catch(res => {
-        const errors = res.graphQLErrors.map(error => error);
-        this.setState({ errors });
-      });
-    if (this.state.errors) {
-      {
-        this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message })
-        );
-      }
-    }
-    if (!this.state.errors) {
-      const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${
-          process.env.NODE_ENV === "development"
-            ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
-        }`,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-        }
-      });
-      const USERS_QUERY = `{ getUsers { id name shares twitter bio balance work_badge friend_badge } }`;
-      axiosGitHubGraphQL
-        .post(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          { query: USERS_QUERY }
-        )
-        .then(result => {
-          this.setState({
-            users: result.data.data.getUsers,
-            total: result.data.data.getUsers.length,
-            getData: true,
-            isLoading: false
-          });
-        })
-        .catch(error => {
-          this.setState({
-            users: [],
-            length: 0,
-            getData: true,
-            isLoading: false
-          });
-        });
-      this.toggleBadgeUpdated();
-    }
-  };
-  _transferShares = async function() {
-    const { user_id } = this.state;
-    const share_amount = parseInt(this.state.share_amount);
-    this.setState({
-      user_id_field: "",
-      share_amount_field: "",
-      errors: ""
-    });
-    await this.props
-      .transferShares({
-        variables: {
-          user_id,
-          share_amount
-        }
-      })
-      .catch(res => {
-        const errors = res.graphQLErrors.map(error => error);
-        this.setState({ errors });
-      });
-    if (this.state.errors) {
-      {
-        this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message })
-        );
-      }
-    }
-    if (!this.state.errors) {
-      this.toggleTransferShares();
-    }
-  };
-  _createUpdate = async function() {
-    const { title, url } = this.state;
-    this.setState({
-      title_field: "",
-      url_field: "",
-      errors: ""
-    });
-    await this.props
-      .createUpdate({
-        variables: {
-          title,
-          url
-        }
-      })
-      .catch(res => {
-        const errors = res.graphQLErrors.map(error => error);
-        this.setState({ errors });
-      });
-    if (this.state.errors) {
-      {
-        this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message })
-        );
-      }
-    }
-    if (!this.state.errors) {
-      const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${
-          process.env.NODE_ENV === "development"
-            ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
-        }`,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-        }
-      });
-      ``;
-      const CREATE_UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
-      axiosGitHubGraphQLAuth
-        .post(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          { query: CREATE_UPDATE_QUERY }
-        )
-        .then(result => {
-          this.setState({
-            updates: result.data.data.getUpdates,
-            getData: true,
-            isLoading: false
-          });
-        })
-        .catch(error => {
-          this.setState({
-            users: [],
-            length: 0,
-            getData: true,
-            isLoading: false
-          });
-        });
-      this.toggleUpdateCreated();
-      this.toggleCreateUpdate();
-    }
-  };
-  _deleteUpdate = async function(id) {
+
+  _deleteUser = async function(id) {
     var id = parseInt(id);
     await this.props
-      .deleteUpdate({
+      .deleteUser({
         variables: {
           id
         }
@@ -649,7 +322,7 @@ class AdminContainer extends Component {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
       });
-      const DELETE_UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
+      const DELETE_UPDATE_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance work_badge friend_badge } }`;
       axiosGitHubGraphQLAuth
         .post(
           `${
@@ -661,20 +334,15 @@ class AdminContainer extends Component {
         )
         .then(result => {
           this.setState({
-            updates: result.data.data.getUpdates,
-            getData: true,
-            isLoading: false
+            users: result.data.data.getUsers
           });
         })
         .catch(error => {
           this.setState({
-            users: [],
-            length: 0,
-            getData: true,
-            isLoading: false
+            users: []
           });
         });
-      this.toggleUpdateDeleted();
+      this.toggleUserDeleted();
     }
   };
 }
