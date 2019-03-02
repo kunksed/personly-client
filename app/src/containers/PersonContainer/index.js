@@ -15,7 +15,7 @@ import { Navbar, AppFooter } from "components";
 import { Divider, LoadingIndicator, QuestionList } from 'components';
 import styles from './index.module.scss';
 
-class QuestionsContainer extends Component {
+class PersonContainer extends Component {
   constructor() {
     super();
     this.state = {
@@ -31,8 +31,19 @@ class QuestionsContainer extends Component {
         baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
+      const PROFILE_QUERY =
+        `{ getUser(user: ${this.props.props.params.id}) { id name bio } }`;
+
+      axiosGitHubGraphQL
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: PROFILE_QUERY })
+        .then(result => {
+          this.setState({
+            user: result.data.data.getUser[0],
+          });
+        });
+
       const MAIN_QUERY =
-        '{ getQuestions(limit: 100) { id title created_on approved closes } }';
+        `{ getQuestions(user: ${this.props.props.params.id}) { id title created_on approved closes } }`;
 
       axiosGitHubGraphQL
         .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
@@ -43,7 +54,7 @@ class QuestionsContainer extends Component {
         });
 
       const SECOND_QUERY =
-        '{ getVotes { id question { id } user { name } shares vote_type } }';
+        `{ getVotes(user: ${this.props.props.params.id}) { id question { id } user { name } shares vote_type } }`;
 
       axiosGitHubGraphQL
         .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
@@ -63,18 +74,40 @@ class QuestionsContainer extends Component {
 
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
       <Box className={styles.container}>
         <Section align="center" justify="center">
+          <Hero
+            justify="center"
+            align="center"
+            backgroundColorIndex="dark"
+            background={
+              <Image
+                fit="cover"
+                full={true}
+                ssrc="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+              />
+            }
+            size="small"
+          >
+            <Box direction="row" justify="center" align="center">
+              <Box basis="1/2" align="end" pad="medium" />
+              <Box basis="1/2" align="start" pad="medium">
+                <Heading margin="none">
+                  {this.state.user.name}
+                </Heading>
+              </Box>
+            </Box>
+          </Hero>
+          <Title align="center" tag="h1">
+            About
+          </Title>
+          <Paragraph>
+            {this.state.user.bio}
+          </Paragraph>
+          <Divider />
           <Title align="center" tag="h1">
             Questions
           </Title>
-          <Paragraph>
-            Shareholders can vote on measures that affect the future of James.
-            The ability to vote on new proposals allows shareholders to make a
-            profound impact on James' life, and help him make more informed
-            decisions. Each shareholder can vote once per share that they own.
-          </Paragraph>
           <Divider />
           {this.state.questions.length === 0 && (
             <Title align="center" tag="h2">
@@ -184,9 +217,8 @@ class QuestionsContainer extends Component {
           )}
         </Section>
       </Box>
-      <AppFooter />
     </div>
     );
   }
 }
-export default QuestionsContainer;
+export default PersonContainer;

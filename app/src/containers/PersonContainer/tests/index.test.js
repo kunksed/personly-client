@@ -2,13 +2,13 @@ import { shallow } from 'enzyme';
 import { shallowToJson } from 'enzyme-to-json';
 import React from 'react';
 // import { spy } from 'sinon';
-import QuestionsContainer from '../index';
+import PersonContainer from '../index';
 
 
-describe('<QuestionsContainer />', () => {
+describe('<PersonContainer />', () => {
   it('should render with default props', () => {
     const wrapper = shallow(
-      <QuestionsContainer />,
+      <PersonContainer />,
     );
     expect(shallowToJson(wrapper)).toMatchSnapshot();
   });

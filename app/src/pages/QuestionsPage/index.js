@@ -1,12 +1,12 @@
 import React from 'react';
 import cssModules from 'react-css-modules';
-import { QuestionsContainer } from 'containers';
+import { PersonContainer } from 'containers';
 import styles from './index.module.scss';
 
-const QuestionsPage = (props) => (
+const PersonPage = (props) => (
   <div className={styles.container}>
-    <QuestionsContainer props={props}/>
+    <PersonContainer props={props}/>
   </div>
 );
 
-export default cssModules(QuestionsPage, styles);
+export default cssModules(PersonPage, styles);

@@ -20,7 +20,7 @@ export RegisterPage from './RegisterPage';
 export LoginPage from './LoginPage';
 export DepositPage from './DepositPage';
 export QuestionPage from './QuestionPage';
-export QuestionsPage from './QuestionsPage';
+export PersonPage from './PersonPage';
 export AboutPage from './AboutPage/index';
 export NotFoundPage from './NotFoundPage/index';
 export LandingPage from './LandingPage/index';

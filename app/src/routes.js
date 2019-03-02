@@ -48,7 +48,7 @@ export const routes = {
     {
       path: '/questions',
       getComponent(location, callback) {
-        System.import('./pages/QuestionsPage')  // eslint-disable-line block-scoped-var
+        System.import('./pages/PersonPage')  // eslint-disable-line block-scoped-var
           .then(loadRoute(callback))
           .catch(err => errorLoading(err));
       },

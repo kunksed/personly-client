@@ -20,7 +20,7 @@ export RegisterContainer from './RegisterContainer';
 export LoginContainer from './LoginContainer';
 export DepositContainer from './DepositContainer';
 export QuestionContainer from './QuestionContainer';
-export QuestionsContainer from './QuestionsContainer';
+export PersonContainer from './PersonContainer';
 export AboutContainer from './AboutContainer';
 export LandingContainer from './LandingContainer';
 export AppContainer from './AppContainer';

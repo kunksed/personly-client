@@ -94,6 +94,26 @@ class SettingsSidebar extends React.Component {
                 icon={<LicenseIcon />}
               />
             )}
+            {this.props.currentUser.is_public === true && (
+              <Button
+                className={styles.button}
+                label="New Question"
+                onClick={e => e}
+                plain
+                href="/new"
+                icon={<LicenseIcon />}
+              />
+            )}
+            {this.props.currentUser.is_public === true && (
+              <Button
+                className={styles.button}
+                label="New Update"
+                onClick={e => e}
+                plain
+                href="/new/update"
+                icon={<LicenseIcon />}
+              />
+            )}
           </Box>
         </div>
       </Box>
