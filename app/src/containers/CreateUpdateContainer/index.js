@@ -22,15 +22,15 @@ class CreateUpdateContainer extends Component {
   constructor() {
     super();
     this.state = {
-      createQuestionToast: false,
+      createUpdateToast: false,
       load_default: false,
       getData: false,
     };
   }
 
-  toggleCreateQuestion() {
+  toggleCreateUpdate() {
     this.setState({
-      createQuestionToast: !this.state.createQuestionToast,
+      createUpdateToast: !this.state.createUpdateToast,
     });
   }
 
@@ -84,7 +84,7 @@ class CreateUpdateContainer extends Component {
               pad={{ vertical: 'large' }}
             >
               <Heading tag="h2" align="center">
-                Create Question
+                Create Update
               </Heading>
               <Section
                 pad={{ vertical: 'medium' }}
@@ -102,6 +102,8 @@ class CreateUpdateContainer extends Component {
                       required
                       id="title"
                       name="title"
+                      placeholder="Update title"
+                      value={this.state.title}
                       type="text"
                       onChange={e => this.setState({ title: e.target.value })}
                       className={styles.input}
@@ -116,50 +118,19 @@ class CreateUpdateContainer extends Component {
               >
                 <Box size="medium" align="center">
                   <FormField
-                    label="Vote closes *"
-                    htmlFor="closes"
+                    label="Update URL *"
+                    htmlFor="url"
                     className={styles.formField}
-                    error={
-                      this.state.closes_field ? this.state.closes_field : ''
-                    }
+                    error={this.state.url_field ? this.state.url_field : ''}
                   >
-                    <DateTime
+                    <input
                       required
-                      id="closes"
-                      name="closes"
+                      id="url"
+                      name="url"
+                      placeholder="https://medium.com"
+                      value={this.state.url}
                       type="text"
-                      value={this.state.closes}
-                      onChange={e => this.setState({ closes: e })}
-                      className={styles.input}
-                    />
-                  </FormField>
-                </Box>
-              </Section>
-              <Section
-                pad={{ vertical: 'medium' }}
-                align="center"
-                justify="center"
-              >
-                <Box size="medium" align="center">
-                  <FormField
-                    label="Description *"
-                    htmlFor="description"
-                    className={styles.formField}
-                    error={
-                      this.state.description_field
-                        ? this.state.description_field
-                        : ''
-                    }
-                  >
-                    <textarea
-                      required
-                      rows="10"
-                      id="description"
-                      name="description"
-                      type="text"
-                      onChange={e =>
-                        this.setState({ description: e.target.value })
-                      }
+                      onChange={e => this.setState({ url: e.target.value })}
                       className={styles.input}
                     />
                   </FormField>
@@ -178,12 +149,12 @@ class CreateUpdateContainer extends Component {
                   />
                 </Menu>
               </Footer>
-              {this.state.createQuestionToast === true && (
+              {this.state.createUpdateToast === true && (
                 <Toast
                   status="ok"
-                  onClose={() => window.location.replace('/questions')}
+                  onClose={() => window.location.replace('/dashboard')}
                 >
-                  This question has been created.
+                  This update has been created.
                 </Toast>
               )}
             </MainContent>
@@ -195,21 +166,19 @@ class CreateUpdateContainer extends Component {
     );
   }
 
-  _createQuestion = async function() {
-    const { title, description, closes } = this.state;
+  _createUpdate = async function() {
+    const { title, url } = this.state;
     this.setState({
-      title_field: '',
-      description_field: '',
-      closes_field: '',
-      errors: '',
+      title_field: "",
+      url_field: "",
+      errors: ""
     });
     await this.props
-      .createQuestion({
+      .createUpdate({
         variables: {
           title,
-          description,
-          closes,
-        },
+          url
+        }
       })
       .catch(res => {
         const errors = res.graphQLErrors.map(error => error);
@@ -223,23 +192,19 @@ class CreateUpdateContainer extends Component {
       }
     }
     if (!this.state.errors) {
-      this.toggleCreateQuestion();
+      this.toggleCreateUpdate();
     }
   };
 }
 
-const CREATE_QUESTION = gql`
-  mutation CreateQuestion(
-    $title: String!
-    $description: String!
-    $closes: String!
-  ) {
-    createQuestion(title: $title, description: $description, closes: $closes) {
+const CREATE_UPDATE = gql`
+  mutation CreateUpdate($title: String, $url: String) {
+    createUpdate(title: $title, url: $url) {
       id
     }
   }
 `;
 
-export default compose(graphql(CREATE_QUESTION, { name: 'createQuestion' }))(
+export default compose(graphql(CREATE_UPDATE, { name: 'createUpdate' }))(
   CreateUpdateContainer,
 );
