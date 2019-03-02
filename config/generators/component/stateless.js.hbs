@@ -1,0 +1,59 @@
+{{#if wantFlowTypes}}
+/* @flow */
+{{/if}}
+{{#if wantPropTypes}}
+import React, { PropTypes } from 'react';
+{{else}}
+import React from 'react';
+{{/if}}
+import Box from 'grommet/components/Box';
+{{#if imports}}
+{{{ createImports imports }}}
+{{/if}}
+{{#if wantSCSSModules}}
+import cssModules from 'react-css-modules';
+import styles from './index.module.scss';
+{{/if}}
+{{#if wantStyledComponents}}
+import { StyledWrapper } from './styles';
+{{/if}}
+
+{{#if wantFlowTypes}}
+function {{ properCase name }}(props: {}) {
+  return (
+    <Box>
+
+    </Box>
+  );
+}
+{{else}}
+{{#if wantPropTypes}}
+function {{ properCase name }}(props) {
+  return (
+    <Box>
+
+    </Box>
+  );
+}
+{{else}}
+function {{ properCase name }}() {
+  return (
+    <Box>
+
+    </Box>
+  );
+}
+{{/if}}
+{{/if}}
+
+{{#if wantPropTypes}}
+{{ properCase name }}.propTypes = {
+
+};
+{{/if}}
+
+{{#if wantSCSSModules}}
+export default cssModules({{ properCase name }}, styles);
+{{else}}
+export default {{ properCase name }};
+{{/if}}

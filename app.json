@@ -1,0 +1,7 @@
+{
+  "name": "JamesG Trading Client",
+  "description": "Client for the JamesG Trading platform",
+  "repository": "https://github.com/jamesgallagher432/jamesg-trading-client",
+  "logo": "https://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "react", "js"]
+}

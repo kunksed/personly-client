@@ -1,0 +1,16 @@
+{{#if wantFlowTypes}}
+/* @flow */
+{{/if}}
+import { createSelector } from 'reselect';
+
+export const select{{ properCase name }} = () => (state) => state.{{ camelCase name }};
+
+export const selectIsLoading = createSelector(
+  select{{ properCase name }}(),
+  ({{ camelCase name }}) => {{ camelCase name }}.isLoading,
+);
+
+export const selectError = createSelector(
+  select{{ properCase name }}(),
+  ({{ camelCase name }}) => {{ camelCase name }}.error,
+);

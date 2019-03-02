@@ -1,0 +1,43 @@
+.titleImage {
+  margin-left: 20px
+}
+
+.navbar {
+  border-bottom: 1px solid #dbe2e8;
+  box-shadow: 0 2px 4px 0 rgba(46, 61, 73, 0.2);
+  position: relative;
+}
+
+.leftMenu {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.rightMenuSide {
+  flex: 1;
+  margin-right: 20px;
+  max-width: 25%;
+}
+
+.rightMenu {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.title {
+  padding-left: 20px;
+}
+
+.userAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: 2px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+
+.startButton {
+  margin-left: 20px;
+}
