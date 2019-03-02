@@ -10,14 +10,6 @@ export const FullSection = styled(Section)`
   justify-content: space-around;
 `;
 
-export const BoxWrapper = styled(Box)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row !important;
-  width: 100%;
-`;
-
 export const MainContent = styled(Box)`
   position: relative;
   margin-bottom: 14px;
@@ -29,12 +21,10 @@ export const MainContent = styled(Box)`
     box-sizing: border-box;
   }
   padding: 60px 0;
-  width: 50%;
+  width: 75%;
 `;
 
-export const MainBox = styled(Box)`
-  background-color: #fafbfc;
-`;
+export const MainBox = styled(Box)``;
 
 export const AsideButtonContainer = styled(Box)`
   position: absolute;

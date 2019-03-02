@@ -78,7 +78,7 @@ class AdminContainer extends Component {
         }`
       });
 
-      const MAIN_QUERY = `{ getUsers { id name shares twitter bio balance work_badge friend_badge } }`;
+      const MAIN_QUERY = `{ getUsers(public: false) { id name shares twitter bio balance work_badge friend_badge } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -106,32 +106,60 @@ class AdminContainer extends Component {
           });
         });
 
-        const UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
+      const RAISING_USERS_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance work_badge friend_badge } }`;
 
-        axiosGitHubGraphQL
-          .post(
-            `${
-              process.env.NODE_ENV === "development"
-                ? "https://personly-api.herokuapp.com/graphql"
-                : "https://api.jamesg.app/graphql"
-            }`,
-            { query: UPDATE_QUERY }
-          )
-          .then(result => {
-            this.setState({
-              updates: result.data.data.getUpdates,
-              getData: true,
-              isLoading: false
-            });
-          })
-          .catch(error => {
-            this.setState({
-              users: [],
-              length: 0,
-              getData: true,
-              isLoading: false
-            });
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: RAISING_USERS_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            public_users: result.data.data.getUsers,
+            total: result.data.data.getUsers.length,
+            getData: true,
+            isLoading: false
           });
+        })
+        .catch(error => {
+          this.setState({
+            users: [],
+            length: 0,
+            getData: true,
+            isLoading: false
+          });
+        });
+
+      const UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: UPDATE_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            updates: result.data.data.getUpdates,
+            getData: true,
+            isLoading: false
+          });
+        })
+        .catch(error => {
+          this.setState({
+            users: [],
+            length: 0,
+            getData: true,
+            isLoading: false
+          });
+        });
 
       const BALANCE_QUERY = "{ getUsers(id: 1) { id balance } }";
 
@@ -197,20 +225,14 @@ class AdminContainer extends Component {
 
   render() {
     if (!this.state.currentUser) {
-      return (
-        <div />
-      );
+      return <div />;
     }
     if (!this.state.users) {
-      return (
-        <div />
-      );
+      return <div />;
     }
 
     if (!this.state.jamesgFunds) {
-      return (
-        <div />
-      );
+      return <div />;
     }
 
     if (this.state.currentUser === "None") {
@@ -220,368 +242,218 @@ class AdminContainer extends Component {
       window.location.replace("/login");
     }
 
-    var totalBalance = parseFloat(0);
-
-    for (var item, i = 0; (item = this.state.users[i++]); ) {
-      var totalBalance = parseFloat(totalBalance) + parseFloat(item.balance);
-    }
-
-    var totalShares = parseFloat(0);
-
-    for (var item, i = 0; (item = this.state.users[i++]); ) {
-      var totalShares = parseFloat(totalShares) + parseFloat(item.shares);
-    }
-
-    var jamesgFunds = this.state.jamesgFunds.balance;
-
-    var totalFunds = parseFloat(totalBalance) - parseFloat(jamesgFunds);
-
     return (
-      <div>
-        <Navbar pathname={this.props.props.pathname} />
-      <Box className={styles.container}>
-        <Section align="center" justify="center">
-          <Heading tag="h2">Administration</Heading>
-          <Divider />
-          <Tabs>
-            <Tab title="Statistics">
-              <Box
-                direction="row"
-                justify="center"
-                className={styles.tableItem}
-              >
-                <Box align="center" pad="large">
-                  <Paragraph>
-                    Current user count: {this.state.users.length}
-                    <br />
-                    Total shares issued: {totalShares}
-                    <br />
-                    Total funds in the system: ${totalBalance.toFixed(2)}
-                    <br />
-                    JamesG-controlled funds: ${jamesgFunds}
-                    <br />
-                    Total user-controlled funds: ${totalFunds.toFixed(2)}
-                    <br />
-                  </Paragraph>
-                </Box>
-                <Box align="center" pad="large">
-                  <Paragraph>
-                    <Anchor label="View user leaderboard" href="/leaderboard" />
-                    <br />
-                    <Anchor label="View user directory" href="/users" />
-                    <br />
-                    <Anchor label="Create question" href="/new" />
-                    <br />
-                    <Anchor label="Create update" onClick={() => this.toggleCreateUpdate()} />
-                    <br />
-                    <Anchor
-                      label="View gender information"
-                      href="/admin/gender"
-                    />
-                    <br />
-                  </Paragraph>
-                </Box>
-              </Box>
-            </Tab>
-            <Tab title="Transfer Shares">
-              <Box className={styles.tableItem}>
-                <Heading tag="h3">Transfer Shares</Heading>
-                <Box direction="row">
-                  <FormField
-                    label="Share Amount *"
-                    htmlFor="share_amount"
-                    className={styles.formField}
-                    error={
-                      this.state.share_amount_field
-                        ? this.state.share_amount_field
-                        : ""
-                    }
+      <MainBox alignContent="center" fill="horizontal" align="center">
+        <FullSection primary direction="row">
+          <MainContent
+            align="center"
+            justify="start"
+            pad={{ vertical: "large" }}
+          >
+            <Section align="center" justify="center">
+              <Heading tag="h2">Administration</Heading>
+              <Divider />
+              <Tabs>
+                <Tab title="Statistics">
+                  <Box
+                    direction="row"
+                    justify="center"
+                    className={styles.tableItem}
                   >
-                    <input
-                      required
-                      id="share_amount"
-                      name="share_amount"
-                      type="text"
-                      onChange={e =>
-                        this.setState({ share_amount: e.target.value })
+                    <Box align="center" pad="large">
+                      <Paragraph>
+                        Current user count: {this.state.users.length}
+                        <br />
+                        Current public user count:{" "}
+                        {this.state.public_users.length}
+                        <br />
+                      </Paragraph>
+                    </Box>
+                  </Box>
+                </Tab>
+                <Tab title="Users">
+                  <Box pad="large" className={styles.tableItem}>
+                    <Heading tag="h2" align="center">
+                      Users
+                    </Heading>
+                    {this.state.users && (
+                      <div>
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>User</th>
+                              <th>Twitter</th>
+                              <th>Balance</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.state.users.map(user => {
+                              return (
+                                <TableRow>
+                                  <td>
+                                    <Anchor
+                                      href={`/profile/${user.id}`}
+                                      label={`${user.name}`}
+                                    />
+                                  </td>
+                                  <td>
+                                    <Anchor
+                                      href={`https://twitter.com/${
+                                        user.twitter
+                                      }`}
+                                      label={user.twitter}
+                                    />
+                                  </td>
+                                  <td>{user.shares}</td>
+                                  <td>
+                                    ${parseFloat(user.balance).toFixed(2)}
+                                  </td>
+                                </TableRow>
+                              );
+                            })}
+                          </tbody>
+                        </Table>
+                      </div>
+                    )}
+                  </Box>
+                  <Footer align="center" justify="center" pad="medium">
+                    <RCPagination
+                      style={{ color: "white" }}
+                      onChange={newPage => this.setNewPage(newPage)}
+                      defaultCurrent={1}
+                      pageSize={25}
+                      current={this.state.currentPage}
+                      total={this.state.total}
+                    />
+                  </Footer>
+                </Tab>
+              </Tabs>
+            </Section>
+            {this.state.createUpdate === true && (
+              <Layer
+                closer={true}
+                flush={true}
+                overlayClose={true}
+                onClose={() => this.toggleCreateUpdate(this.state.user)}
+              >
+                <Box pad="large">
+                  <Heading tag="h2">Create update</Heading>
+                  <Section
+                    pad={{ vertical: "medium" }}
+                    align="center"
+                    justify="center"
+                  >
+                    <FormField
+                      label="Title *"
+                      htmlFor="title"
+                      className={styles.formField}
+                      error={
+                        this.state.title_field ? this.state.title_field : ""
                       }
-                      className={styles.input}
+                    >
+                      <input
+                        required
+                        id="title"
+                        name="title"
+                        placeholder="Update title"
+                        value={this.state.title}
+                        type="text"
+                        onChange={e => this.setState({ title: e.target.value })}
+                        className={styles.input}
+                      />
+                    </FormField>
+                    <FormField
+                      label="Update URL *"
+                      htmlFor="url"
+                      className={styles.formField}
+                      error={this.state.url_field ? this.state.url_field : ""}
+                    >
+                      <input
+                        required
+                        id="url"
+                        name="url"
+                        placeholder="https://medium.com"
+                        value={this.state.url}
+                        type="text"
+                        onChange={e => this.setState({ url: e.target.value })}
+                        className={styles.input}
+                      />
+                    </FormField>
+                  </Section>
+                  <br />
+                  <br />
+                  <Footer pad={{ vertical: "medium" }}>
+                    <Button
+                      label="Create"
+                      type="submit"
+                      primary={true}
+                      onClick={() => this._createUpdate()}
                     />
-                  </FormField>
-                  <FormField
-                    label="User *"
-                    htmlFor="user_id"
-                    className={styles.formField}
-                    style={{ marginLeft: 5 }}
-                    error={
-                      this.state.user_id_field ? this.state.user_id_field : ""
-                    }
-                  >
-                    <input
-                      required
-                      id="user_id"
-                      name="user_id"
-                      type="text"
-                      onChange={e => this.setState({ user_id: e.target.value })}
-                      className={styles.input}
-                    />
-                  </FormField>
-                  <Button
-                    label="Save"
-                    primary
-                    style={{ marginLeft: 5 }}
-                    onClick={() => {
-                      this._transferShares();
-                    }}
-                  />
+                  </Footer>
                 </Box>
-              </Box>
-            </Tab>
-            <Tab title="Users">
-              <Box pad="large" className={styles.tableItem}>
-                <Heading tag="h2" align="center">
-                  Users
-                </Heading>
-                {this.state.users && (
-                  <div>
-                    <Table>
-                      <thead>
-                        <tr>
-                          <th>User</th>
-                          <th>Twitter</th>
-                          <th>Shares</th>
-                          <th>Balance</th>
-                          <th>Badges</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.users.map(user => {
-                          return (
-                            <TableRow>
-                              <td>
-                                <Anchor
-                                  href={`/profile/${user.id}`}
-                                  label={`${user.name} ${
-                                    user.work_badge == true ? "💼" : ""
-                                  } ${user.friend_badge == true ? "🙌" : ""}`}
-                                />
-                              </td>
-                              <td>
-                                <Anchor
-                                  href={`https://twitter.com/${user.twitter}`}
-                                  label={user.twitter}
-                                />
-                              </td>
-                              <td>{user.shares}</td>
-                              <td>${parseFloat(user.balance).toFixed(2)}</td>
-                              <td>
-                                <Anchor
-                                  onClick={() => {
-                                    this.toggleBadgeUpdatedLayer(user);
-                                  }}
-                                  label="Edit"
-                                />
-                              </td>
-                            </TableRow>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </div>
-                )}
-              </Box>
-              <Footer align="center" justify="center" pad="medium">
-                <RCPagination
-                  style={{ color: "white" }}
-                  onChange={newPage => this.setNewPage(newPage)}
-                  defaultCurrent={1}
-                  pageSize={25}
-                  current={this.state.currentPage}
-                  total={this.state.total}
-                />
-              </Footer>
-            </Tab>
-            <Tab title="Updates">
-              <Box pad="large" className={styles.tableItem}>
-                <Heading tag="h2" align="center">
-                  Updates
-                </Heading>
-                {this.state.updates.length === 0 && (
-                  <Paragraph>No updates have been posted.</Paragraph>
-                )}
-                {this.state.updates && (
-                  <div>
-                    <Table>
-                      <thead>
-                        <tr>
-                          <th>Title</th>
-                          <th>URL</th>
-                          <th>Created</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.updates.map(update => {
-                          return (
-                            <TableRow>
-                              <td>{update.title}</td>
-                              <td>
-                                <Anchor
-                                  href={`${update.url}`}
-                                  label={update.url}
-                                />
-                              </td>
-                              <td>{update.created_on}</td>
-                              <td>
-                                <Anchor
-                                  onClick={() => {
-                                    this._deleteUpdate(update.id);
-                                  }}
-                                  label="Delete"
-                                />
-                              </td>
-                            </TableRow>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </div>
-                )}
-              </Box>
-              <Footer align="center" justify="center" pad="medium">
-                <RCPagination
-                  style={{ color: "white" }}
-                  onChange={newPage => this.setNewPage(newPage)}
-                  defaultCurrent={1}
-                  pageSize={25}
-                  current={this.state.currentPage}
-                  total={this.state.total}
-                />
-              </Footer>
-            </Tab>
-          </Tabs>
-        </Section>
-        {this.state.createUpdate === true && (
-          <Layer
-            closer={true}
-            flush={true}
-            overlayClose={true}
-            onClose={() => this.toggleCreateUpdate(this.state.user)}
-          >
-            <Box pad="large">
-              <Heading tag="h2">Create update</Heading>
-              <Section
-                pad={{ vertical: 'medium' }}
-                align="center"
-                justify="center"
+              </Layer>
+            )}
+            {this.state.badgeGrantedLayer === true && (
+              <Layer
+                closer={true}
+                flush={true}
+                overlayClose={true}
+                onClose={() => this.toggleBadgeUpdatedLayer(this.state.user)}
               >
-              <FormField
-                label="Title *"
-                htmlFor="title"
-                className={styles.formField}
-                error={this.state.title_field ? this.state.title_field : ''}
-              >
-                <input
-                  required
-                  id="title"
-                  name="title"
-                  placeholder="Update title"
-                  value={this.state.title}
-                  type="text"
-                  onChange={e => this.setState({ title: e.target.value })}
-                  className={styles.input}
-                />
-              </FormField>
-              <FormField
-                label="Update URL *"
-                htmlFor="url"
-                className={styles.formField}
-                error={this.state.url_field ? this.state.url_field : ''}
-              >
-                <input
-                  required
-                  id="url"
-                  name="url"
-                  placeholder="https://medium.com"
-                  value={this.state.url}
-                  type="text"
-                  onChange={e => this.setState({ url: e.target.value })}
-                  className={styles.input}
-                />
-              </FormField>
-              </Section>
-              <br />
-              <br />
-              <Footer pad={{ vertical: "medium" }}>
-                <Button
-                  label="Create"
-                  type="submit"
-                  primary={true}
-                  onClick={() => this._createUpdate()}
-                />
-              </Footer>
-            </Box>
-          </Layer>
-        )}
-        {this.state.badgeGrantedLayer === true && (
-          <Layer
-            closer={true}
-            flush={true}
-            overlayClose={true}
-            onClose={() => this.toggleBadgeUpdatedLayer(this.state.user)}
-          >
-            <Box pad="large">
-              <Heading tag="h2">Update {this.state.user.name}'s badges</Heading>
-              <br />
-              <CheckBox
-                label="Work badge"
-                checked={this.state.work_badge ? true : false}
-                onClick={() =>
-                  this.setState({ work_badge: !this.state.work_badge })
-                }
-              />
-              <CheckBox
-                label="Friend badge"
-                checked={this.state.friend_badge ? true : false}
-                onClick={() =>
-                  this.setState({ friend_badge: !this.state.friend_badge })
-                }
-              />
-              <br />
-              <Footer pad={{ vertical: "medium" }}>
-                <Button
-                  label="Update"
-                  type="submit"
-                  primary={true}
-                  onClick={() => this._grantBadge(this.state.user.id)}
-                />
-              </Footer>
-            </Box>
-          </Layer>
-        )}
-        {this.state.badgeGranted === true && (
-          <Toast status="ok" onClose={() => this.toggleBadgeUpdated()}>
-            The badges for this user have been updated.
-          </Toast>
-        )}
-        {this.state.updateCreated === true && (
-          <Toast status="ok" onClose={() => this.toggleUpdateCreated()}>
-            The update has been created.
-          </Toast>
-        )}
-        {this.state.updateDeleted === true && (
-          <Toast status="ok" onClose={() => this.toggleUpdateDeleted()}>
-            The update has been deleted.
-          </Toast>
-        )}
-        {this.state.sharesTransfered === true && (
-          <Toast status="ok" onClose={() => this.toggleTransferShares()}>
-            The share transfer has been completed.
-          </Toast>
-        )}
-      </Box>
-      <AppFooter />
-    </div>
+                <Box pad="large">
+                  <Heading tag="h2">
+                    Update {this.state.user.name}'s badges
+                  </Heading>
+                  <br />
+                  <CheckBox
+                    label="Work badge"
+                    checked={this.state.work_badge ? true : false}
+                    onClick={() =>
+                      this.setState({ work_badge: !this.state.work_badge })
+                    }
+                  />
+                  <CheckBox
+                    label="Friend badge"
+                    checked={this.state.friend_badge ? true : false}
+                    onClick={() =>
+                      this.setState({ friend_badge: !this.state.friend_badge })
+                    }
+                  />
+                  <br />
+                  <Footer pad={{ vertical: "medium" }}>
+                    <Button
+                      label="Update"
+                      type="submit"
+                      primary={true}
+                      onClick={() => this._grantBadge(this.state.user.id)}
+                    />
+                  </Footer>
+                </Box>
+              </Layer>
+            )}
+            {this.state.badgeGranted === true && (
+              <Toast status="ok" onClose={() => this.toggleBadgeUpdated()}>
+                The badges for this user have been updated.
+              </Toast>
+            )}
+            {this.state.updateCreated === true && (
+              <Toast status="ok" onClose={() => this.toggleUpdateCreated()}>
+                The update has been created.
+              </Toast>
+            )}
+            {this.state.updateDeleted === true && (
+              <Toast status="ok" onClose={() => this.toggleUpdateDeleted()}>
+                The update has been deleted.
+              </Toast>
+            )}
+            {this.state.sharesTransfered === true && (
+              <Toast status="ok" onClose={() => this.toggleTransferShares()}>
+                The share transfer has been completed.
+              </Toast>
+            )}
+          </MainContent>
+        </FullSection>
+      </MainBox>
     );
   }
   _grantBadge = async function(id) {
@@ -717,32 +589,32 @@ class AdminContainer extends Component {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
       });
-``
-    const CREATE_UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
-    axiosGitHubGraphQLAuth
-      .post(
-        `${
-          process.env.NODE_ENV === "development"
-            ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
-        }`,
-        { query: CREATE_UPDATE_QUERY }
-      )
-      .then(result => {
-        this.setState({
-          updates: result.data.data.getUpdates,
-          getData: true,
-          isLoading: false
+      ``;
+      const CREATE_UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
+      axiosGitHubGraphQLAuth
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: CREATE_UPDATE_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            updates: result.data.data.getUpdates,
+            getData: true,
+            isLoading: false
+          });
+        })
+        .catch(error => {
+          this.setState({
+            users: [],
+            length: 0,
+            getData: true,
+            isLoading: false
+          });
         });
-      })
-      .catch(error => {
-        this.setState({
-          users: [],
-          length: 0,
-          getData: true,
-          isLoading: false
-        });
-      });
       this.toggleUpdateCreated();
       this.toggleCreateUpdate();
     }
@@ -777,74 +649,44 @@ class AdminContainer extends Component {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
       });
-    const DELETE_UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
-    axiosGitHubGraphQLAuth
-      .post(
-        `${
-          process.env.NODE_ENV === "development"
-            ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
-        }`,
-        { query: DELETE_UPDATE_QUERY }
-      )
-      .then(result => {
-        this.setState({
-          updates: result.data.data.getUpdates,
-          getData: true,
-          isLoading: false
+      const DELETE_UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
+      axiosGitHubGraphQLAuth
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: DELETE_UPDATE_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            updates: result.data.data.getUpdates,
+            getData: true,
+            isLoading: false
+          });
+        })
+        .catch(error => {
+          this.setState({
+            users: [],
+            length: 0,
+            getData: true,
+            isLoading: false
+          });
         });
-      })
-      .catch(error => {
-        this.setState({
-          users: [],
-          length: 0,
-          getData: true,
-          isLoading: false
-        });
-      });
       this.toggleUpdateDeleted();
     }
   };
 }
-const GRANT_BADGES = gql`
-  mutation GrantBadge(
-    $user_id: Int!
-    $work_badge: Boolean!
-    $friend_badge: Boolean!
-  ) {
-    grantBadge(
-      user_id: $user_id
-      work_badge: $work_badge
-      friend_badge: $friend_badge
-    ) {
+
+const DELETE_USER = gql`
+  mutation DeleteUser($id: Int!) {
+    deleteUser(id: $id) {
       id
     }
   }
 `;
-const TRANSFER_SHARES = gql`
-  mutation TransferShares($user_id: String, $share_amount: Int) {
-    transferShares(user_id: $user_id, share_amount: $share_amount) {
-      id
-    }
-  }
-`;
-const CREATE_UPDATE = gql`
-  mutation CreateUpdate($title: String, $url: String) {
-    createUpdate(title: $title, url: $url) {
-      id
-    }
-  }
-`;
-const DELETE_UPDATE = gql`
-  mutation DeleteUpdate($id: Int!) {
-    deleteUpdate(id: $id) {
-      id
-    }
-  }
-`;
-export default compose(
-  graphql(GRANT_BADGES, { name: "grantBadge" }),
-  graphql(TRANSFER_SHARES, { name: "transferShares" }),
-  graphql(CREATE_UPDATE, { name: "createUpdate" }),
-  graphql(DELETE_UPDATE, { name: "deleteUpdate" })
-)(AdminContainer);
+
+export default compose(graphql(DELETE_USER, { name: "deleteUser" }))(
+  AdminContainer
+);
