@@ -28,14 +28,14 @@ class QuestionsContainer extends Component {
   render() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
       const MAIN_QUERY =
         '{ getQuestions(limit: 100) { id title created_on approved closes } }';
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
         .then(result => {
           this.setState({
             questions: result.data.data.getQuestions,
@@ -46,7 +46,7 @@ class QuestionsContainer extends Component {
         '{ getVotes { id question { id } user { name } shares vote_type } }';
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
         .then(result => {
           this.setState({ votes: result.data.data.getVotes, getData: true, isLoading: false });
         })

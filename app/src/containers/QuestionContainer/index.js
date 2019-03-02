@@ -55,7 +55,7 @@ class QuestionContainer extends Component {
       var axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`
       });
@@ -68,7 +68,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: MAIN_QUERY }
@@ -91,7 +91,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: SECOND_QUERY }
@@ -108,7 +108,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: COMMENT_QUERY }
@@ -120,7 +120,7 @@ class QuestionContainer extends Component {
       var axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -134,7 +134,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: THIRD_QUERY }
@@ -333,7 +333,7 @@ class QuestionContainer extends Component {
         const axiosGitHubGraphQL = axios.create({
           baseURL: `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           headers: {
@@ -359,7 +359,7 @@ class QuestionContainer extends Component {
           .post(
             `${
               process.env.NODE_ENV === "development"
-                ? "https://jamesg-test.herokuapp.com/graphql"
+                ? "https://personly-api.herokuapp.com/graphql"
                 : "https://api.jamesg.app/graphql"
             }`,
             { query: VOTED_QUERY }
@@ -920,7 +920,7 @@ class QuestionContainer extends Component {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -935,7 +935,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: COMMENT_QUERY }
@@ -985,7 +985,7 @@ class QuestionContainer extends Component {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -1000,7 +1000,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: COMMENT_QUERY }
@@ -1048,7 +1048,7 @@ class QuestionContainer extends Component {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`
       });
@@ -1060,7 +1060,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: YES_QUERY }
@@ -1071,7 +1071,7 @@ class QuestionContainer extends Component {
       const axiosGitHubGraphQLAuth = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -1097,7 +1097,7 @@ class QuestionContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: VOTED_QUERY }

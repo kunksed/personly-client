@@ -46,7 +46,7 @@ class DashboardContainer extends Component {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -60,7 +60,7 @@ class DashboardContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: MAIN_QUERY }
@@ -82,7 +82,7 @@ class DashboardContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: SHAREHOLDERS_QUERY }

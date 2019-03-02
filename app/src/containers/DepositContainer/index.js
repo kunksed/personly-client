@@ -48,7 +48,7 @@ class DepositContainer extends Component {
       const axiosGitHubGraphQLAuth = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -62,7 +62,7 @@ class DepositContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: MAIN_QUERY }
@@ -290,7 +290,7 @@ class DepositContainer extends Component {
       const axiosGitHubGraphQLAuth = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -304,7 +304,7 @@ class DepositContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: MAIN_QUERY }

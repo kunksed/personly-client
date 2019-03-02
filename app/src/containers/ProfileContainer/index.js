@@ -33,14 +33,14 @@ class ProfileContainer extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
       });
 
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`
       });
 
       const MAIN_QUERY = `{ getUsers(id: ${
@@ -48,7 +48,7 @@ class ProfileContainer extends Component {
       }) { id name role email profile_picture bio position location twitter personal_website created_at balance shares } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
         .then(result => {
           this.setState({ user: result.data.data.getUsers[0], getData: true });
         })
@@ -59,7 +59,7 @@ class ProfileContainer extends Component {
       const SECOND_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
@@ -72,7 +72,7 @@ class ProfileContainer extends Component {
       }) { id trade_type shares price share_price created_at } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: OPEN_TRADES_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: OPEN_TRADES_QUERY })
         .then(result => {
           this.setState({ open_trades: result.data.data.getOpenTrades });
         })
@@ -85,7 +85,7 @@ class ProfileContainer extends Component {
       }) { id shares price trade_type created_at user_balance user_shares } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTrades, getData: true });
         })

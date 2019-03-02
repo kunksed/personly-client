@@ -46,7 +46,7 @@ class ShareholdersContainer extends Component {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -60,7 +60,7 @@ class ShareholdersContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: MAIN_QUERY }
@@ -82,7 +82,7 @@ class ShareholdersContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: SHAREHOLDERS_QUERY }
@@ -102,10 +102,10 @@ class ShareholdersContainer extends Component {
             isLoading: false
           });
         });
-        const MAIN_QUERY = `{ getHighestBalance(limit: 10) { id name balance work_badge friend_badge } }`;
+        const BALANCE_QUERY = `{ getHighestBalance(limit: 10) { id name balance work_badge friend_badge } }`;
 
         axiosGitHubGraphQL
-          .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+          .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: BALANCE_QUERY })
           .then(result => {
             this.setState({
               highest_balance: result.data.data.getHighestBalance,
@@ -119,7 +119,7 @@ class ShareholdersContainer extends Component {
         const SECOND_QUERY = `{ getMostShares(limit: 10) { id name shares work_badge friend_badge } }`;
 
         axiosGitHubGraphQL
-          .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
+          .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
           .then(result => {
             this.setState({
               most_shares: result.data.data.getMostShares,

@@ -26,7 +26,7 @@ class AdminGenderContainer extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -35,7 +35,7 @@ class AdminGenderContainer extends Component {
       const USER_QUERY = `{ getCurrentUser { id name role email } }`;
 
       axiosGitHubGraphQLAuth
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
           query: USER_QUERY,
         })
         .then(result => {
@@ -45,13 +45,13 @@ class AdminGenderContainer extends Component {
         });
 
       var axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
       const MAIN_QUERY = `{ getUsers { id gender } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
           query: MAIN_QUERY,
         })
         .then(result => {

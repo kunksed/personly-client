@@ -52,13 +52,13 @@ class RequestPasswordResetContainer extends Component {
     }
     if (this.props.location.query.token) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
       });
 
       const MAIN_QUERY = `{ getPasswordToken(token: "${this.props.location.query.token}") { id password_reset } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://jamesg-test.herokuapp.com/graphql' : `${process.env.NODE_ENV === 'development' ? 'https://jamesg.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`}`, { query: MAIN_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`}`, { query: MAIN_QUERY })
         .then(result => {
           if (result.data.data.getPasswordToken.length == 1) {
             this.setState({ token: result.data.data.getPasswordToken })

@@ -60,7 +60,7 @@ class TradeContainer extends Component {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`
       });
@@ -71,7 +71,7 @@ class TradeContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: MAIN_QUERY }
@@ -86,7 +86,7 @@ class TradeContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: YESTERDAY_QUERY }
@@ -103,7 +103,7 @@ class TradeContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: TRADES_QUERY }
@@ -121,7 +121,7 @@ class TradeContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: OPEN_TRADES_QUERY }
@@ -136,7 +136,7 @@ class TradeContainer extends Component {
       var axiosGitHubGraphQLAuth = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
-            ? "https://jamesg-test.herokuapp.com/graphql"
+            ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
@@ -150,7 +150,7 @@ class TradeContainer extends Component {
         .post(
           `${
             process.env.NODE_ENV === "development"
-              ? "https://jamesg-test.herokuapp.com/graphql"
+              ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
           { query: THIRD_QUERY }
@@ -664,13 +664,13 @@ class TradeContainer extends Component {
     }
     if (!this.state.errors) {
       var axiosGitHubGraphQL = axios.create({
-        baseURL: "https://jamesg.herokuapp.com/graphql"
+        baseURL: "https://personly-api.herokuapp.com/graphql"
       });
 
       const TRADES_QUERY = `{ getTrades { id trade_type shares price share_price created_at } }`;
 
       axiosGitHubGraphQL
-        .post("https://jamesg.herokuapp.com/graphql", { query: TRADES_QUERY })
+        .post("https://personly-api.herokuapp.com/graphql", { query: TRADES_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTrades, getData: true });
         })
@@ -679,7 +679,7 @@ class TradeContainer extends Component {
         });
 
       var axiosGitHubGraphQLAuth = axios.create({
-        baseURL: "https://jamesg.herokuapp.com/graphql",
+        baseURL: "https://personly-api.herokuapp.com/graphql",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
@@ -688,7 +688,7 @@ class TradeContainer extends Component {
       const THIRD_QUERY = `{ getCurrentUser { id name balance shares } }`;
 
       axiosGitHubGraphQLAuth
-        .post("https://jamesg.herokuapp.com/graphql", { query: THIRD_QUERY })
+        .post("https://personly-api.herokuapp.com/graphql", { query: THIRD_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
@@ -731,13 +731,13 @@ class TradeContainer extends Component {
     }
     if (!this.state.errors) {
       var axiosGitHubGraphQL = axios.create({
-        baseURL: "https://jamesg.herokuapp.com/graphql"
+        baseURL: "https://personly-api.herokuapp.com/graphql"
       });
 
       const TRADES_QUERY = `{ getTrades { id trade_type shares price share_price created_at } }`;
 
       axiosGitHubGraphQL
-        .post("https://jamesg.herokuapp.com/graphql", { query: TRADES_QUERY })
+        .post("https://personly-api.herokuapp.com/graphql", { query: TRADES_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTrades, getData: true });
         })
@@ -746,7 +746,7 @@ class TradeContainer extends Component {
         });
 
       var axiosGitHubGraphQLAuth = axios.create({
-        baseURL: "https://jamesg.herokuapp.com/graphql",
+        baseURL: "https://personly-api.herokuapp.com/graphql",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
@@ -755,7 +755,7 @@ class TradeContainer extends Component {
       const THIRD_QUERY = `{ getCurrentUser { id name balance shares } }`;
 
       axiosGitHubGraphQLAuth
-        .post("https://jamesg.herokuapp.com/graphql", { query: THIRD_QUERY })
+        .post("https://personly-api.herokuapp.com/graphql", { query: THIRD_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
@@ -795,13 +795,13 @@ class TradeContainer extends Component {
     }
     if (!this.state.errors) {
       var axiosGitHubGraphQL = axios.create({
-        baseURL: "https://jamesg.herokuapp.com/graphql"
+        baseURL: "https://personly-api.herokuapp.com/graphql"
       });
 
       const TRADES_QUERY = `{ getTrades { id trade_type shares price share_price created_at } }`;
 
       axiosGitHubGraphQL
-        .post("https://jamesg.herokuapp.com/graphql", { query: TRADES_QUERY })
+        .post("https://personly-api.herokuapp.com/graphql", { query: TRADES_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTrades, getData: true });
         })
@@ -810,7 +810,7 @@ class TradeContainer extends Component {
         });
 
       var axiosGitHubGraphQLAuth = axios.create({
-        baseURL: "https://jamesg.herokuapp.com/graphql",
+        baseURL: "https://personly-api.herokuapp.com/graphql",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
@@ -819,7 +819,7 @@ class TradeContainer extends Component {
       const THIRD_QUERY = `{ getCurrentUser { id name balance shares } }`;
 
       axiosGitHubGraphQLAuth
-        .post("https://jamesg.herokuapp.com/graphql", { query: THIRD_QUERY })
+        .post("https://personly-api.herokuapp.com/graphql", { query: THIRD_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
