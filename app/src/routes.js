@@ -134,22 +134,6 @@ export const routes = {
       },
     },
     {
-      path: '/trades',
-      getComponent(location, callback) {
-        System.import('./pages/TradesListPage')  // eslint-disable-line block-scoped-var
-          .then(loadRoute(callback))
-          .catch(err => errorLoading(err));
-      },
-    },
-    {
-      path: '/start',
-      getComponent(location, callback) {
-        System.import('./pages/StartPage')  // eslint-disable-line block-scoped-var
-          .then(loadRoute(callback))
-          .catch(err => errorLoading(err));
-      },
-    },
-    {
       path: '/questions/:id/edit',
       getComponent(location, callback) {
         System.import('./pages/EditQuestionPage')  // eslint-disable-line block-scoped-var
@@ -161,14 +145,6 @@ export const routes = {
       path: '/admin',
       getComponent(location, callback) {
         System.import('./pages/AdminPage')  // eslint-disable-line block-scoped-var
-          .then(loadRoute(callback))
-          .catch(err => errorLoading(err));
-      },
-    },
-    {
-      path: '/admin/gender',
-      getComponent(location, callback) {
-        System.import('./pages/AdminGenderPage')  // eslint-disable-line block-scoped-var
           .then(loadRoute(callback))
           .catch(err => errorLoading(err));
       },

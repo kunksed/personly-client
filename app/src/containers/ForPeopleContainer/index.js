@@ -12,8 +12,6 @@ import Status from 'grommet/components/icons/Status';
 import Columns from 'grommet/components/Columns';
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
-import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
 import { MainBox, FullSection } from './styles';
 import { Navbar, AppFooter } from "components";
 import { Divider, LoadingIndicator, LandingQuestionList } from 'components';
