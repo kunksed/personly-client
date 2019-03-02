@@ -101,12 +101,12 @@ class Navbar extends Component {
         <Header justify="between" className="component">
           {process.env.NODE_ENV === 'development' && (
             <Title className={styles.title}>
-              <Anchor href="/">{process.env.NAME ? process.env.NAME : "JamesG"} Development</Anchor>
+              <Anchor href="/">Personly Development</Anchor>
             </Title>
           )}
           {process.env.NODE_ENV !== 'development' && (
             <Title className={styles.title}>
-              <Anchor href="/">{process.env.NAME ? process.env.NAME : "JamesG"}</Anchor>
+              <Anchor href="/">Personly</Anchor>
             </Title>
           )}
           {this.state.currentUser === 0 && (
