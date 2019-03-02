@@ -9,20 +9,20 @@ function Html({ content, state, scriptHash, vendorHash, cssHash, styles }) {
         <meta charSet="UTF-8" />
         <meta httpEquiv="Content-Language" content="en" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>JamesGallagher.app - Trading</title>
+        <title>Personly - Invest in the future</title>
         <link rel="icon" href="https://pbs.twimg.com/profile_images/1074379859491729408/Bkl1xAGr_bigger.jpg" type="image/png" sizes="16x16" />
-        <meta name="title" content="JamesGallagher.app - Trading" />
+        <meta name="title" content="Personly - Invest in the future" />
         <meta name="description" content="" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://jamesg.app/" />
-        <meta property="og:title" content="JamesGallagher.app - Trading" />
+        <meta property="og:url" content="https://personly.app/" />
+        <meta property="og:title" content="Personly - Invest in the future" />
         <meta property="og:description" content="" />
         <meta property="og:image" content="https://images.unsplash.com/photo-1518600506278-4e8ef466b810?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=858391bd28bf4aadaa5b3e0750edb485&auto=format&fit=crop&w=1293&q=80" />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://jamesg.app/" />
-        <meta property="twitter:title" content="JamesGallagher.app - Trading" />
+        <meta property="twitter:url" content="https://personly.app/" />
+        <meta property="twitter:title" content="Personly - Invest in the future" />
         <meta property="twitter:description" content="" />
         <meta property="twitter:image" content="https://images.unsplash.com/photo-1518600506278-4e8ef466b810?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=858391bd28bf4aadaa5b3e0750edb485&auto=format&fit=crop&w=1293&q=80" />
         <script src="https://js.stripe.com/v3/"></script>

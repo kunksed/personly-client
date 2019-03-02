@@ -110,7 +110,6 @@ class DepositContainer extends Component {
 
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
         <Box className={styles.container}>
           <Box full="horizontal">
             <Section align="center" justify="center" pad="large">
@@ -220,7 +219,7 @@ class DepositContainer extends Component {
             )}
             {this.state.minimumToast == true && (
               <Toast status="critical" onClose={() => this.toggleMinimumToast()}>
-                The minimum investment is $5.
+                The minimum investment is $10.
               </Toast>
             )}
             {this.state.cardDeleted === true && (
@@ -230,7 +229,6 @@ class DepositContainer extends Component {
             )}
           </Box>
         </Box>
-        <AppFooter />
       </div>
     );
   }
@@ -240,7 +238,7 @@ class DepositContainer extends Component {
     var new_amount = old_amount.replace(".", "")
     const amount = parseInt(this.state.amount.replace('.', ''));
     const stripe_token = "None";
-    if (parseInt(new_amount) < parseInt(500)) {
+    if (parseInt(new_amount) < parseInt(1000)) {
       this.toggleMinimumToast()
     } else {
         const result = this.props
