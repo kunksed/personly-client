@@ -89,7 +89,6 @@ class LandingContainer extends Component {
 
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
         <Box className={styles.container}>
           <Box full="horizontal">
             <Hero
@@ -184,7 +183,6 @@ class LandingContainer extends Component {
             </Section>
           </Box>
         </Box>
-        <AppFooter />
       </div>
     );
   }

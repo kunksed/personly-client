@@ -42,7 +42,9 @@ class AppContainer extends Component {
           stripe={this.state.stripe}
         >
           <App centered={false} inline>
+            <Navbar pathname={location.pathname} />
             {React.cloneElement(this.props.children, this.props)}
+            <AppFooter />
           </App>
         </StripeProvider>
       </ReactHotLoader>

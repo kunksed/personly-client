@@ -1,4 +1,5 @@
 /* GENERATOR: Assemble all components for export */
+export SettingsSidebar from './SettingsSidebar';
 export MobileNav from './MobileNav';
 export About from './About';
 export Divider from './Divider';

@@ -106,20 +106,13 @@ class UpdateProfileContainer extends Component {
 
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
-      <div>
-        <MainBox
-          alignContent="center"
-          fill="horizontal"
-          align="center"
-          className={styles.container}
-        >
+        <MainBox alignContent="center" fill="horizontal" align="center">
           <FullSection primary direction="row">
+            <SettingsSidebar currentUser={this.state.currentUser} />
             <MainContent
               align="center"
               justify="start"
-              pad={{ vertical: 'large' }}
-            >
+              pad={{ vertical: 'large' }}>
               <Heading tag="h2" align="center">
                 Edit Profile
               </Heading>
@@ -581,8 +574,6 @@ class UpdateProfileContainer extends Component {
           </FullSection>
         </MainBox>
       </div>
-      <AppFooter />
-    </div>
     );
   }
 

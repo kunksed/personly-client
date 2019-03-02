@@ -1,0 +1,82 @@
+.avatarWrapper {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aside {
+  max-width: 250px;
+  margin-bottom: 14px;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(46,61,73,.2);
+  border: 1px solid #dbe2e8;
+  @media screen and (max-width: 1260px) {
+    display: none !important;
+  }
+}
+
+.boxStyled {
+  padding-right: 20px;
+  width: 33%
+}
+
+.innerWidgetBox {
+  border: 1px solid #dbe2e8;
+}
+
+.loadingIndicator {
+  margin-top: 20px;
+}
+
+.value {
+  margin-right: 50px;
+}
+
+.button {
+  padding-right: 5px !important;
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.careerResourcesBlurb {
+  max-width: 250px;
+}
+
+.boxWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row !important;
+}
+
+.imageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row !important;
+}
+
+.innerWrapper {
+  width: 80vw;
+  justify-content: center;
+  @media screen and (max-width: 1000px) {
+    width: 70vw;
+  }
+}
+
+.listWrapper {
+  min-height: 750px;
+  max-width: 100vw !important;
+  box-sizing: border-box;
+}
+
+.flexGrow {
+  flex-grow: 1;
+}
+
+.small {
+  max-width: 50px !important;
+}
