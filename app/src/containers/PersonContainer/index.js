@@ -146,6 +146,25 @@ class PersonContainer extends Component {
           });
         });
 
+      const UPDATES_QUERY = `{ getUpdates(user: ${
+        this.props.props.params.id
+      }) { id title url created_on } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: UPDATES_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            updates: result.data.data.getUpdates
+          });
+        });
+
       const TRADES_QUERY = `{ getTrades(user: ${
         this.props.props.params.id
       }) { id trade_type shares price share_price created_at } }`;
@@ -276,7 +295,11 @@ class PersonContainer extends Component {
                 <Paragraph align="center" justify="center">
                   Note: A trading fee of $0.02 is applied per share purchased
                 </Paragraph>
-                {data.length > 0 && <Title tag="h1" align="center">${data[0][1]}</Title>}
+                {data.length > 0 && (
+                  <Title tag="h1" align="center">
+                    ${data[0][1]}
+                  </Title>
+                )}
                 {new_data.length > 1 && (
                   <Box align="center" justify="center">
                     {new_data[0][1] - new_data[new_data.length - 1][1] > 0 && (
@@ -377,7 +400,12 @@ class PersonContainer extends Component {
                   </Box>
                 )}
                 {new_data.length === 0 && (
-                  <Box colorIndex="unknown" pad="small" align="center" justify="center">
+                  <Box
+                    colorIndex="unknown"
+                    pad="small"
+                    align="center"
+                    justify="center"
+                  >
                     <Anchor>$0 | 0%</Anchor>
                   </Box>
                 )}
@@ -521,6 +549,30 @@ class PersonContainer extends Component {
                 })}
               </div>
             )}
+            <Title align="center" tag="h1">
+              Updates
+            </Title>
+            <Divider />
+            {this.state.updates.length === 0 && (
+              <Title align="center" tag="h3">
+                No updates have been posted yet.
+              </Title>
+            )}
+            {this.state.updates.length > 0 && (
+              <div>
+                {this.state.updates.map(update => {
+                  return (
+                    <Box align="center">
+                      <Timestamp value={update.created_on} fields="date" />
+                      <div>
+                        <Heading tag="h3">{update.title}</Heading>
+                      </div>
+                      <Anchor href={`${update.url}`}>Read more</Anchor>
+                    </Box>
+                  );
+                })}
+              </div>
+            )}
           </Section>
         </Box>
         {this.state.investToast == true && (
@@ -550,64 +602,66 @@ class PersonContainer extends Component {
             overlayClose={true}
             onClose={() => this.toggleInvestModal()}
           >
-          <FormFields>
-            <Header>
-              <Heading>Create Order</Heading>
-            </Header>
-            <Section pad={{ vertical: "medium" }}>
-              <Box size="medium">
-                <FormField
-                  label="Order Type *"
-                  htmlFor="order_type"
-                  className={styles.formField}
-                  error={
-                    this.state.order_type_field
-                      ? this.state.order_type_field
-                      : ""
-                  }
-                >
-                  <Select
-                    placeHolder=""
-                    options={["Buy", "Sell"]}
-                    value={this.state.order_type}
-                    onChange={e => this.setState({ order_type: e.option })}
-                    className={styles.input}
+            <FormFields>
+              <Header>
+                <Heading>Create Order</Heading>
+              </Header>
+              <Section pad={{ vertical: "medium" }}>
+                <Box size="medium">
+                  <FormField
+                    label="Order Type *"
+                    htmlFor="order_type"
+                    className={styles.formField}
+                    error={
+                      this.state.order_type_field
+                        ? this.state.order_type_field
+                        : ""
+                    }
+                  >
+                    <Select
+                      placeHolder=""
+                      options={["Buy", "Sell"]}
+                      value={this.state.order_type}
+                      onChange={e => this.setState({ order_type: e.option })}
+                      className={styles.input}
+                    />
+                  </FormField>
+                </Box>
+              </Section>
+              <Section pad={{ vertical: "medium" }}>
+                <Box size="medium">
+                  <FormField
+                    label="Share Amount *"
+                    htmlFor="name"
+                    className={styles.formField}
+                    error={
+                      this.state.shares_field ? this.state.shares_field : ""
+                    }
+                  >
+                    <input
+                      required
+                      id="shares"
+                      name="shares"
+                      defaultValue={this.state.shares}
+                      type="number"
+                      onChange={e => this.setState({ shares: e.target.value })}
+                      className={styles.input}
+                    />
+                  </FormField>
+                </Box>
+              </Section>
+              <Footer>
+                <Menu inline direction="row" responsive={false}>
+                  <Button
+                    label="Create Order"
+                    style={{ marginTop: 10, marginLeft: 5 }}
+                    onClick={() => {
+                      this._createOrder();
+                    }}
+                    icon={<CheckmarkIcon />}
                   />
-                </FormField>
-              </Box>
-            </Section>
-            <Section pad={{ vertical: "medium" }}>
-              <Box size="medium">
-                <FormField
-                  label="Share Amount *"
-                  htmlFor="name"
-                  className={styles.formField}
-                  error={this.state.shares_field ? this.state.shares_field : ""}
-                >
-                  <input
-                    required
-                    id="shares"
-                    name="shares"
-                    defaultValue={this.state.shares}
-                    type="number"
-                    onChange={e => this.setState({ shares: e.target.value })}
-                    className={styles.input}
-                  />
-                </FormField>
-              </Box>
-            </Section>
-            <Footer>
-              <Menu inline direction="row" responsive={false}>
-                <Button
-                  label="Create Order"
-                  style={{ marginTop: 10, marginLeft: 5 }}
-                  onClick={() => {
-                    this._createOrder();
-                  }}
-                  icon={<CheckmarkIcon />}
-                />
-              </Menu>
-            </Footer>
+                </Menu>
+              </Footer>
             </FormFields>
           </Layer>
         )}
