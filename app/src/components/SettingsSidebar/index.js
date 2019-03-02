@@ -9,6 +9,9 @@ import Heading from 'grommet/components/Heading';
 import Button from 'grommet/components/Button';
 import BriefcaseIcon from 'grommet/components/icons/base/Briefcase';
 import ArchiveIcon from 'grommet/components/icons/base/Archive';
+import AtmIcon from 'grommet/components/icons/base/Atm';
+import ArticleIcon from 'grommet/components/icons/base/Article';
+import CircleQuestionIcon from 'grommet/components/icons/base/CircleQuestion';
 import { ThumbnailImage, Wrapper } from './styles';
 import cssModules from 'react-css-modules';
 import styles from './index.module.scss'
@@ -62,7 +65,7 @@ class SettingsSidebar extends React.Component {
               onClick={e => e}
               plain
               href="/deposit"
-              icon={<ArchiveIcon />}
+              icon={<AtmIcon />}
             />
             {this.props.currentUser.is_public === true && (
               <Button
@@ -101,7 +104,7 @@ class SettingsSidebar extends React.Component {
                 onClick={e => e}
                 plain
                 href="/new"
-                icon={<LicenseIcon />}
+                icon={<CircleQuestionIcon />}
               />
             )}
             {this.props.currentUser.is_public === true && (
@@ -111,7 +114,7 @@ class SettingsSidebar extends React.Component {
                 onClick={e => e}
                 plain
                 href="/new/update"
-                icon={<LicenseIcon />}
+                icon={<ArticleIcon />}
               />
             )}
           </Box>

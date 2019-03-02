@@ -13,6 +13,8 @@ import Value from "grommet/components/Value";
 import TableRow from "grommet/components/TableRow";
 import IterationIcon from "grommet/components/icons/base/Iteration";
 import StarIcon from "grommet/components/icons/base/Star";
+import Highcharts from 'highcharts/highstock';
+import HighchartsReact from 'highcharts-react-official';
 import { graphql, compose } from "react-apollo";
 import Toast from "grommet/components/Toast";
 import axios from "axios";
