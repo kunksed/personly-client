@@ -25,6 +25,7 @@ class CreateQuestionContainer extends Component {
       createQuestionToast: false,
       load_default: false,
       getData: false,
+      currentUser: "None",
     };
   }
 
@@ -63,13 +64,11 @@ class CreateQuestionContainer extends Component {
       );
     }
 
-    if (this.state.currentUser.role !== 'Admin') {
-      window.location.replace('/login');
+    if (this.state.currentUser.is_public === true) {
+      window.location.replace('/');
     }
 
     return (
-      <div>
-        <Navbar pathname={this.props.props.pathname} />
       <div>
         <MainBox
           alignContent="center"
@@ -190,8 +189,6 @@ class CreateQuestionContainer extends Component {
           </FullSection>
         </MainBox>
       </div>
-      <AppFooter />
-    </div>
     );
   }
 

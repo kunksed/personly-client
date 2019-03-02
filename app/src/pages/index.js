@@ -1,4 +1,6 @@
 /* GENERATOR: Assemble all pages for export */
+export ForInvestorsPage from './ForInvestorsPage';
+export ForPeoplePage from './ForPeoplePage';
 export PeopleListPage from './PeopleListPage';
 export CreateUpdatePage from './CreateUpdatePage';
 export DashboardPage from './DashboardPage';

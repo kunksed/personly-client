@@ -1,4 +1,6 @@
 /* GENERATOR: Assemble all containers for export */
+export ForInvestorsContainer from './ForInvestorsContainer';
+export ForPeopleContainer from './ForPeopleContainer';
 export PeopleListContainer from './PeopleListContainer';
 export CreateUpdateContainer from './CreateUpdateContainer';
 export DashboardContainer from './DashboardContainer';

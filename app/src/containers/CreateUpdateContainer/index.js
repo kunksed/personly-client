@@ -63,13 +63,15 @@ class CreateUpdateContainer extends Component {
       );
     }
 
-    if (this.state.currentUser.role !== 'Admin') {
-      window.location.replace('/login');
+    if (this.state.currentUser === "None") {
+      window.location.replace("/login");
+    }
+
+    if (this.state.currentUser.is_public === true) {
+      window.location.replace('/');
     }
 
     return (
-      <div>
-        <Navbar pathname={this.props.props.pathname} />
       <div>
         <MainBox
           alignContent="center"
@@ -161,8 +163,6 @@ class CreateUpdateContainer extends Component {
           </FullSection>
         </MainBox>
       </div>
-      <AppFooter />
-    </div>
     );
   }
 

@@ -11,8 +11,8 @@ import Menu from "grommet/components/Menu";
 import Table from "grommet/components/Table";
 import Value from "grommet/components/Value";
 import TableRow from "grommet/components/TableRow";
-import IterationIcon from 'grommet/components/icons/base/Iteration';
-import StarIcon from 'grommet/components/icons/base/Star';
+import IterationIcon from "grommet/components/icons/base/Iteration";
+import StarIcon from "grommet/components/icons/base/Star";
 import { graphql, compose } from "react-apollo";
 import Toast from "grommet/components/Toast";
 import axios from "axios";
@@ -54,7 +54,7 @@ class DashboardContainer extends Component {
         }
       });
 
-      const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website gender api_key } }`;
+      const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website gender api_key is_public } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -76,7 +76,7 @@ class DashboardContainer extends Component {
           });
         });
 
-      const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance }`;
+      const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance gender }`;
 
       axiosGitHubGraphQL
         .post(
@@ -120,6 +120,62 @@ class DashboardContainer extends Component {
       var sharesIssued = parseFloat(totalShares) + parseFloat(item.shares);
     }
 
+    var user_genders = [];
+    var user_genders_result = {};
+
+    for (var item, i = 0; (item = this.state.shareholders[i++]); ) {
+      var name = item.gender;
+
+      if (name === "") {
+        var name = "None";
+      }
+
+      if (!(name in user_genders)) {
+        user_genders_result[name] = 1;
+      } else {
+        user_genders_result[name] = user_genders_result[name] + 1;
+      }
+    }
+
+    for (var item, i = 0; (item = Object.keys(user_genders_result)[i++]); ) {
+      console.log(item);
+      user_genders.push({ name: item, value: user_genders_result[item] });
+    }
+
+    var data = user_genders.map(gender => {
+      return { name: gender.name, y: gender.value };
+    });
+
+    const options = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: "pie"
+      },
+      tooltip: {
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+      },
+      title: "Gender Distribution",
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: "pointer",
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: true
+        }
+      },
+      series: [
+        {
+          name: "Genders",
+          colorByPoint: true,
+          data: data
+        }
+      ]
+    };
+
     return (
       <div>
         <MainBox alignContent="center" fill="horizontal" align="center">
@@ -147,6 +203,29 @@ class DashboardContainer extends Component {
                   label="Shares Issued"
                   className={styles.boxStyled}
                 />
+              </Box>
+              <Divider />
+              <Box>
+                <Heading tag="h2">Gender Distribution of Shareholders</Heading>
+                <HighchartsReact highcharts={Highcharts} options={options} />
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Stats</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {user_genders.map(gender => {
+                      return (
+                        <TableRow>
+                          <td>{gender.name}</td>
+                          <td>{gender.value}</td>
+                        </TableRow>
+                      );
+                    })}
+                  </tbody>
+                </Table>
               </Box>
               <Footer align="center" justify="center">
                 <Menu inline direction="row" responsive={false}>

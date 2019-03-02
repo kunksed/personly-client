@@ -229,6 +229,22 @@ export const routes = {
           .catch(err => errorLoading(err));
       },
     },
+    {
+      path: '/for-people',
+      getComponent(location, callback) {
+        System.import('./pages/ForPeoplePage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/for-investors',
+      getComponent(location, callback) {
+        System.import('./pages/ForInvestorsPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
 /* GENERATOR: Newly generated Routes go here */
     {
       path: '*',

@@ -17,7 +17,6 @@ class NotFoundContainer extends Component {
   render() {
     return (
       <div>
-        <Navbar pathname={this.props.props.pathname} />
       <MainBox
         alignContent="center"
         fill="horizontal"
@@ -42,7 +41,6 @@ class NotFoundContainer extends Component {
           </MainContent>
         </FullSection>
       </MainBox>
-      <AppFooter />
     </div>
     );
   }

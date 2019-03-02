@@ -52,7 +52,7 @@ class ShareholdersContainer extends Component {
         }
       });
 
-      const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website gender api_key } }`;
+      const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website gender api_key is_public } }`;
 
       axiosGitHubGraphQL
         .post(
