@@ -1,0 +1,19 @@
+.container {
+  min-height: 100vh;
+}
+
+.headerText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroImage {
+  opacity: 75%
+}
+
+.tableItem {
+  min-height: 750px;
+  max-width: 100vw !important;
+  box-sizing: border-box;
+}
