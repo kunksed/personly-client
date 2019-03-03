@@ -12,6 +12,7 @@ import ArchiveIcon from 'grommet/components/icons/base/Archive';
 import AtmIcon from 'grommet/components/icons/base/Atm';
 import ArticleIcon from 'grommet/components/icons/base/Article';
 import CircleQuestionIcon from 'grommet/components/icons/base/CircleQuestion';
+import UserExpertIcon from 'grommet/components/icons/base/UserExpert';
 import { ThumbnailImage, Wrapper } from './styles';
 import cssModules from 'react-css-modules';
 import styles from './index.module.scss'
@@ -48,7 +49,7 @@ class SettingsSidebar extends React.Component {
               label="Account"
               onClick={e => e}
               plain
-              href="/settings"
+              path="/settings"
               icon={<ToolsIcon />}
             />
             {this.props.currentUser.is_public === true && (
@@ -57,8 +58,18 @@ class SettingsSidebar extends React.Component {
                 label="Dashboard"
                 onClick={e => e}
                 plain
-                href="/dashboard"
+                path="/dashboard"
                 icon={<DashboardIcon />}
+              />
+            )}
+            {this.props.currentUser.is_public === true && (
+              <Button
+                className={styles.button}
+                label="Relations"
+                onClick={e => e}
+                plain
+                path="/dashboard/relations"
+                icon={<UserExpertIcon />}
               />
             )}
             <Button
@@ -66,7 +77,7 @@ class SettingsSidebar extends React.Component {
               label="Investments"
               onClick={e => e}
               plain
-              href="/settings/investments"
+              path="/settings/investments"
               icon={<ArchiveIcon />}
             />
             <Button
@@ -74,7 +85,7 @@ class SettingsSidebar extends React.Component {
               label="Deposit"
               onClick={e => e}
               plain
-              href="/settings/deposit"
+              path="/settings/deposit"
               icon={<AtmIcon />}
             />
             {this.props.currentUser.is_public === true && (
@@ -83,7 +94,7 @@ class SettingsSidebar extends React.Component {
                 label="Shareholders"
                 onClick={e => e}
                 plain
-                href="/dashboard/shareholders"
+                path="/dashboard/shareholders"
                 icon={<BriefcaseIcon />}
               />
             )}
@@ -93,28 +104,8 @@ class SettingsSidebar extends React.Component {
                 label="Leaderboard"
                 onClick={e => e}
                 plain
-                href="/dashboard/leaderboard"
+                path="/dashboard/leaderboard"
                 icon={<LicenseIcon />}
-              />
-            )}
-            {this.props.currentUser.is_public === true && (
-              <Button
-                className={styles.button}
-                label="New Question"
-                onClick={e => e}
-                plain
-                href="/new"
-                icon={<CircleQuestionIcon />}
-              />
-            )}
-            {this.props.currentUser.is_public === true && (
-              <Button
-                className={styles.button}
-                label="New Update"
-                onClick={e => e}
-                plain
-                href="/new/update"
-                icon={<ArticleIcon />}
               />
             )}
           </Box>

@@ -221,6 +221,30 @@ export const routes = {
           .catch(err => errorLoading(err));
       },
     },
+    {
+      path: '/leaderboard',
+      getComponent(location, callback) {
+        System.import('./pages/GlobalLeaderboard')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/updates/:id/edit',
+      getComponent(location, callback) {
+        System.import('./pages/EditShareholderUpdatePage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/dashboard/relations',
+      getComponent(location, callback) {
+        System.import('./pages/ShareholderRelationsPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
 /* GENERATOR: Newly generated Routes go here */
     {
       path: '*',

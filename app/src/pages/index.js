@@ -1,4 +1,7 @@
 /* GENERATOR: Assemble all pages for export */
+export ShareholderRelationsPage from './ShareholderRelationsPage';
+export EditShareholderUpdatePage from './EditShareholderUpdatePage';
+export GlobalLeaderboard from './GlobalLeaderboard';
 export ForInvestorsPage from './ForInvestorsPage';
 export ForPeoplePage from './ForPeoplePage';
 export PeopleListPage from './PeopleListPage';

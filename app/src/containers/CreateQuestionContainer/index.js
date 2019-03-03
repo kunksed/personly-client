@@ -176,7 +176,7 @@ class CreateQuestionContainer extends Component {
               {this.state.createQuestionToast === true && (
                 <Toast
                   status="ok"
-                  onClose={() => window.location.replace('/questions')}
+                  onClose={() => window.location.replace('/dashboard')}
                 >
                   This question has been created.
                 </Toast>

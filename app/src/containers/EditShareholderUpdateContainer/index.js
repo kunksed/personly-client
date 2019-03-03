@@ -20,20 +20,20 @@ import { NotFoundContainer } from "containers";
 import { Navbar, AppFooter } from "components";
 import regeneratorRuntime from "regenerator-runtime";
 
-class EditQuestionContainer extends Component {
+class EditShareholderUpdateContainer extends Component {
   constructor() {
     super();
     this.state = {
-      updateQuestionToast: false,
+      updateUpdateToast: false,
       load_default: false,
       getData: false,
       currentUser: "None"
     };
   }
 
-  toggleUpdateQuestion() {
+  toggleShareholderUpdateUpdate() {
     this.setState({
-      updateQuestionToast: !this.state.updateQuestionToast
+      updateUpdateToast: !this.state.updateUpdateToast
     });
   }
 
@@ -68,9 +68,9 @@ class EditQuestionContainer extends Component {
           });
         });
 
-      const QUESTION_QUERY = `{ getQuestions(id: ${parseInt(
+      const QUESTION_QUERY = `{ getUpdates(id: ${parseInt(
         this.props.props.params.id
-      )}) { id title created_on description approved closes } }`;
+      )}) { id title description created_on } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -85,10 +85,9 @@ class EditQuestionContainer extends Component {
         )
         .then(result => {
           this.setState({
-            question: result.data.data.getQuestions[0],
-            title: result.data.data.getQuestions[0].title,
-            description: result.data.data.getQuestions[0].description,
-            closes: Date.parse(result.data.data.getQuestions[0].closes),
+            update: result.data.data.getUpdates[0],
+            title: result.data.data.getUpdates[0].title,
+            description: result.data.data.getUpdates[0].description,
             getData: true
           });
         });
@@ -99,11 +98,11 @@ class EditQuestionContainer extends Component {
     if (!this.state.currentUser) {
       return <div />;
     }
-    if (!this.state.question) {
+    if (!this.state.update) {
       return <div />;
     }
 
-    if (this.state.question.length === 0) {
+    if (this.state.update.length === 0) {
       return (
         <div>
           <NotFoundContainer />
@@ -126,7 +125,7 @@ class EditQuestionContainer extends Component {
               pad={{ vertical: "large" }}
             >
               <Heading tag="h2" align="center">
-                Update Question
+                Update Shareholder Update
               </Heading>
               <Section
                 pad={{ vertical: "medium" }}
@@ -144,6 +143,8 @@ class EditQuestionContainer extends Component {
                       required
                       id="title"
                       name="title"
+                      placeholder="Update title"
+                      value={this.state.title}
                       type="text"
                       onChange={e => this.setState({ title: e.target.value })}
                       className={styles.input}
@@ -158,33 +159,7 @@ class EditQuestionContainer extends Component {
               >
                 <Box size="medium" align="center">
                   <FormField
-                    label="Vote closes *"
-                    htmlFor="closes"
-                    className={styles.formField}
-                    error={
-                      this.state.closes_field ? this.state.closes_field : ""
-                    }
-                  >
-                    <DateTime
-                      required
-                      id="closes"
-                      name="closes"
-                      type="text"
-                      value={this.state.closes}
-                      onChange={e => this.setState({ closes: e })}
-                      className={styles.input}
-                    />
-                  </FormField>
-                </Box>
-              </Section>
-              <Section
-                pad={{ vertical: "medium" }}
-                align="center"
-                justify="center"
-              >
-                <Box size="medium" align="center">
-                  <FormField
-                    label="Description *"
+                    label="Update Description *"
                     htmlFor="description"
                     className={styles.formField}
                     error={
@@ -195,9 +170,10 @@ class EditQuestionContainer extends Component {
                   >
                     <textarea
                       required
-                      rows="10"
+                      rows="15"
                       id="description"
                       name="description"
+                      value={this.state.description}
                       type="text"
                       onChange={e =>
                         this.setState({ description: e.target.value })
@@ -213,18 +189,18 @@ class EditQuestionContainer extends Component {
                     label="Update"
                     style={{ marginTop: 10, marginLeft: 5 }}
                     onClick={() => {
-                      this._updateQuestion();
+                      this._updateShareholderUpdate();
                     }}
                     icon={<EditIcon />}
                   />
                 </Menu>
               </Footer>
-              {this.state.updateQuestionToast === true && (
+              {this.state.updateUpdateToast === true && (
                 <Toast
                   status="ok"
                   onClose={() => window.location.replace("/dashboard")}
                 >
-                  This question has been updated.
+                  This shareholder update has been edited.
                 </Toast>
               )}
             </MainContent>
@@ -234,8 +210,8 @@ class EditQuestionContainer extends Component {
     );
   }
 
-  _updateQuestion = async function() {
-    const { title, description, closes } = this.state;
+  _updateShareholderUpdate = async function() {
+    const { title, description } = this.state;
     const id = this.props.props.params.id;
     this.setState({
       title_field: "",
@@ -244,12 +220,11 @@ class EditQuestionContainer extends Component {
       errors: ""
     });
     await this.props
-      .updateQuestion({
+      .updateShareholderUpdate({
         variables: {
           id,
           title,
           description,
-          closes
         }
       })
       .catch(res => {
@@ -264,29 +239,23 @@ class EditQuestionContainer extends Component {
       }
     }
     if (!this.state.errors) {
-      this.toggleUpdateQuestion();
+      this.toggleShareholderUpdateUpdate();
     }
   };
 }
 
-const UPDATE_QUESTION = gql`
-  mutation UpdateQuestion(
+const UPDATE_SHAREHOLDER_UPDATE = gql`
+  mutation UpdateShareholderUpdate(
     $id: Int!
     $title: String!
     $description: String!
-    $closes: String!
   ) {
-    updateQuestion(
-      id: $id
-      title: $title
-      description: $description
-      closes: $closes
-    ) {
+    updateShareholderUpdate(id: $id, title: $title, description: $description) {
       id
     }
   }
 `;
 
-export default compose(graphql(UPDATE_QUESTION, { name: "updateQuestion" }))(
-  EditQuestionContainer
-);
+export default compose(
+  graphql(UPDATE_SHAREHOLDER_UPDATE, { name: "updateShareholderUpdate" })
+)(EditShareholderUpdateContainer);

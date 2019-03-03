@@ -1,4 +1,7 @@
 /* GENERATOR: Assemble all containers for export */
+export EditShareholderUpdateContainer from './EditShareholderUpdateContainer';
+export GlobalLeaderboardContainer from './GlobalLeaderboardContainer';
+export ShareholderRelationsContainer from './ShareholderRelationsContainer';
 export ForInvestorsContainer from './ForInvestorsContainer';
 export ForPeopleContainer from './ForPeopleContainer';
 export PeopleListContainer from './PeopleListContainer';
