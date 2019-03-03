@@ -181,7 +181,7 @@ class Navbar extends Component {
                     <Anchor href={`/profile/${this.state.currentUser.id}`}>
                       Profile
                     </Anchor>
-                    {this.state.currentUser.is_raising === true && (
+                    {this.state.currentUser.is_public === true && (
                       <Anchor href="/dashboard">Dashboard</Anchor>
                     )}
                     {this.state.currentUser.role === 'Admin' && (

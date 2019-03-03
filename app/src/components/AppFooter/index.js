@@ -24,7 +24,7 @@ const AppFooter = () => (
         <Anchor path="/people">People</Anchor>
         <Anchor path="/for-people">For People</Anchor>
         <Anchor path="/for-investors">For Investors</Anchor>
-        <Anchor href="mailto:james@opencommit.com">Contact</Anchor>
+        <Anchor href="/terms">Terms</Anchor>
       </nav>
       <nav
         className={

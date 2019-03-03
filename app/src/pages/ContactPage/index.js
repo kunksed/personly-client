@@ -1,10 +1,12 @@
 import React from 'react';
-import Box from 'grommet/components/Box';
+import cssModules from 'react-css-modules';
+import { ContactContainer } from 'containers';
+import styles from './index.module.scss';
 
-export default function ContactPage() {
-  return (
-    <Box>
-      Hello from ContactPage!
-    </Box>
-  );
-}
+const ContactPage = (props) => (
+  <div className={styles.container}>
+    <ContactContainer props={props} />
+  </div>
+);
+
+export default cssModules(ContactPage, styles);

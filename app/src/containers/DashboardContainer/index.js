@@ -10,6 +10,7 @@ import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
 import Table from "grommet/components/Table";
 import Value from "grommet/components/Value";
+import Anchor from "grommet/components/Anchor";
 import Paragraph from "grommet/components/Paragraph";
 import TableRow from "grommet/components/TableRow";
 import IterationIcon from "grommet/components/icons/base/Iteration";

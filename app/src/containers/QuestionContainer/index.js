@@ -386,7 +386,7 @@ class QuestionContainer extends Component {
     return (
       <div>
         <Box className={styles.container}>
-          <Box full="horizontal">
+          <Box>
             <Hero
               justify="center"
               align="center"
@@ -395,17 +395,19 @@ class QuestionContainer extends Component {
                 <Image
                   fit="cover"
                   full={true}
-                  ssrc="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+                  src="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
                 />
               }
               size="small"
             >
               <Box direction="row" justify="center" align="center">
-                <Box basis="1/2" align="end" pad="medium" />
+                <Box basis="1/2" align="end" pad="medium">
+                  <Wrapper imageSize={200}>
+                    <ThumbnailImage src={this.state.user.profile_picture} />
+                  </Wrapper>
+                </Box>
                 <Box basis="1/2" align="start" pad="medium">
-                  <Heading margin="none">
-                    {this.state.question.user.name} - Question
-                  </Heading>
+                  <Heading margin="none">{this.state.user.name} - Question</Heading>
                 </Box>
               </Box>
             </Hero>

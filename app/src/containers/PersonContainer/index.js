@@ -309,9 +309,6 @@ class PersonContainer extends Component {
                   constructorType={"stockChart"}
                   options={options}
                 />
-                <Paragraph align="center" justify="center">
-                  Note: A trading fee of $0.02 is applied per share purchased
-                </Paragraph>
                 {data.length > 0 && (
                   <Title tag="h1" align="center">
                     ${data[0][1]}
@@ -421,18 +418,18 @@ class PersonContainer extends Component {
                     colorIndex="unknown"
                     pad="small"
                     align="center"
-                    justify="center"
                   >
                     <Anchor>$0 | 0%</Anchor>
                   </Box>
                 )}
               </Box>
             </Columns>
-            <Divider />
-            <Title align="center" tag="h1">
+            <br />
+              <Columns size="large" justify="center">
+              <Box>
+            <Title align="center" tag="h2">
               Questions
             </Title>
-            <Divider />
             {this.state.questions.length === 0 && (
               <Title align="center" tag="h5">
                 No questions have been posted yet.
@@ -566,10 +563,11 @@ class PersonContainer extends Component {
                 })}
               </div>
             )}
-            <Title align="center" tag="h1">
+            </Box>
+            <Box>
+            <Title align="center" tag="h2">
               Updates
             </Title>
-            <Divider />
             {this.state.updates.length === 0 && (
               <Title align="center" tag="h5">
                 No updates have been posted yet.
@@ -579,7 +577,7 @@ class PersonContainer extends Component {
               <div>
                 {this.state.updates.map(update => {
                   return (
-                    <Box align="center">
+                    <Box>
                       <Timestamp value={update.created_on} fields="date" />
                       <div>
                         <Heading tag="h3">{update.title}</Heading>
@@ -590,9 +588,11 @@ class PersonContainer extends Component {
                 })}
               </div>
             )}
+            </Box>
+            </Columns>
           </Section>
         </Box>
-        {this.state.investToast == true && (
+        {this.state.investToast === true && (
           <Toast
             status="ok"
             key={1}
@@ -624,6 +624,9 @@ class PersonContainer extends Component {
                 <Heading>Create Order</Heading>
               </Header>
               <Section pad={{ vertical: "medium" }}>
+              <Paragraph align="center" justify="center">
+                Note: A trading fee of $0.02 is applied per share purchased
+              </Paragraph>
                 <Box size="medium">
                   <FormField
                     label="Order Type *"

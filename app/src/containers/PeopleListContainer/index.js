@@ -95,7 +95,7 @@ class PeopleListContainer extends Component {
                           heading={user.name}
                           label={`${user.shares_issued} shares available`}
                           description={`${user.bio.substring(0,149)}...`}
-                          link={<Anchor href={`/person/${user.id}`}
+                          link={<Anchor href={`/people/${user.id}`}
                             label='Learn more' />}
                         />
                       </Tile>

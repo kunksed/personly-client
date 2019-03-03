@@ -8,6 +8,7 @@ import Anchor from "grommet/components/Anchor";
 import Paragraph from "grommet/components/Paragraph";
 import Markdown from "grommet/components/Markdown";
 import List from "grommet/components/List";
+import Button from "grommet/components/Button";
 import ListItem from "grommet/components/ListItem";
 import Split from "grommet/components/Split";
 import { FullSection, MainContent, MainBox } from "./styles";
@@ -31,12 +32,12 @@ class ContactContainer extends Component {
                 <Anchor path="/terms">Terms of Service</Anchor>
               </ListItem>
               <ListItem justify="between">
-                <Anchor path="/privacy">
-                  Privacy Policy
-                </Anchor>
+                <Anchor path="/privacy">Privacy Policy</Anchor>
               </ListItem>
               <ListItem justify="between">
-                <Anchor path="/contact" className="active">Contact</Anchor>
+                <Anchor path="/contact" className="active">
+                  Contact
+                </Anchor>
               </ListItem>
               <ListItem justify="between">
                 <Anchor path="/risks">Risks</Anchor>
@@ -52,19 +53,29 @@ class ContactContainer extends Component {
                 Investors
               </Heading>
               <Paragraph>
-                If you have any questions about investing in people through Personly, use this button.
+                If you have any questions about investing in people through
+                Personly, use this button.
                 <br />
-                Questions relating to individuals listed on the platform should be directed to those individuals.
+                <br />
+                Questions relating to individuals listed on the platform should
+                be directed to those individuals.
               </Paragraph>
-              <Button href="mailto:ir@personly.app?subject=Investor Contact" label="Investor contact"/>
+              <Button
+                href="mailto:ir@personly.app?subject=Investor Contact"
+                label="Investor contact"
+              />
               <Divider />
               <Heading tag="h3" strong={true}>
                 Publicly Traded People
               </Heading>
               <Paragraph>
-                If you have any questions about getting listed on Personly, eligibility, or compliance, use this button.
+                If you have any questions about getting listed on Personly,
+                eligibility, or compliance, use this button.
               </Paragraph>
-              <Button href="mailto:ir@personly.app?subject=Investment Contact" label="Investment contact"/>
+              <Button
+                href="mailto:ir@personly.app?subject=Investment Contact"
+                label="Investment contact"
+              />
               <Divider />
               <Heading tag="h3" strong={true}>
                 General Inquiries
@@ -72,7 +83,10 @@ class ContactContainer extends Component {
               <Paragraph>
                 If you have any other question about Personly, use this button.
               </Paragraph>
-              <Button href="mailto:ir@personly.app?subject=Investment Contact" label="General inquiry"/>
+              <Button
+                href="mailto:ir@personly.app?subject=Investment Contact"
+                label="General inquiry"
+              />
             </Box>
           </MainContent>
         </FullSection>

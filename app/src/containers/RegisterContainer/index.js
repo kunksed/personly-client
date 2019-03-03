@@ -180,6 +180,7 @@ class RegisterContainer extends Component {
                 />
               </FormField>
             </FormFields>
+            <span>By signing up you agree to the <Anchor path="/terms">Terms of Service</Anchor> and <Anchor path="/privacy">Privacy Policy</Anchor>.</span>
             <Footer pad={{ vertical: 'medium' }} align="center">
               <Button
                 fill
