@@ -189,10 +189,10 @@ class Navbar extends Component {
                     For Investors
                   </Anchor>
                 <Anchor
-                  path="/account/deposit"
+                  path="/settings/deposit"
                   primary={false}
                   className={
-                    this.props.pathname === '/account/deposit' ? 'active' : ''
+                    this.props.pathname === '/settings/deposit' ? 'active' : ''
                   }
                 >
                   Deposit

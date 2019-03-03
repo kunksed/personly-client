@@ -62,7 +62,7 @@ export const routes = {
       },
     },
     {
-      path: '/account/deposit',
+      path: '/settings/deposit',
       getComponent(location, callback) {
         System.import('./pages/DepositPage')  // eslint-disable-line block-scoped-var
           .then(loadRoute(callback))

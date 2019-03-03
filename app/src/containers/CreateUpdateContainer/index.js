@@ -13,7 +13,8 @@ import CheckmarkIcon from 'grommet/components/icons/base/Checkmark';
 import axios from 'axios';
 import gql from 'graphql-tag';
 import styles from './index.module.scss';
-import { FullSection, MainContent, MainBox } from './styles';
+import { SettingsSidebar } from "components";
+import { FullSection, MainContent, MainBox } from "./styles";
 import { LoadingIndicator } from 'components';
 import { Navbar, AppFooter } from "components";
 import regeneratorRuntime from 'regenerator-runtime';
@@ -67,24 +68,20 @@ class CreateUpdateContainer extends Component {
       window.location.replace("/login");
     }
 
-    if (this.state.currentUser.is_public === true) {
+    if (this.state.currentUser.is_public === false) {
       window.location.replace('/');
     }
 
     return (
-      <div>
-        <MainBox
-          alignContent="center"
-          fill="horizontal"
-          align="center"
-          className={styles.container}
-        >
-          <FullSection primary direction="row">
-            <MainContent
-              align="center"
-              justify="start"
-              pad={{ vertical: 'large' }}
-            >
+        <div>
+          <MainBox alignContent="center" fill="horizontal" align="center">
+            <FullSection primary direction="row">
+              <SettingsSidebar currentUser={this.state.currentUser} />
+              <MainContent
+                align="center"
+                justify="start"
+                pad={{ vertical: "large" }}
+              >
               <Heading tag="h2" align="center">
                 Create Update
               </Heading>

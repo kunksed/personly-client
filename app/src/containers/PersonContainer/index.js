@@ -28,6 +28,7 @@ import axios from "axios";
 import { reduxForm } from "redux-form";
 import { MainBox, FullSection } from "./styles";
 import { Navbar, AppFooter } from "components";
+import { NotFoundContainer } from "containers";
 import { Divider, LoadingIndicator, QuestionList } from "components";
 import styles from "./index.module.scss";
 
@@ -70,6 +71,9 @@ class PersonContainer extends Component {
           this.setState({
             user: result.data.data.getUsers[0]
           });
+        })
+        .catch(error => {
+          this.setState({ not_found: true });
         });
 
       const MAIN_QUERY = `{ getQuestions(user: ${
@@ -216,6 +220,14 @@ class PersonContainer extends Component {
   render() {
     if (this.state.isLoading === true) {
       return <div />;
+    }
+
+    if (this.state.not_found === true) {
+      return (
+        <div>
+          <NotFoundContainer />
+        </div>
+      );
     }
 
     var data = this.state.trades.map(function(vote) {

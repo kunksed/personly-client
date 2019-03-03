@@ -64,7 +64,7 @@ class SettingsSidebar extends React.Component {
               label="Deposit"
               onClick={e => e}
               plain
-              href="/deposit"
+              href="/settings/deposit"
               icon={<AtmIcon />}
             />
             {this.props.currentUser.is_public === true && (

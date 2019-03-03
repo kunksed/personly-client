@@ -17,8 +17,9 @@ import axios from "axios";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import regeneratorRuntime from "regenerator-runtime";
-import { LoadingIndicator } from "components";
-import { Navbar, AppFooter } from "components";
+import { LoadingIndicator, Divider } from "components";
+import { SettingsSidebar } from "components";
+import { FullSection, MainContent, MainBox } from "./styles";
 import styles from "./index.module.scss";
 
 class DepositContainer extends Component {
@@ -56,7 +57,7 @@ class DepositContainer extends Component {
         }
       });
 
-      const MAIN_QUERY = `{ getCurrentUser { id card_last card_exp_month card_exp_year } }`;
+      const MAIN_QUERY = `{ getCurrentUser { id name profile_picture is_public card_last card_exp_month card_exp_year } }`;
 
       axiosGitHubGraphQLAuth
         .post(
@@ -109,12 +110,15 @@ class DepositContainer extends Component {
     }
 
     return (
-      <div>
-        <Box className={styles.container}>
-          <Box full="horizontal">
-            <Section align="center" justify="center" pad="large">
-              <Columns size="large" pad="large" align="center" justify="center">
-                <Box pad="large">
+        <div>
+          <MainBox alignContent="center" fill="horizontal" align="center">
+            <FullSection primary direction="row">
+              <SettingsSidebar currentUser={this.state.currentUser} />
+              <MainContent
+                align="center"
+                justify="start"
+                pad={{ vertical: "large" }}
+              ><Box pad="large">
                   <Heading tag="h2">Deposit Funds</Heading>
                   <Paragraph>
                     You can deposit a minimum of $5 into your account.
@@ -191,23 +195,19 @@ class DepositContainer extends Component {
                       </div>
                     )}
                   </Box>
-                </Box>
-                <Box pad="large">
-                  <Heading tag="h2">Removing Account Funds</Heading>
+                  <Divider />
+                  <Heading tag="h2">Payouts</Heading>
                   <Paragraph>
-                    Please contact us at ir@jamesg.app to request a refund of
-                    money in your account.
+                    Please contact us at ir@personly.app to request a payout of money in your account.
                     <br />
                     <br />
-                    Your refund will be processed through Stripe.
+                    Your payout will be processed through Stripe.
                   </Paragraph>
                 </Box>
-              </Columns>
-            </Section>
             {this.state.notificationToast == true && (
               <Toast
                 status="ok"
-                onClose={() => { window.location.replace("/questions") }}
+                onClose={() => { window.location.replace("/settings") }}
               >
                 Your money has been added to your account.
               </Toast>
@@ -227,9 +227,10 @@ class DepositContainer extends Component {
                 Your card has been deleted.
               </Toast>
             )}
-          </Box>
-        </Box>
-      </div>
+          </MainContent>
+        </FullSection>
+      </MainBox>
+    </div>
     );
   }
 

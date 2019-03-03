@@ -150,7 +150,6 @@ class InvestmentsContainer extends Component {
                 <Menu inline direction="row" responsive={false}>
                   <Button
                     label="View people raising"
-                    primary
                     href="/people"
                     style={{ marginTop: 10, marginLeft: 5 }}
                   />

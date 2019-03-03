@@ -65,10 +65,10 @@ class ProfileContainer extends Component {
           { query: MAIN_QUERY }
         )
         .then(result => {
-          this.setState({ user: result.data.data.getUsers[0], getData: true });
+          this.setState({ user: result.data.data.getUsers[0] });
         })
         .catch(error => {
-          this.setState({ getData: true });
+          this.setState({ not_found: true });
         });
 
       const TRADES_QUERY = `{ getTrades(id: ${

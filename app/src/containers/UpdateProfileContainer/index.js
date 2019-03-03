@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import Box from 'grommet/components/Box';
-import Heading from 'grommet/components/Heading';
-import Section from 'grommet/components/Section';
-import FormField from 'grommet/components/FormField';
-import Footer from 'grommet/components/Footer';
-import Select from 'grommet/components/Select';
-import CheckmarkIcon from 'grommet/components/icons/base/Checkmark';
-import Button from 'grommet/components/Button';
-import Menu from 'grommet/components/Menu';
-import { graphql, compose } from 'react-apollo';
-import Toast from 'grommet/components/Toast';
-import axios from 'axios';
-import gql from 'graphql-tag';
-import styles from './index.module.scss';
-import { FullSection, MainContent, MainBox } from './styles';
-import { Divider, LoadingIndicator, SettingsSidebar } from 'components';
+import React, { Component } from "react";
+import Box from "grommet/components/Box";
+import Heading from "grommet/components/Heading";
+import Section from "grommet/components/Section";
+import FormField from "grommet/components/FormField";
+import Footer from "grommet/components/Footer";
+import Select from "grommet/components/Select";
+import CheckmarkIcon from "grommet/components/icons/base/Checkmark";
+import Button from "grommet/components/Button";
+import Menu from "grommet/components/Menu";
+import { graphql, compose } from "react-apollo";
+import Toast from "grommet/components/Toast";
+import axios from "axios";
+import gql from "graphql-tag";
+import styles from "./index.module.scss";
+import { FullSection, MainContent, MainBox } from "./styles";
+import { Divider, LoadingIndicator, SettingsSidebar } from "components";
 import { Navbar, AppFooter } from "components";
-import regeneratorRuntime from 'regenerator-runtime';
+import regeneratorRuntime from "regenerator-runtime";
 
 class UpdateProfileContainer extends Component {
   constructor() {
@@ -27,27 +27,38 @@ class UpdateProfileContainer extends Component {
       load_default: false,
       getData: false,
       getSecondData: false,
-      currentUser: 'None',
-      isLoading: true,
+      currentUser: "None",
+      isLoading: true
     };
   }
 
   componentDidMount() {
-    if (!localStorage.getItem('auth_token')) {
-      window.location.replace('/login');
+    if (!localStorage.getItem("auth_token")) {
+      window.location.replace("/login");
     }
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${
+          process.env.NODE_ENV === "development"
+            ? "https://personly-api.herokuapp.com/graphql"
+            : "https://api.jamesg.app/graphql"
+        }`,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-        },
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+        }
       });
 
       const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website gender api_key is_public } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: MAIN_QUERY }
+        )
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
@@ -71,7 +82,7 @@ class UpdateProfileContainer extends Component {
         })
         .catch(result => {
           this.setState({
-            currentUser: 'None',
+            currentUser: "None",
             getData: true,
             isLoading: false
           });
@@ -81,27 +92,25 @@ class UpdateProfileContainer extends Component {
 
   toggleUpdateAccount() {
     this.setState({
-      updateAccountToast: !this.state.updateAccountToast,
+      updateAccountToast: !this.state.updateAccountToast
     });
   }
 
   toggleUpdatePassword() {
     this.setState({
-      updatePasswordToast: !this.state.updatePasswordToast,
+      updatePasswordToast: !this.state.updatePasswordToast
     });
   }
 
   toggleRegenerateAPIKey() {
     this.setState({
-      regenerateAPIKeyToast: !this.state.regenerateAPIKeyToast,
+      regenerateAPIKeyToast: !this.state.regenerateAPIKeyToast
     });
   }
 
   render() {
     if (this.state.isLoading === true) {
-      return (
-        <div />
-      );
+      return <div />;
     }
 
     return (
@@ -112,12 +121,13 @@ class UpdateProfileContainer extends Component {
             <MainContent
               align="center"
               justify="start"
-              pad={{ vertical: 'large' }}>
+              pad={{ vertical: "large" }}
+            >
               <Heading tag="h2" align="center">
                 Edit Profile
               </Heading>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -126,7 +136,7 @@ class UpdateProfileContainer extends Component {
                     label="Full Name *"
                     htmlFor="name"
                     className={styles.formField}
-                    error={this.state.name_field ? this.state.name_field : ''}
+                    error={this.state.name_field ? this.state.name_field : ""}
                   >
                     <input
                       required
@@ -142,7 +152,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -154,7 +164,7 @@ class UpdateProfileContainer extends Component {
                     error={
                       this.state.profile_picture_field
                         ? this.state.profile_picture_field
-                        : ''
+                        : ""
                     }
                   >
                     <input
@@ -173,7 +183,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -182,7 +192,7 @@ class UpdateProfileContainer extends Component {
                     label="Email *"
                     htmlFor="email"
                     className={styles.formField}
-                    error={this.state.email_field ? this.state.email_field : ''}
+                    error={this.state.email_field ? this.state.email_field : ""}
                   >
                     <input
                       required
@@ -198,7 +208,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -208,7 +218,7 @@ class UpdateProfileContainer extends Component {
                     htmlFor="position"
                     className={styles.formField}
                     error={
-                      this.state.position_field ? this.state.position_field : ''
+                      this.state.position_field ? this.state.position_field : ""
                     }
                   >
                     <input
@@ -227,7 +237,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -237,7 +247,7 @@ class UpdateProfileContainer extends Component {
                     htmlFor="location"
                     className={styles.formField}
                     error={
-                      this.state.location_field ? this.state.location_field : ''
+                      this.state.location_field ? this.state.location_field : ""
                     }
                   >
                     <input
@@ -256,7 +266,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -266,7 +276,7 @@ class UpdateProfileContainer extends Component {
                     htmlFor="twitter"
                     className={styles.formField}
                     error={
-                      this.state.twitter_field ? this.state.twitter_field : ''
+                      this.state.twitter_field ? this.state.twitter_field : ""
                     }
                   >
                     <input
@@ -285,7 +295,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -297,7 +307,7 @@ class UpdateProfileContainer extends Component {
                     error={
                       this.state.personal_website_field
                         ? this.state.personal_website_field
-                        : ''
+                        : ""
                     }
                   >
                     <input
@@ -316,7 +326,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -326,20 +336,20 @@ class UpdateProfileContainer extends Component {
                     htmlFor="genderInput"
                     className={styles.formField}
                     error={
-                      this.state.gender_field ? this.state.gender_field : ''
+                      this.state.gender_field ? this.state.gender_field : ""
                     }
                   >
                     <Select
                       placeHolder=""
-                      options={['Male', 'Female', 'Other', 'Prefer Not To Say']}
+                      options={["Male", "Female", "Other", "Prefer Not To Say"]}
                       value={this.state.gender}
                       onChange={e => this.setState({ gender: e.option })}
                       className={styles.input}
                     />
                   </FormField>
-                  {this.state.gender === 'Other' && (
+                  {this.state.gender === "Other" && (
                     <Section
-                      pad={{ vertical: 'medium' }}
+                      pad={{ vertical: "medium" }}
                       align="center"
                       justify="center"
                     >
@@ -349,7 +359,7 @@ class UpdateProfileContainer extends Component {
                           htmlFor="bio"
                           className={styles.formField}
                           error={
-                            this.state.bio_field ? this.state.bio_field : ''
+                            this.state.bio_field ? this.state.bio_field : ""
                           }
                         >
                           <input
@@ -370,7 +380,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -379,7 +389,7 @@ class UpdateProfileContainer extends Component {
                     label="Bio *"
                     htmlFor="bio"
                     className={styles.formField}
-                    error={this.state.bio_field ? this.state.bio_field : ''}
+                    error={this.state.bio_field ? this.state.bio_field : ""}
                   >
                     <textarea
                       required
@@ -412,7 +422,7 @@ class UpdateProfileContainer extends Component {
                 Change Password
               </Heading>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -425,7 +435,7 @@ class UpdateProfileContainer extends Component {
                     error={
                       this.state.current_password_field
                         ? this.state.current_password_field
-                        : ''
+                        : ""
                     }
                   >
                     <input
@@ -442,7 +452,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -455,7 +465,7 @@ class UpdateProfileContainer extends Component {
                     error={
                       this.state.new_password_field
                         ? this.state.new_password_field
-                        : ''
+                        : ""
                     }
                   >
                     <input
@@ -472,7 +482,7 @@ class UpdateProfileContainer extends Component {
                 </Box>
               </Section>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -485,7 +495,7 @@ class UpdateProfileContainer extends Component {
                     error={
                       this.state.new_password_confirmation_field
                         ? this.state.new_password_confirmation_field
-                        : ''
+                        : ""
                     }
                   >
                     <input
@@ -495,7 +505,7 @@ class UpdateProfileContainer extends Component {
                       type="password"
                       onChange={e =>
                         this.setState({
-                          new_password_confirmation: e.target.value,
+                          new_password_confirmation: e.target.value
                         })
                       }
                       className={styles.input}
@@ -519,7 +529,7 @@ class UpdateProfileContainer extends Component {
                 API Key
               </Heading>
               <Section
-                pad={{ vertical: 'medium' }}
+                pad={{ vertical: "medium" }}
                 align="center"
                 justify="center"
               >
@@ -529,9 +539,7 @@ class UpdateProfileContainer extends Component {
                     htmlFor="api_key"
                     className={styles.formField}
                     error={
-                      this.state.api_key_field
-                        ? this.state.api_key_field
-                        : ''
+                      this.state.api_key_field ? this.state.api_key_field : ""
                     }
                   >
                     <input
@@ -566,7 +574,10 @@ class UpdateProfileContainer extends Component {
                 </Toast>
               )}
               {this.state.regenerateAPIKeyToast === true && (
-                <Toast status="ok" onClose={() => this.toggleRegenerateAPIKey()}>
+                <Toast
+                  status="ok"
+                  onClose={() => this.toggleRegenerateAPIKey()}
+                >
                   Your API key has been updated.
                 </Toast>
               )}
@@ -587,21 +598,21 @@ class UpdateProfileContainer extends Component {
       location,
       personal_website,
       twitter_username,
-      gender,
+      gender
     } = this.state;
-    if (this.state.gender === 'Other') {
+    if (this.state.gender === "Other") {
       this.setState({ gender: this.state.gender_custom });
     }
     this.setState({
-      name_field: '',
-      email_field: '',
-      profile_picture_field: '',
-      bio_field: '',
-      position_field: '',
-      location_field: '',
-      twitter_field: '',
-      personal_website_field: '',
-      errors: '',
+      name_field: "",
+      email_field: "",
+      profile_picture_field: "",
+      bio_field: "",
+      position_field: "",
+      location_field: "",
+      twitter_field: "",
+      personal_website_field: "",
+      errors: ""
     });
     await this.props
       .updateUser({
@@ -614,8 +625,8 @@ class UpdateProfileContainer extends Component {
           location,
           twitter_username,
           personal_website,
-          gender,
-        },
+          gender
+        }
       })
       .catch(res => {
         const errors = res.graphQLErrors.map(error => error);
@@ -624,7 +635,7 @@ class UpdateProfileContainer extends Component {
     if (this.state.errors) {
       {
         this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message }),
+          this.setState({ [error.field]: error.message })
         );
       }
     }
@@ -637,30 +648,33 @@ class UpdateProfileContainer extends Component {
     const {
       new_password,
       new_password_confirmation,
-      current_password,
+      current_password
     } = this.state;
     this.setState({
-      new_password_field: '',
-      new_password_confirmation_field: '',
-      current_password_field: '',
-      errors: '',
+      new_password_field: "",
+      new_password_confirmation_field: "",
+      current_password_field: "",
+      errors: ""
     });
     await this.props
       .updatePassword({
         variables: {
           new_password,
           new_password_confirmation,
-          current_password,
-        },
+          current_password
+        }
       })
       .catch(res => {
         const errors = res.graphQLErrors.map(error => error);
-        this.setState({ errors: errors, api_key: res.data.data.resetAPIKey[0].api_key });
+        this.setState({
+          errors: errors,
+          api_key: res.data.data.resetAPIKey[0].api_key
+        });
       });
     if (this.state.errors) {
       {
         this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message }),
+          this.setState({ [error.field]: error.message })
         );
       }
     }
@@ -670,24 +684,37 @@ class UpdateProfileContainer extends Component {
   };
 
   _updateAPIKey = async function() {
-    await this.props
-      .updatePassword({})
-      .catch(res => {
-        const errors = res.graphQLErrors.map(error => error);
-        this.setState({ errors });
-      });
+    await this.props.resetAPIKey({}).catch(res => {
+      const errors = res.graphQLErrors.map(error => error);
+      this.setState({ errors });
+    });
     if (this.state.errors) {
       {
         this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message }),
+          this.setState({ [error.field]: error.message })
         );
       }
     }
     if (!this.state.errors) {
+      const MAIN_QUERY = `{ getCurrentUser { id api_key } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: MAIN_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            api_key: result.data.data.getCurrentUser[0].api_key
+          });
+        });
       this.toggleRegenerateAPIKey();
     }
   };
-
 }
 
 const UPDATE_USER = gql`
@@ -744,7 +771,7 @@ const REGENERATE_API_KEY = gql`
 `;
 
 export default compose(
-  graphql(UPDATE_USER, { name: 'updateUser' }),
-  graphql(UPDATE_PASSWORD, { name: 'updatePassword' }),
-  graphql(REGENERATE_API_KEY, { name: 'resetAPIKey' }),
+  graphql(UPDATE_USER, { name: "updateUser" }),
+  graphql(UPDATE_PASSWORD, { name: "updatePassword" }),
+  graphql(REGENERATE_API_KEY, { name: "resetAPIKey" })
 )(UpdateProfileContainer);
