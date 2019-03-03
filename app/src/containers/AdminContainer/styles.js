@@ -29,7 +29,7 @@ export const MainContent = styled(Box)`
     box-sizing: border-box;
   }
   padding: 60px 0;
-  width: 50%;
+  width: 75%;
 `;
 
 export const MainBox = styled(Box)`

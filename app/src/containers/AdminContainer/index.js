@@ -78,7 +78,7 @@ class AdminContainer extends Component {
         }`
       });
 
-      const MAIN_QUERY = `{ getUsers(public: false) { id name shares twitter bio balance work_badge friend_badge } }`;
+      const MAIN_QUERY = `{ getUsers(public: false) { id name shares twitter bio balance is_public shares_issued } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -91,8 +91,7 @@ class AdminContainer extends Component {
         )
         .then(result => {
           this.setState({
-            users: result.data.data.getUsers,
-            total: result.data.data.getUsers.length
+            users: result.data.data.getUsers
           });
         })
         .catch(error => {
@@ -101,7 +100,7 @@ class AdminContainer extends Component {
           });
         });
 
-      const RAISING_USERS_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance work_badge friend_badge } }`;
+      const RAISING_USERS_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -122,59 +121,28 @@ class AdminContainer extends Component {
             public_users: []
           });
         });
-
-      const UPDATE_QUERY = `{ getUpdates { id title url created_on } }`;
-
-      axiosGitHubGraphQL
-        .post(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          { query: UPDATE_QUERY }
-        )
-        .then(result => {
-          this.setState({
-            updates: result.data.data.getUpdates,
-            getData: true,
-            isLoading: false
-          });
-        })
-        .catch(error => {
-          this.setState({
-            users: [],
-            length: 0,
-            getData: true,
-            isLoading: false
-          });
-        });
-
-      const BALANCE_QUERY = "{ getUsers(id: 1) { id balance } }";
-
-      axiosGitHubGraphQL
-        .post(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          {
-            query: BALANCE_QUERY
-          }
-        )
-        .then(result => {
-          this.setState({
-            jamesgFunds: result.data.data.getUsers[0],
-            getData: true
-          });
-        });
     }
   }
 
   toggleUserDeleted() {
     this.setState({
       userDeleted: !this.state.userDeleted
+    });
+  }
+
+  toggleUpdateUserStatusLayer(user) {
+    this.setState({
+      userStatusLayer: !this.state.userStatusLayer,
+      user: user,
+      name: user.name,
+      is_public: user.is_public,
+      shares_issued: user.shares_issued
+    });
+  }
+
+  toggleUpdateUserStatusToast() {
+    this.setState({
+      userStatusToast: !this.state.userStatusToast
     });
   }
 
@@ -236,6 +204,7 @@ class AdminContainer extends Component {
                               <th>User</th>
                               <th>Twitter</th>
                               <th>Balance</th>
+                              <th>Edit</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -260,6 +229,82 @@ class AdminContainer extends Component {
                                   <td>
                                     ${parseFloat(user.balance).toFixed(2)}
                                   </td>
+                                  <td>
+                                    <Anchor
+                                      onClick={() =>
+                                        this.toggleUpdateUserStatusLayer(user)
+                                      }
+                                      label="Edit"
+                                    />
+                                  </td>
+                                </TableRow>
+                              );
+                            })}
+                          </tbody>
+                        </Table>
+                      </div>
+                    )}
+                  </Box>
+                  <Footer align="center" justify="center" pad="medium">
+                    <RCPagination
+                      style={{ color: "white" }}
+                      onChange={newPage => this.setNewPage(newPage)}
+                      defaultCurrent={1}
+                      pageSize={25}
+                      current={this.state.currentPage}
+                      total={this.state.total}
+                    />
+                  </Footer>
+                </Tab>
+                <Tab title="Publicly Traded Users">
+                  <Box pad="large" className={styles.tableItem}>
+                    <Heading tag="h2" align="center">
+                      Publicly Traded Users
+                    </Heading>
+                    {this.state.public_users && (
+                      <div>
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>User</th>
+                              <th>Twitter</th>
+                              <th>Shares</th>
+                              <th>Balance</th>
+                              <th>Shares Issued</th>
+                              <th>Edit</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {this.state.public_users.map(user => {
+                              return (
+                                <TableRow>
+                                  <td>
+                                    <Anchor
+                                      href={`/profile/${user.id}`}
+                                      label={`${user.name}`}
+                                    />
+                                  </td>
+                                  <td>
+                                    <Anchor
+                                      href={`https://twitter.com/${
+                                        user.twitter
+                                      }`}
+                                      label={user.twitter}
+                                    />
+                                  </td>
+                                  <td>{user.shares}</td>
+                                  <td>
+                                    ${parseFloat(user.balance).toFixed(2)}
+                                  </td>
+                                  <td>{user.shares_issued}</td>
+                                  <td>
+                                    <Anchor
+                                      onClick={() =>
+                                        this.toggleUpdateUserStatusLayer(user)
+                                      }
+                                      label="Edit"
+                                    />
+                                  </td>
                                 </TableRow>
                               );
                             })}
@@ -281,9 +326,70 @@ class AdminContainer extends Component {
                 </Tab>
               </Tabs>
             </Section>
+            {this.state.userStatusLayer === true && (
+              <Layer
+                closer={true}
+                flush={true}
+                overlayClose={true}
+                onClose={() =>
+                  this.toggleUpdateUserStatusLayer(this.state.user)
+                }
+              >
+                <Box pad="large">
+                  <Heading tag="h2">Update {this.state.user.name}</Heading>
+                  <br />
+                  <CheckBox
+                    label="Publicly Traded"
+                    checked={this.state.is_public ? true : false}
+                    onClick={() =>
+                      this.setState({ is_public: !this.state.is_public })
+                    }
+                  />
+                  <br />
+                  <FormField
+                    label="Shares Issued *"
+                    htmlFor="shares_issued"
+                    className={styles.formField}
+                    error={
+                      this.state.shares_issued_field
+                        ? this.state.shares_issued_field
+                        : ""
+                    }
+                  >
+                    <input
+                      required
+                      id="shares_issued"
+                      name="shares_issued"
+                      type="text"
+                      onChange={e =>
+                        this.setState({ shares_issued: e.target.value })
+                      }
+                      className={styles.input}
+                    />
+                  </FormField>
+                  <br />
+                  <Footer pad={{ vertical: "medium" }}>
+                    <Button
+                      label="Update"
+                      type="submit"
+                      primary={true}
+                      onClick={() => this._updateUserStatus(this.state.user.id)}
+                    />
+                  </Footer>
+                </Box>
+              </Layer>
+            )}
             {this.state.userDeleted === true && (
               <Toast status="ok" onClose={() => this.toggleUserDeleted()}>
                 The user has been deleted.
+              </Toast>
+            )}
+            {this.state.userStatusToast === true && (
+              <Toast
+                status="ok"
+                onClose={() => this.toggleUpdateUserStatusToast()}
+              >
+                The user has been updated.
               </Toast>
             )}
           </MainContent>
@@ -322,7 +428,8 @@ class AdminContainer extends Component {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
       });
-      const DELETE_UPDATE_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance work_badge friend_badge } }`;
+      const DELETE_UPDATE_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued } }`;
+
       axiosGitHubGraphQLAuth
         .post(
           `${
@@ -345,6 +452,66 @@ class AdminContainer extends Component {
       this.toggleUserDeleted();
     }
   };
+
+  _updateUserStatus = async function(id) {
+    var id = parseInt(id);
+    var is_public = this.state.is_public;
+    var shares_issued = parseInt(this.state.shares_issued);
+    this.setState({ user: [], name: "", is_public: false, shares_issued: 0 });
+    await this.props
+      .adminSetPublic({
+        variables: {
+          id,
+          is_public,
+          shares_issued
+        }
+      })
+      .catch(res => {
+        const errors = res.graphQLErrors.map(error => error);
+        this.setState({ errors });
+      });
+    if (this.state.errors) {
+      {
+        this.state.errors.map(error =>
+          this.setState({ [error.field]: error.message })
+        );
+      }
+    }
+    if (!this.state.errors) {
+      const axiosGitHubGraphQLAuth = axios.create({
+        baseURL: `${
+          process.env.NODE_ENV === "development"
+            ? "https://personly-api.herokuapp.com/graphql"
+            : "https://api.jamesg.app/graphql"
+        }`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+        }
+      });
+      const ADMIN_PUBLIC_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued } }`;
+
+      axiosGitHubGraphQLAuth
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: ADMIN_PUBLIC_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            users: result.data.data.getUsers
+          });
+        })
+        .catch(error => {
+          this.setState({
+            users: []
+          });
+        });
+      this.toggleUpdateUserStatusToast();
+    }
+  };
 }
 
 const DELETE_USER = gql`
@@ -355,6 +522,23 @@ const DELETE_USER = gql`
   }
 `;
 
-export default compose(graphql(DELETE_USER, { name: "deleteUser" }))(
-  AdminContainer
-);
+const ADMIN_SET_PUBLIC = gql`
+  mutation AdminSetPublic(
+    $id: Int!
+    $is_public: Boolean!
+    $shares_issued: Int!
+  ) {
+    adminSetPublic(
+      id: $id
+      is_public: $is_public
+      shares_issued: $shares_issued
+    ) {
+      id
+    }
+  }
+`;
+
+export default compose(
+  graphql(DELETE_USER, { name: "deleteUser" }),
+  graphql(ADMIN_SET_PUBLIC, { name: "adminSetPublic" })
+)(AdminContainer);
