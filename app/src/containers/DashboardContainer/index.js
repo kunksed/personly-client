@@ -73,11 +73,6 @@ class DashboardContainer extends Component {
             currentUser: result.data.data.getCurrentUser[0]
           });
         })
-        .catch(result => {
-          this.setState({
-            currentUser: "None"
-          });
-        });
 
       const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance gender } }`;
 
@@ -172,7 +167,7 @@ class DashboardContainer extends Component {
       return <div />;
     }
 
-    if (this.state.currentUser === "None") {
+    if (!localStorage.getItem("auth_token")) {
       window.location.replace("/login");
     }
 

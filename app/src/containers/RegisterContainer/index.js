@@ -40,7 +40,7 @@ class RegisterContainer extends Component {
 
   componentDidMount() {
     if (localStorage.getItem('auth_token')) {
-      window.location.replace('/questions');
+      window.location.replace('/dashboard');
     }
   }
 

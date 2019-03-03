@@ -51,6 +51,16 @@ class SettingsSidebar extends React.Component {
               href="/settings"
               icon={<ToolsIcon />}
             />
+            {this.props.currentUser.is_public === true && (
+              <Button
+                className={styles.button}
+                label="Dashboard"
+                onClick={e => e}
+                plain
+                href="/dashboard"
+                icon={<DashboardIcon />}
+              />
+            )}
             <Button
               className={styles.button}
               label="Investments"
@@ -67,16 +77,6 @@ class SettingsSidebar extends React.Component {
               href="/settings/deposit"
               icon={<AtmIcon />}
             />
-            {this.props.currentUser.is_public === true && (
-              <Button
-                className={styles.button}
-                label="Dashboard"
-                onClick={e => e}
-                plain
-                href="/dashboard"
-                icon={<DashboardIcon />}
-              />
-            )}
             {this.props.currentUser.is_public === true && (
               <Button
                 className={styles.button}

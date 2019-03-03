@@ -65,7 +65,7 @@ class Navbar extends Component {
         },
       });
 
-      const USER_QUERY = '{ getCurrentUser { id name role balance shares } }';
+      const USER_QUERY = '{ getCurrentUser { id name role balance shares is_public } }';
 
       axiosGitHubGraphQLAuth
         .post(`${process.env.NODE_ENV === 'development' ?'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: USER_QUERY })
@@ -216,7 +216,9 @@ class Navbar extends Component {
                     <Anchor href={`/profile/${this.state.currentUser.id}`}>
                       Profile
                     </Anchor>
-                    <Anchor href="/settings">Settings</Anchor>
+                    {this.state.currentUser.is_raising === true && (
+                      <Anchor href="/dashboard">Dashboard</Anchor>
+                    )}
                     {this.state.currentUser.role === 'Admin' && (
                       <Anchor href="/admin">Admin</Anchor>
                     )}

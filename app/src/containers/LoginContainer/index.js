@@ -37,7 +37,7 @@ class LoginContainer extends Component {
 
   componentDidMount() {
     if (localStorage.getItem('auth_token')) {
-      window.location.replace('/questions');
+      window.location.replace('/dashboard');
     }
   }
 
@@ -155,7 +155,7 @@ class LoginContainer extends Component {
           <Toast
             status="ok"
             onClose={() => {
-              window.location.replace('/questions');
+              window.location.replace('/dashboard');
             }}
           >
             You have been logged in.
