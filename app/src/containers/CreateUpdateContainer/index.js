@@ -9,7 +9,7 @@ import Menu from 'grommet/components/Menu';
 import { graphql, compose } from 'react-apollo';
 import Toast from 'grommet/components/Toast';
 import DateTime from 'grommet/components/DateTime';
-import CheckmarkIcon from 'grommet/components/icons/base/Checkmark';
+import EditIcon from 'grommet/components/icons/base/Edit';
 import axios from 'axios';
 import gql from 'graphql-tag';
 import styles from './index.module.scss';
@@ -44,7 +44,7 @@ class CreateUpdateContainer extends Component {
         },
       });
 
-      const MAIN_QUERY = `{ getCurrentUser { id name role email } }`;
+      const MAIN_QUERY = `{ getCurrentUser { id name is_public profile_picture } }`;
 
       axiosGitHubGraphQL
         .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
@@ -117,19 +117,19 @@ class CreateUpdateContainer extends Component {
               >
                 <Box size="medium" align="center">
                   <FormField
-                    label="Update URL *"
-                    htmlFor="url"
+                    label="Update Description *"
+                    htmlFor="description"
                     className={styles.formField}
-                    error={this.state.url_field ? this.state.url_field : ''}
+                    error={this.state.description_field ? this.state.description_field : ''}
                   >
-                    <input
+                    <textarea
                       required
-                      id="url"
-                      name="url"
-                      placeholder="https://medium.com"
-                      value={this.state.url}
+                      rows="15"
+                      id="description"
+                      name="description"
+                      value={this.state.description}
                       type="text"
-                      onChange={e => this.setState({ url: e.target.value })}
+                      onChange={e => this.setState({ description: e.target.value })}
                       className={styles.input}
                     />
                   </FormField>
@@ -138,13 +138,12 @@ class CreateUpdateContainer extends Component {
               <Footer align="center" justify="center">
                 <Menu inline direction="row" responsive={false}>
                   <Button
-                    label="Save"
-                    primary
+                    label="Create"
                     style={{ marginTop: 10, marginLeft: 5 }}
                     onClick={() => {
-                      this._createQuestion();
+                      this._createUpdate();
                     }}
-                    icon={<CheckmarkIcon />}
+                    icon={<EditIcon />}
                   />
                 </Menu>
               </Footer>
@@ -164,17 +163,17 @@ class CreateUpdateContainer extends Component {
   }
 
   _createUpdate = async function() {
-    const { title, url } = this.state;
+    const { title, description } = this.state;
     this.setState({
       title_field: "",
-      url_field: "",
+      description_field: "",
       errors: ""
     });
     await this.props
       .createUpdate({
         variables: {
           title,
-          url
+          description
         }
       })
       .catch(res => {
@@ -195,8 +194,8 @@ class CreateUpdateContainer extends Component {
 }
 
 const CREATE_UPDATE = gql`
-  mutation CreateUpdate($title: String, $url: String) {
-    createUpdate(title: $title, url: $url) {
+  mutation CreateUpdate($title: String, $description: String) {
+    createUpdate(title: $title, description: $description) {
       id
     }
   }

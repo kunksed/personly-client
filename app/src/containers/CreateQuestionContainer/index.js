@@ -9,7 +9,7 @@ import Menu from 'grommet/components/Menu';
 import { graphql, compose } from 'react-apollo';
 import Toast from 'grommet/components/Toast';
 import DateTime from 'grommet/components/DateTime';
-import CheckmarkIcon from 'grommet/components/icons/base/Checkmark';
+import EditIcon from 'grommet/components/icons/base/Edit';
 import axios from 'axios';
 import gql from 'graphql-tag';
 import styles from './index.module.scss';
@@ -45,7 +45,7 @@ class CreateQuestionContainer extends Component {
         },
       });
 
-      const MAIN_QUERY = `{ getCurrentUser { id name role email } }`;
+      const MAIN_QUERY = `{ getCurrentUser { id name is_public profile_picture } }`;
 
       axiosGitHubGraphQL
         .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
@@ -164,13 +164,12 @@ class CreateQuestionContainer extends Component {
               <Footer align="center" justify="center">
                 <Menu inline direction="row" responsive={false}>
                   <Button
-                    label="Save"
-                    primary
+                    label="Create"
                     style={{ marginTop: 10, marginLeft: 5 }}
                     onClick={() => {
                       this._createQuestion();
                     }}
-                    icon={<CheckmarkIcon />}
+                    icon={<EditIcon />}
                   />
                 </Menu>
               </Footer>
