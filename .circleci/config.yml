@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:7.4.0
+    working_directory: /home/ubuntu/personly-client
+    steps:
+      - checkout
+      - run: mkdir -p /home/ubuntu/personly-client/artifacts
+      - run: npm install
+      - run: npm run setup
+      - store_artifacts:
+          path: /home/ubuntu/personly-client/artifacts
+      - add_ssh_keys
