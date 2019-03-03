@@ -245,6 +245,38 @@ export const routes = {
           .catch(err => errorLoading(err));
       },
     },
+    {
+      path: '/terms',
+      getComponent(location, callback) {
+        System.import('./pages/TermsPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/privacy',
+      getComponent(location, callback) {
+        System.import('./pages/PrivacyPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/risks',
+      getComponent(location, callback) {
+        System.import('./pages/RisksPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/contact',
+      getComponent(location, callback) {
+        System.import('./pages/ContactPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
 /* GENERATOR: Newly generated Routes go here */
     {
       path: '*',

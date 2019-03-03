@@ -1,5 +1,7 @@
 .container {
   height: 100vh;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .headerText {
@@ -10,4 +12,17 @@
 
 .heroImage {
   opacity: 75%
+}
+
+.cardStyled {
+  border: solid #E9E9E9 !important;
+  border-width: 0 1px 1px !important;
+  border-bottom-right-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+}
+
+.mailListStyles {
+  background-color: #f7f7f7;
+  padding-bottom: 64px;
+  padding-top: 64px;
 }

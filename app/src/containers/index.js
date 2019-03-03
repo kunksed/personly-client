@@ -1,4 +1,8 @@
 /* GENERATOR: Assemble all containers for export */
+export ContactContainer from './ContactContainer';
+export RisksContainer from './RisksContainer';
+export PrivacyContainer from './PrivacyContainer';
+export TermsContainer from './TermsContainer';
 export EditShareholderUpdateContainer from './EditShareholderUpdateContainer';
 export GlobalLeaderboardContainer from './GlobalLeaderboardContainer';
 export ShareholderRelationsContainer from './ShareholderRelationsContainer';

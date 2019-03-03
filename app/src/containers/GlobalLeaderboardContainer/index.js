@@ -26,6 +26,7 @@ class GlobalLeaderboardContainer extends Component {
       all_shares: [],
     };
   }
+  
   render() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({

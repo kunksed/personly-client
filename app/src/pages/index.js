@@ -1,4 +1,8 @@
 /* GENERATOR: Assemble all pages for export */
+export ContactPage from './ContactPage';
+export RisksPage from './RisksPage';
+export PrivacyPage from './PrivacyPage';
+export TermsPage from './TermsPage';
 export ShareholderRelationsPage from './ShareholderRelationsPage';
 export EditShareholderUpdatePage from './EditShareholderUpdatePage';
 export GlobalLeaderboard from './GlobalLeaderboard';

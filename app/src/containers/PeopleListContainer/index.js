@@ -8,8 +8,11 @@ import Title from "grommet/components/Title";
 import Timestamp from "grommet/components/Timestamp";
 import Paragraph from "grommet/components/Paragraph";
 import Columns from "grommet/components/Columns";
+import Footer from "grommet/components/Footer";
+import Button from "grommet/components/Button";
 import Tiles from "grommet/components/Tiles";
 import Tile from "grommet/components/Tile";
+import FormField from "grommet/components/FormField";
 import Card from "grommet/components/Card";
 import axios from "axios";
 import { reduxForm } from "redux-form";
@@ -66,40 +69,72 @@ class PeopleListContainer extends Component {
     return (
       <div>
         <Box className={styles.container}>
-          <Section align="center" justify="center">
+          <Section>
             <br />
-            <Title tag="h2">
+            <Heading tag="h2" strong={true}>
               People raising right now
-            </Title>
-            <Paragraph>
+            </Heading>
+            <Heading tag="h3">
               All people raising are thoroughly vetted and approved.
-            </Paragraph>
-            <Divider />
-            {this.state.users.length === 0 && (
-              <Title align="center" tag="h3">
-                No users are publicly traded yet.
-              </Title>
-            )}
-            {this.state.users.length > 0 && (
-              <Tiles flush={false}>
-                {this.state.users.map(user => {
-                  return (
-                    <Tile>
-                      <Card
-                        thumbnail={user.profile_picture}
-                        heading={user.name}
-                        label={`${user.shares_issued} shares available`}
-                        description={`${user.bio.substring(0,149)}...`}
-                        link={<Anchor href={`/person/${user.id}`}
-                          label='Learn more' />}
-                      />
-                    </Tile>
-                  );
-                })}
-              </Tiles>
-            )}
+            </Heading>
+            <Box align="center" justify="center">
+              {this.state.users.length === 0 && (
+                <Title align="center" tag="h3">
+                  No users are publicly traded yet.
+                </Title>
+              )}
+              {this.state.users.length > 0 && (
+                <Tiles flush={false}>
+                  {this.state.users.map(user => {
+                    return (
+                      <Tile
+                        className={styles.cardStyled}>
+                        <Card
+                          textSize="small"
+                          thumbnail={user.profile_picture}
+                          heading={user.name}
+                          label={`${user.shares_issued} shares available`}
+                          description={`${user.bio.substring(0,149)}...`}
+                          link={<Anchor href={`/person/${user.id}`}
+                            label='Learn more' />}
+                        />
+                      </Tile>
+                    );
+                  })}
+                </Tiles>
+              )}
+            </Box>
           </Section>
         </Box>
+        <Section align="center" className={styles.mailListStyles}>
+          <Box>
+            <Title tag="h4">
+              Get emailed when a new person goes public.
+            </Title>
+            <FormField
+              label="Email *"
+              htmlFor="emailInput"
+              className={styles.formField}
+              error={this.state.email_field ? this.state.email_field : ''}
+            >
+              <input
+                required
+                id="emailInput"
+                name="email"
+                type="email"
+                onChange={e => this.setState({ email: e.target.value })}
+                className={styles.input}
+              />
+            </FormField>
+            <Footer pad={{ vertical: 'medium' }} align="center">
+              <Button
+                fill
+                label="Join"
+                type="submit"
+              />
+            </Footer>
+          </Box>
+        </Section>
       </div>
     );
   }

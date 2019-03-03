@@ -23,41 +23,6 @@ class Navbar extends Component {
 
   componentDidMount() {
     if (this.state.getData === false) {
-      const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
-      });
-
-      const MAIN_QUERY =
-        '{ getTradesToday { id trade_type shares price share_price created_at } }';
-
-      axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
-        .then(result => {
-          this.setState({ today_trades: result.data.data.getTradesToday });
-        });
-
-      const TRADES_QUERY =
-        '{ getTrades { id trade_type shares price share_price created_at } }';
-
-      axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
-        .then(result => {
-          this.setState({ trades: result.data.data.getTrades });
-        });
-
-      const YESTERDAY_QUERY =
-        '{ getTradesYesterday { id trade_type shares price share_price created_at } }';
-
-      axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
-          query: YESTERDAY_QUERY,
-        })
-        .then(result => {
-          this.setState({
-            yesterday_trades: result.data.data.getTradesYesterday,
-          });
-        });
-
       const axiosGitHubGraphQLAuth = axios.create({
         baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
         headers: {
