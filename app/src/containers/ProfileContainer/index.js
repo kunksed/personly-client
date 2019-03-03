@@ -103,10 +103,10 @@ class ProfileContainer extends Component {
           { query: TRADES_QUERY }
         )
         .then(result => {
-          this.setState({ trades: result.data.data.getTrades, getData: true });
+          this.setState({ investments: result.data.data.getTrades, getData: true });
         })
         .catch(error => {
-          this.setState({ trades: [] });
+          this.setState({ investments: [] });
         });
     }
   }

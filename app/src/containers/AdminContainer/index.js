@@ -204,6 +204,7 @@ class AdminContainer extends Component {
                               <th>User</th>
                               <th>Twitter</th>
                               <th>Balance</th>
+                              <th>Delete</th>
                               <th>Edit</th>
                             </tr>
                           </thead>
@@ -228,6 +229,14 @@ class AdminContainer extends Component {
                                   <td>{user.shares}</td>
                                   <td>
                                     ${parseFloat(user.balance).toFixed(2)}
+                                  </td>
+                                  <td>
+                                    <Anchor
+                                      onClick={() =>
+                                        this.deleteUser(user.id)
+                                      }
+                                      label="Delete"
+                                    />
                                   </td>
                                   <td>
                                     <Anchor
@@ -271,6 +280,7 @@ class AdminContainer extends Component {
                               <th>Shares</th>
                               <th>Balance</th>
                               <th>Shares Issued</th>
+                              <th>Delete</th>
                               <th>Edit</th>
                             </tr>
                           </thead>
@@ -297,6 +307,14 @@ class AdminContainer extends Component {
                                     ${parseFloat(user.balance).toFixed(2)}
                                   </td>
                                   <td>{user.shares_issued}</td>
+                                  <td>
+                                    <Anchor
+                                      onClick={() =>
+                                        this.deleteUser(user.id)
+                                      }
+                                      label="Delete"
+                                    />
+                                  </td>
                                   <td>
                                     <Anchor
                                       onClick={() =>
@@ -363,6 +381,29 @@ class AdminContainer extends Component {
                       type="text"
                       onChange={e =>
                         this.setState({ shares_issued: e.target.value })
+                      }
+                      className={styles.input}
+                    />
+                  </FormField>
+                  <br />
+                  <FormField
+                    label="Listing Description *"
+                    htmlFor="listing_description"
+                    className={styles.formField}
+                    error={
+                      this.state.listing_description_field
+                        ? this.state.listing_description_field
+                        : ""
+                    }
+                  >
+                    <textarea
+                      rows="15"
+                      required
+                      id="listing_description"
+                      name="listing_description"
+                      type="text"
+                      onChange={e =>
+                        this.setState({ listing_description: e.target.value })
                       }
                       className={styles.input}
                     />
@@ -455,7 +496,7 @@ class AdminContainer extends Component {
 
   _updateUserStatus = async function(id) {
     var id = parseInt(id);
-    var is_public = this.state.is_public;
+    var { is_public, listing_description } = this.state;
     var shares_issued = parseInt(this.state.shares_issued);
     this.setState({ user: [], name: "", is_public: false, shares_issued: 0 });
     await this.props
@@ -509,6 +550,7 @@ class AdminContainer extends Component {
             users: []
           });
         });
+      this.toggleUpdateUserStatusLayer();
       this.toggleUpdateUserStatusToast();
     }
   };
@@ -527,11 +569,13 @@ const ADMIN_SET_PUBLIC = gql`
     $id: Int!
     $is_public: Boolean!
     $shares_issued: Int!
+    $listing_description: String!
   ) {
     adminSetPublic(
       id: $id
       is_public: $is_public
       shares_issued: $shares_issued
+      listing_description: $listing_description
     ) {
       id
     }

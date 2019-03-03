@@ -55,7 +55,7 @@ class PersonContainer extends Component {
 
       const PROFILE_QUERY = `{ getUsers(id: ${
         this.props.props.params.id
-      }) { id name bio } }`;
+      }) { id name listing_description } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -281,7 +281,7 @@ class PersonContainer extends Component {
                 <Title align="left" tag="h2">
                   About
                 </Title>
-                <Paragraph>{this.state.user.bio}</Paragraph>
+                <Paragraph>{this.state.user.listing_description}</Paragraph>
               </Box>
               <Box>
                 <Title align="left" tag="h2">
