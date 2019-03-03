@@ -118,7 +118,7 @@ export const routes = {
       },
     },
     {
-      path: '/leaderboard',
+      path: '/dashboard/leaderboard',
       getComponent(location, callback) {
         System.import('./pages/LeaderboardPage')  // eslint-disable-line block-scoped-var
           .then(loadRoute(callback))
@@ -158,7 +158,7 @@ export const routes = {
       },
     },
     {
-      path: '/updates',
+      path: '/updates/:id',
       getComponent(location, callback) {
         System.import('./pages/UpdatesPage')  // eslint-disable-line block-scoped-var
           .then(loadRoute(callback))

@@ -78,7 +78,7 @@ class DashboardContainer extends Component {
           });
         });
 
-      const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance gender }`;
+      const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance gender } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -195,13 +195,11 @@ class DashboardContainer extends Component {
               <Box direction="row">
                 <Value
                   value={this.state.shareholders.count}
-                  icon={<IterationIcon colorIndex="brand" />}
                   label="Shareholders"
                   className={styles.boxStyled}
                 />
                 <Value
                   value={sharesIssued}
-                  icon={<StarIcon colorIndex="brand" />}
                   label="Shares Issued"
                   className={styles.boxStyled}
                 />
@@ -209,6 +207,8 @@ class DashboardContainer extends Component {
               <Divider />
               <Box>
                 <Heading tag="h2">Gender Distribution of Shareholders</Heading>
+                {user_genders.length > 0 && (
+                  <div>
                 <HighchartsReact highcharts={Highcharts} options={options} />
                 <Table>
                   <thead>
@@ -228,12 +228,16 @@ class DashboardContainer extends Component {
                     })}
                   </tbody>
                 </Table>
+                </div>
+              )}
+              {user_genders.length === 0 && (
+                <Paragraph>No data is available at this moment.</Paragraph>
+              )}
               </Box>
               <Footer align="center" justify="center">
                 <Menu inline direction="row" responsive={false}>
                   <Button
                     label="View profile"
-                    primary
                     href={`/people/${this.state.currentUser.id}`}
                     style={{ marginTop: 10, marginLeft: 5 }}
                   />

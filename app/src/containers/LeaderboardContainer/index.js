@@ -90,33 +90,27 @@ class ShareholdersContainer extends Component {
         .then(result => {
           this.setState({
             shareholders: result.data.data.getShareholders,
-            getSecondData: true,
-            getData: true,
-            isLoading: false
           });
         })
         .catch(result => {
           this.setState({
             shareholders: [],
-            getData: true,
-            isLoading: false
           });
         });
-        const BALANCE_QUERY = `{ getHighestBalance(limit: 10) { id name balance work_badge friend_badge } }`;
+        const BALANCE_QUERY = `{ getHighestBalance(limit: 10) { id name balance } }`;
 
         axiosGitHubGraphQL
           .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: BALANCE_QUERY })
           .then(result => {
             this.setState({
               highest_balance: result.data.data.getHighestBalance,
-              getData: true,
             });
           })
           .catch(error => {
             this.setState({ getData: true });
           });
 
-        const SECOND_QUERY = `{ getMostShares(limit: 10) { id name shares work_badge friend_badge } }`;
+        const SECOND_QUERY = `{ getMostShares(limit: 10) { id name shares } }`;
 
         axiosGitHubGraphQL
           .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
@@ -124,10 +118,11 @@ class ShareholdersContainer extends Component {
             this.setState({
               most_shares: result.data.data.getMostShares,
               getData: true,
+              isLoading: false
             });
           })
           .catch(error => {
-            this.setState({ getData: true });
+            this.setState({ getData: true, isLoading: false });
           });
     }
   }
@@ -136,6 +131,7 @@ class ShareholdersContainer extends Component {
     if (this.state.isLoading === true) {
       return <div />;
     }
+
     var data = this.state.most_shares.map(function(share) {
       return { name: share.name, y: share.shares };
     });
