@@ -1,5 +1,9 @@
 .container {
-  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
 }
 
 .headerText {
@@ -10,4 +14,21 @@
 
 .heroImage {
   opacity: 75%
+}
+
+.buttonLeft {
+  margin-right: 20px;
+}
+
+.commentReply {
+  padding-top: 10px;
+  padding-left: 50px;
+}
+
+.commentBox {
+  padding-bottom: 10px;
+}
+
+.registerButton {
+  color: white !important
 }

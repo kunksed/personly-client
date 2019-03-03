@@ -104,7 +104,7 @@ class QuestionContainer extends Component {
 
       const COMMENT_QUERY = `{ getComments(id: ${parseInt(
         this.props.props.params.id
-      )}) { id user { id name shares } body created_at reply_id } }`;
+      )}) { id user { id name } body created_at reply_id } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -628,8 +628,7 @@ class QuestionContainer extends Component {
                             return (
                               <Box key={i} className={styles.commentBox}>
                                 <Anchor href={`/profile/${comment.user.id}`}>
-                                  {comment.user.name} (owns{" "}
-                                  {comment.user.shares} shares)
+                                  {comment.user.name}
                                 </Anchor>
                                 <Heading tag="h5">
                                   Posted on:{" "}
@@ -683,8 +682,7 @@ class QuestionContainer extends Component {
                                           comment_info.user.id
                                         }`}
                                       >
-                                        {comment_info.user.name} (owns{" "}
-                                        {comment_info.user.shares} shares)
+                                        {comment_info.user.name}
                                       </Anchor>
                                       {this.state.currentUser && (
                                         <div>

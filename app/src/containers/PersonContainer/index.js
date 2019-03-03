@@ -26,6 +26,7 @@ import regeneratorRuntime from "regenerator-runtime";
 import gql from "graphql-tag";
 import axios from "axios";
 import { reduxForm } from "redux-form";
+import { ThumbnailImage, Wrapper } from './styles';
 import { MainBox, FullSection } from "./styles";
 import { Navbar, AppFooter } from "components";
 import { NotFoundContainer } from "containers";
@@ -56,7 +57,7 @@ class PersonContainer extends Component {
 
       const PROFILE_QUERY = `{ getUsers(id: ${
         this.props.props.params.id
-      }) { id name listing_description } }`;
+      }) { id name listing_description profile_picture } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -152,7 +153,7 @@ class PersonContainer extends Component {
 
       const UPDATES_QUERY = `{ getUpdates(user: ${
         this.props.props.params.id
-      }) { id title url created_on } }`;
+      }) { id title created_on } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -276,7 +277,11 @@ class PersonContainer extends Component {
             size="small"
           >
             <Box direction="row" justify="center" align="center">
-              <Box basis="1/2" align="end" pad="medium" />
+              <Box basis="1/2" align="end" pad="medium">
+                <Wrapper imageSize={200}>
+                  <ThumbnailImage src={this.state.user.profile_picture} />
+                </Wrapper>
+              </Box>
               <Box basis="1/2" align="start" pad="medium">
                 <Heading margin="none">{this.state.user.name}</Heading>
                 <br />
@@ -566,7 +571,7 @@ class PersonContainer extends Component {
             </Title>
             <Divider />
             {this.state.updates.length === 0 && (
-              <Title align="center" tag="h3">
+              <Title align="center" tag="h5">
                 No updates have been posted yet.
               </Title>
             )}
@@ -579,7 +584,7 @@ class PersonContainer extends Component {
                       <div>
                         <Heading tag="h3">{update.title}</Heading>
                       </div>
-                      <Anchor href={`${update.url}`}>Read more</Anchor>
+                      <Anchor href={`/updates/${update.id}`}>Read more</Anchor>
                     </Box>
                   );
                 })}

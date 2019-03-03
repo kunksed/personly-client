@@ -10,6 +10,7 @@ import CheckmarkIcon from "grommet/components/icons/base/Checkmark";
 import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
 import Table from "grommet/components/Table";
+import Paragraph from "grommet/components/Paragraph";
 import TableRow from "grommet/components/TableRow";
 import { graphql, compose } from "react-apollo";
 import Toast from "grommet/components/Toast";
@@ -20,10 +21,10 @@ import { FullSection, MainContent, MainBox } from "./styles";
 import { Divider, LoadingIndicator, SettingsSidebar } from "components";
 import { Navbar, AppFooter } from "components";
 import regeneratorRuntime from "regenerator-runtime";
-import Highcharts from 'highcharts/highstock';
-import HighchartsReact from 'highcharts-react-official';
+import Highcharts from "highcharts/highstock";
+import HighchartsReact from "highcharts-react-official";
 
-class ShareholdersContainer extends Component {
+class LeaderboardContainer extends Component {
   constructor() {
     super();
     this.state = {
@@ -54,7 +55,7 @@ class ShareholdersContainer extends Component {
         }
       });
 
-      const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website gender api_key shares_issued } }`;
+      const MAIN_QUERY = `{ getCurrentUser { id name profile_picture is_public shares_issued } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -67,16 +68,16 @@ class ShareholdersContainer extends Component {
         )
         .then(result => {
           this.setState({
-            currentUser: result.data.data.getCurrentUser[0],
+            currentUser: result.data.data.getCurrentUser[0]
           });
         })
         .catch(result => {
           this.setState({
-            currentUser: "None",
+            currentUser: "None"
           });
         });
 
-      const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance }`;
+      const SHAREHOLDERS_QUERY = `{ getShareholders { id user { id name } user_shares } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -89,41 +90,55 @@ class ShareholdersContainer extends Component {
         )
         .then(result => {
           this.setState({
-            shareholders: result.data.data.getShareholders,
+            shareholders: result.data.data.getShareholders
           });
         })
         .catch(result => {
           this.setState({
-            shareholders: [],
+            shareholders: []
           });
         });
-        const BALANCE_QUERY = `{ getHighestBalance(limit: 10) { id name balance } }`;
+      const BALANCE_QUERY = `{ getHighestBalance(limit: 10) { id name balance } }`;
 
-        axiosGitHubGraphQL
-          .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: BALANCE_QUERY })
-          .then(result => {
-            this.setState({
-              highest_balance: result.data.data.getHighestBalance,
-            });
-          })
-          .catch(error => {
-            this.setState({ getData: true });
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: BALANCE_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            highest_balance: result.data.data.getHighestBalance
           });
+        })
+        .catch(error => {
+          this.setState({ getData: true });
+        });
 
-        const SECOND_QUERY = `{ getMostShares(limit: 10) { id name shares } }`;
+      const SECOND_QUERY = `{ getMostShares(limit: 10) { id name shares } }`;
 
-        axiosGitHubGraphQL
-          .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: SECOND_QUERY })
-          .then(result => {
-            this.setState({
-              most_shares: result.data.data.getMostShares,
-              getData: true,
-              isLoading: false
-            });
-          })
-          .catch(error => {
-            this.setState({ getData: true, isLoading: false });
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: SECOND_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            most_shares: result.data.data.getMostShares,
+            getData: true,
+            isLoading: false
           });
+        })
+        .catch(error => {
+          this.setState({ getData: true, isLoading: false });
+        });
     }
   }
 
@@ -137,47 +152,48 @@ class ShareholdersContainer extends Component {
     });
 
     var dataTotal = this.state.most_shares.map(function(share) {
-      return share.shares;
+      return share.user.shares;
     });
 
-    var shareTotal = this.state.all_shares.map(function(share) {
-      return share.shares;
+    var shareTotal = this.state.shareholders.map(function(share) {
+      return share.user.shares;
     });
 
-    var total = this.state.currentUser.shares_issued - parseFloat(shareTotal[0]);
+    var total =
+      this.state.currentUser.shares_issued - parseFloat(shareTotal[0]);
 
-    data.push({ name: 'Other', y: total });
+    data.push({ name: "Other", y: total });
 
     const options = {
       chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
-        type: 'pie',
+        type: "pie"
       },
       title: {
         text: "Shareholders"
       },
       tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+        pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
       },
       plotOptions: {
         pie: {
           allowPointSelect: true,
-          cursor: 'pointer',
+          cursor: "pointer",
           dataLabels: {
-            enabled: false,
+            enabled: false
           },
-          showInLegend: true,
-        },
+          showInLegend: true
+        }
       },
       series: [
         {
-          name: 'Shareholders',
+          name: "Shareholders",
           colorByPoint: true,
-          data: data,
-        },
-      ],
+          data: data
+        }
+      ]
     };
 
     return (
@@ -191,13 +207,16 @@ class ShareholdersContainer extends Component {
               pad={{ vertical: "large" }}
             >
               <Heading tag="h2" align="center">
-                Shareholders
+                Shareholder Leaderboard
               </Heading>
-
-                <HighchartsReact highcharts={Highcharts} options={options} />
-                <Columns size="large" align="center" justify="center">
+              {this.state.shareholders.length === 0 && (
+                <Paragraph>You have no shareholders yet.</Paragraph>
+              )}
+              {this.state.shareholders.length > 0 && (
+                <div>
+                  <HighchartsReact highcharts={Highcharts} options={options} />
                   <Box align="left" pad="medium" margin="small" pad="large">
-                    <Heading align="center" tag="h2">
+                    <Heading align="center" tag="h3">
                       Most Shares
                     </Heading>
                     {this.state.most_shares && (
@@ -231,7 +250,7 @@ class ShareholdersContainer extends Component {
                   <Box align="left" pad="medium" margin="small" pad="large">
                     {this.state.highest_balance && (
                       <div>
-                        <Heading align="center" tag="h2">
+                        <Heading align="center" tag="h3">
                           Highest Balance
                         </Heading>
                         <Table>
@@ -251,7 +270,9 @@ class ShareholdersContainer extends Component {
                                       label={`${user.name}`}
                                     />
                                   </td>
-                                  <td>${parseFloat(user.balance).toFixed(2)}</td>
+                                  <td>
+                                    ${parseFloat(user.balance).toFixed(2)}
+                                  </td>
                                 </TableRow>
                               );
                             })}
@@ -260,7 +281,8 @@ class ShareholdersContainer extends Component {
                       </div>
                     )}
                   </Box>
-                </Columns>
+                </div>
+              )}
             </MainContent>
           </FullSection>
         </MainBox>
@@ -269,4 +291,4 @@ class ShareholdersContainer extends Component {
   }
 }
 
-export default ShareholdersContainer;
+export default LeaderboardContainer;

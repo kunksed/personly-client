@@ -10,6 +10,7 @@ import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
 import Table from "grommet/components/Table";
 import Value from "grommet/components/Value";
+import Paragraph from "grommet/components/Paragraph";
 import TableRow from "grommet/components/TableRow";
 import IterationIcon from "grommet/components/icons/base/Iteration";
 import StarIcon from "grommet/components/icons/base/Star";
@@ -104,6 +105,65 @@ class DashboardContainer extends Component {
             isLoading: false
           });
         });
+
+      const TODAY_QUERY = `{ getTradesToday { id trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: TODAY_QUERY }
+        )
+        .then(result => {
+          this.setState({ today_trades: result.data.data.getTradesToday });
+        });
+
+      const YESTERDAY_QUERY = `{ getTradesYesterday { id trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: YESTERDAY_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            yesterday_trades: result.data.data.getTradesYesterday
+          });
+        });
+
+
+      const TRADES_QUERY = `{ getTrades { id trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: TRADES_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            trades: result.data.data.getTrades,
+            getData: true,
+            isLoading: false
+          });
+        })
+        .catch(error => {
+          this.setState({
+            trades: [],
+            getData: true,
+            isLoading: false
+          });
+        });
     }
   }
 
@@ -144,11 +204,11 @@ class DashboardContainer extends Component {
       user_genders.push({ name: item, value: user_genders_result[item] });
     }
 
-    var data = user_genders.map(gender => {
+    var genderData = user_genders.map(gender => {
       return { name: gender.name, y: gender.value };
     });
 
-    const options = {
+    const optionsGender = {
       chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
@@ -173,7 +233,36 @@ class DashboardContainer extends Component {
         {
           name: "Genders",
           colorByPoint: true,
-          data: data
+          data: genderData
+        }
+      ]
+    };
+
+    var data = this.state.trades.map(function(vote) {
+      var date = Date.parse(vote.created_at);
+      return [date, parseFloat(vote.share_price)];
+    });
+
+    var new_data = this.state.today_trades.map(function(vote) {
+      var date = Date.parse(vote.created_at);
+      return [date, parseFloat(vote.share_price)];
+    });
+
+    var yesterday_data = this.state.yesterday_trades.map(function(vote) {
+      var date = Date.parse(vote.created_at);
+      return [date, parseFloat(vote.share_price)];
+    });
+
+    const options = {
+      series: [
+        {
+          data: data,
+          name: "JG",
+          type: "area",
+          threshold: null,
+          tooltip: {
+            valueDecimals: 2
+          }
         }
       ]
     };
@@ -194,7 +283,7 @@ class DashboardContainer extends Component {
               <Divider />
               <Box direction="row">
                 <Value
-                  value={this.state.shareholders.count}
+                  value={this.state.shareholders.length}
                   label="Shareholders"
                   className={styles.boxStyled}
                 />
@@ -203,13 +292,145 @@ class DashboardContainer extends Component {
                   label="Shares Issued"
                   className={styles.boxStyled}
                 />
+                {data.length > 0 && (
+                  <Value
+                    value={data[0][0]}
+                    label="Share Price"
+                    className={styles.boxStyled}
+                  />
+                )}
+                {data.length === 0 && (
+                  <Value
+                    value={0}
+                    label="Share Price"
+                    className={styles.boxStyled}
+                  />
+                )}
               </Box>
+              <Divider />
+              <Heading tag="h2" align="center">
+                Investor Graph
+              </Heading>
+              <HighchartsReact
+                highcharts={Highcharts}
+                constructorType={"stockChart"}
+                options={options}
+              />
+              {new_data.length > 1 && (
+                <Box align="center" justify="center">
+                  {new_data[0][1] - new_data[new_data.length - 1][1] > 0 && (
+                    <Box colorIndex="ok" pad="small">
+                      <Anchor>
+                        +$
+                        {parseFloat(
+                          new_data[0][1] - yesterday_data[0][1]
+                        ).toFixed(2)}{" "}
+                        | +
+                        {parseFloat(
+                          ((new_data[0][1] - yesterday_data[0][1]) /
+                            new_data[0][1]) *
+                            100
+                        ).toFixed(2)}
+                        %
+                      </Anchor>
+                    </Box>
+                  )}
+                  {new_data[0][1] - new_data[new_data.length - 1][1] < 0 && (
+                    <Box colorIndex="critical" pad="small">
+                      <Anchor>
+                        -$
+                        {parseFloat(
+                          new_data[0][1] - yesterday_data[0][1]
+                        ).toFixed(2)}{" "}
+                        | -
+                        {parseFloat(
+                          ((new_data[0][1] - yesterday_data[0][1]) /
+                            new_data[0][1]) *
+                            100
+                        ).toFixed(2)}
+                        %
+                      </Anchor>
+                    </Box>
+                  )}
+                  {new_data[0][1] - new_data[new_data.length - 1][1] ===
+                    0 && (
+                    <Box colorIndex="unknown" pad="small">
+                      <Anchor>
+                        $
+                        {parseFloat(
+                          new_data[0][1] - yesterday_data[0][1]
+                        ).toFixed(2)}{" "}
+                        | 0%
+                      </Anchor>
+                    </Box>
+                  )}
+                </Box>
+              )}
+              {new_data.length === 1 && (
+                <Box align="center" justify="center">
+                  {new_data[0][1] > 0 && (
+                    <Box colorIndex="ok" pad="small">
+                      <Anchor>
+                        +$
+                        {parseFloat(
+                          new_data[0][1] - yesterday_data[0][1]
+                        ).toFixed(2)}{" "}
+                        | +
+                        {parseFloat(
+                          ((new_data[0][1] - yesterday_data[0][1]) /
+                            new_data[0][1]) *
+                            100
+                        ).toFixed(2)}
+                        %
+                      </Anchor>
+                    </Box>
+                  )}
+                  {new_data[0][1] < 0 && (
+                    <Box colorIndex="critical" pad="small">
+                      <Anchor>
+                        -$
+                        {parseFloat(
+                          new_data[0][1] - yesterday_data[0][1]
+                        ).toFixed(2)}{" "}
+                        | -
+                        {parseFloat(
+                          ((new_data[0][1] - yesterday_data[0][1]) /
+                            new_data[0][1]) *
+                            100
+                        ).toFixed(2)}
+                        %
+                      </Anchor>
+                    </Box>
+                  )}
+                  {new_data[0][1] === 0 && (
+                    <Box colorIndex="unknown" pad="small">
+                      <Anchor>
+                        $
+                        {parseFloat(
+                          new_data[0][1] - yesterday_data[0][1]
+                        ).toFixed(2)}{" "}
+                        | 0%
+                      </Anchor>
+                    </Box>
+                  )}
+                </Box>
+              )}
+              {new_data.length === 0 && (
+                <Box
+                  colorIndex="unknown"
+                  pad="small"
+                  align="center"
+                  justify="center"
+                >
+                  <Anchor>$0 | 0%</Anchor>
+                </Box>
+              )}
               <Divider />
               <Box>
                 <Heading tag="h2">Gender Distribution of Shareholders</Heading>
                 {user_genders.length > 0 && (
                   <div>
-                <HighchartsReact highcharts={Highcharts} options={options} />
+                <HighchartsReact highcharts={Highcharts} options={optionsGender} />
                 <Table>
                   <thead>
                     <tr>
