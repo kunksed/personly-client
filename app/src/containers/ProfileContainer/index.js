@@ -71,27 +71,9 @@ class ProfileContainer extends Component {
           this.setState({ getData: true });
         });
 
-      const SECOND_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter personal_website } }`;
-
-      axiosGitHubGraphQL
-        .post(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          { query: SECOND_QUERY }
-        )
-        .then(result => {
-          this.setState({
-            currentUser: result.data.data.getCurrentUser[0],
-            getData: true
-          });
-        });
-
       const TRADES_QUERY = `{ getTrades(id: ${
         this.props.props.params.id
-      }) { id shares price trade_type created_at user_balance user_shares in_user { id name } } }`;
+      }) { id shares price trade_type created_at user_balance in_user { id name } } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -116,7 +98,7 @@ class ProfileContainer extends Component {
       return <div />;
     }
 
-    if (!this.state.trades) {
+    if (!this.state.investments) {
       return <div />;
     }
 
@@ -128,14 +110,9 @@ class ProfileContainer extends Component {
       );
     }
 
-    var data1 = this.state.trades.map(function(trade) {
+    var data1 = this.state.investments.map(function(trade) {
       var date = Date.parse(trade.created_at);
       return [date, parseFloat(trade.user_balance)];
-    });
-
-    var data2 = this.state.trades.map(function(trade) {
-      var date = Date.parse(trade.created_at);
-      return [date, parseFloat(trade.user_shares)];
     });
 
     const options = {
@@ -147,13 +124,6 @@ class ProfileContainer extends Component {
             valueDecimals: 2
           }
         },
-        {
-          name: "Shares",
-          data: data2,
-          tooltip: {
-            valueDecimals: 2
-          }
-        }
       ]
     };
 
@@ -176,15 +146,6 @@ class ProfileContainer extends Component {
                       fields="date"
                     />
                   </Heading>
-                  {this.state.currentUser && (
-                    <div>
-                      {this.state.currentUser.id === this.state.user.id && (
-                        <Anchor href="/settings" label="Edit your profile" />
-                      )}
-                      <br />
-                      <br />
-                    </div>
-                  )}
                   <Heading tag="h4">
                     Balance: ${parseFloat(this.state.user.balance).toFixed(2)}
                   </Heading>
