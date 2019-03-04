@@ -64,7 +64,7 @@ class QuestionContainer extends Component {
 
       const MAIN_QUERY = `{ getQuestions(id: ${parseInt(
         this.props.props.params.id
-      )}) { id user { id name profile_picture } title created_on description approved closes } }`;
+      )}) { id user { id name profile_picture header_image_url } title created_on description approved closes } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -407,7 +407,7 @@ class QuestionContainer extends Component {
             <Image
               fit="cover"
               full={true}
-              src="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+              src={this.state.question.user.header_image_url}
             />
           }
           size="small"

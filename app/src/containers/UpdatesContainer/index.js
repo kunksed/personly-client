@@ -54,7 +54,7 @@ class UpdatesContainer extends Component {
 
       const UPDATES_QUERY = `{ getUpdates(id: ${
         this.props.props.params.id
-      }) { id user { id name profile_picture } title description created_on } }`;
+      }) { id user { id name profile_picture header_image_url } title description created_on } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -151,7 +151,7 @@ class UpdatesContainer extends Component {
             <Image
               fit="cover"
               full={true}
-              src="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+              src={this.state.update.user.header_image_url}
             />
           }
           size="small"

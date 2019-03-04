@@ -13,6 +13,7 @@ import AtmIcon from 'grommet/components/icons/base/Atm';
 import ArticleIcon from 'grommet/components/icons/base/Article';
 import CircleQuestionIcon from 'grommet/components/icons/base/CircleQuestion';
 import UserExpertIcon from 'grommet/components/icons/base/UserExpert';
+import BookIcon from 'grommet/components/icons/base/Book';
 import { ThumbnailImage, Wrapper } from './styles';
 import cssModules from 'react-css-modules';
 import styles from './index.module.scss'
@@ -106,6 +107,16 @@ class SettingsSidebar extends React.Component {
                 plain
                 path="/dashboard/leaderboard"
                 icon={<LicenseIcon />}
+              />
+            )}
+            {this.props.currentUser.is_public === true && (
+              <Button
+                className={styles.button}
+                label="Update Listing"
+                onClick={e => e}
+                plain
+                path="/dashboard/listing"
+                icon={<BookIcon />}
               />
             )}
           </Box>

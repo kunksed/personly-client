@@ -57,7 +57,7 @@ class PersonContainer extends Component {
 
       const PROFILE_QUERY = `{ getUsers(id: ${
         this.props.props.params.id
-      }) { id name listing_description profile_picture } }`;
+      }) { id name listing_description profile_picture header_image_url } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -271,7 +271,7 @@ class PersonContainer extends Component {
               <Image
                 fit="cover"
                 full={true}
-                src="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+                src={this.state.user.header_image_url}
               />
             }
             size="small"

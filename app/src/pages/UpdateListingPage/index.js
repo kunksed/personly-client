@@ -1,10 +1,12 @@
 import React from 'react';
-import Box from 'grommet/components/Box';
+import cssModules from 'react-css-modules';
+import { UpdateListingContainer } from 'containers';
+import styles from './index.module.scss';
 
-export default function UpdateListingPage() {
-  return (
-    <Box>
-      Hello from UpdateListingPage!
-    </Box>
-  );
-}
+const UpdateListingPage = (props) => (
+  <div className={styles.container}>
+    <UpdateListingContainer props={props}/>
+  </div>
+);
+
+export default cssModules(UpdateListingPage, styles);

@@ -1,10 +1,12 @@
 import React from 'react';
-import Box from 'grommet/components/Box';
+import cssModules from 'react-css-modules';
+import { InvestorFaqsContainer } from 'containers';
+import styles from './index.module.scss';
 
-export default function InvestorFaqsPage() {
-  return (
-    <Box>
-      Hello from InvestorFaqsPage!
-    </Box>
-  );
-}
+const InvestorFaqsPage = (props) => (
+  <div className={styles.container}>
+    <InvestorFaqsContainer props={props} />
+  </div>
+);
+
+export default cssModules(InvestorFaqsPage, styles);
