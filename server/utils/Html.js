@@ -10,7 +10,7 @@ function Html({ content, state, scriptHash, vendorHash, cssHash, styles }) {
         <meta httpEquiv="Content-Language" content="en" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Personly - Invest in the future</title>
-        <link rel="icon" href="https://pbs.twimg.com/profile_images/1074379859491729408/Bkl1xAGr_bigger.jpg" type="image/png" sizes="16x16" />
+        <link rel="icon" href="https://sfo2.digitaloceanspaces.com/personly/personly.png" type="image/png" sizes="16x16" />
         <meta name="title" content="Personly - Invest in the future" />
         <meta name="description" content="" />
 

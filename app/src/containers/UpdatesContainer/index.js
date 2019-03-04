@@ -12,6 +12,7 @@ import Paragraph from "grommet/components/Paragraph";
 import FormField from "grommet/components/FormField";
 import FormFields from "grommet/components/FormFields";
 import Button from "grommet/components/Button";
+import Toast from "grommet/components/Toast";
 import Header from "grommet/components/Header";
 import Markdown from "grommet/components/Markdown";
 import Columns from "grommet/components/Columns";
@@ -508,9 +509,9 @@ class UpdatesContainer extends Component {
           Authorization: `Bearer ${this.state.auth_token}`
         }
       });
-      const COMMENT_QUERY = `{ getComments(id: ${parseInt(
+      const COMMENT_QUERY = `{ getComments(update: ${parseInt(
         this.props.props.params.id
-      )}) { id user { id name shares } body created_at } }`;
+      )}) { id user { id name } body created_at reply_id } }`;
 
       axiosGitHubGraphQL
         .post(

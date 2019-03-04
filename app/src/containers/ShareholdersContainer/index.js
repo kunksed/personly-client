@@ -145,7 +145,7 @@ class ShareholdersContainer extends Component {
                   {this.state.shareholders.map((shareholder) => {
                     <TableRow>
                       <td>#{shareholder.id}</td>
-                      <td><Anchor href={`/people/${shareholder.id}`} label={shareholder.name}/></td>
+                      <td><Anchor href={`/profile/${shareholder.id}`} label={shareholder.name}/></td>
                       <td>{shareholder.shares}</td>
                       <td>{shareholder.balance}</td>
                       <td className="secondary">{shareholder.created_on}</td>
@@ -161,7 +161,6 @@ class ShareholdersContainer extends Component {
                 <Menu inline direction="row" responsive={false}>
                   <Button
                     label="View people raising"
-                    primary
                     href="/people"
                     style={{ marginTop: 10, marginLeft: 5 }}
                   />

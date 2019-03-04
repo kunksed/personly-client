@@ -19,7 +19,7 @@ import Table from "grommet/components/Table";
 import TableRow from "grommet/components/TableRow";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
-import { MainBox, FullSection } from "./styles";
+import { MainBox, FullSection, Wrapper, ThumbnailImage } from "./styles";
 import { Divider, LoadingIndicator } from "components";
 import { Navbar, AppFooter } from "components";
 import { NotFoundContainer } from "containers";
@@ -64,7 +64,7 @@ class QuestionContainer extends Component {
 
       const MAIN_QUERY = `{ getQuestions(id: ${parseInt(
         this.props.props.params.id
-      )}) { id user { id name } title created_on description approved closes } }`;
+      )}) { id user { id name profile_picture } title created_on description approved closes } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -80,14 +80,11 @@ class QuestionContainer extends Component {
             question: result.data.data.getQuestions[0],
             approved: result.data.data.getQuestions[0].approved
           });
-        })
-        .catch(error => {
-          this.setState({ not_found: true });
         });
 
       const SECOND_QUERY = `{ getVotes(id: ${parseInt(
         this.props.props.params.id
-      )}) { id user { id name friend_badge work_badge } shares vote_type } }`;
+      )}) { id user { id name } shares } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -197,7 +194,7 @@ class QuestionContainer extends Component {
     if (this.state.not_found === true) {
       return (
         <div>
-          <NotFoundContainer pathname={this.state.props.props.pathname} />
+          <NotFoundContainer />
         </div>
       );
     }
@@ -328,49 +325,66 @@ class QuestionContainer extends Component {
       return <div />;
     }
 
-    if (this.state.getSecondData === false && this.state.currentUser) {
-      if (this.state.currentUser) {
-        const axiosGitHubGraphQL = axios.create({
-          baseURL: `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-          }
-        });
+    if (
+      this.state.getSecondData === false &&
+      this.state.currentUser !== "None"
+    ) {
+      const axiosGitHubGraphQL = axios.create({
+        baseURL: `${
+          process.env.NODE_ENV === "development"
+            ? "https://personly-api.herokuapp.com/graphql"
+            : "https://api.jamesg.app/graphql"
+        }`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+        }
+      });
 
-        const VOTED_QUERY = `{ getVotes(id: ${parseInt(
-          this.props.props.params.id
-        )}, user: ${parseInt(this.state.currentUser.id)}) {
+      const VOTED_QUERY = `{ getVotes(id: ${parseInt(
+        this.props.props.params.id
+      )}, user: ${parseInt(this.state.currentUser.id)}) {
         id
         user {
           id
           name
-          shares
-          friend_badge
-          work_badge
         }
         vote_type
       }}`;
 
-        axiosGitHubGraphQL
-          .post(
-            `${
-              process.env.NODE_ENV === "development"
-                ? "https://personly-api.herokuapp.com/graphql"
-                : "https://api.jamesg.app/graphql"
-            }`,
-            { query: VOTED_QUERY }
-          )
-          .then(result => {
-            this.setState({
-              voted: result.data.data.getVotes,
-              getSecondData: true
-            });
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: VOTED_QUERY }
+        )
+        .then(result => {
+          this.setState({
+            voted: result.data.data.getVotes,
+            getSecondData: true
           });
-      }
+        });
+
+      const SHARES_QUERY = `{ getMostRecentShares(in_user: ${parseInt(
+        this.props.props.params.id
+      )}, user: ${
+        this.state.currentUser.id
+      }) { id user { id name } user_shares } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://api.jamesg.app/graphql"
+          }`,
+          { query: SHARES_QUERY }
+        )
+        .then(result => {
+          this.setState({ user_shares: result.data.data.getMostRecentShares });
+        });
     }
 
     var today = new Date().getTime();
@@ -384,76 +398,84 @@ class QuestionContainer extends Component {
     }
 
     return (
-      <div>
-        <Box className={styles.container}>
-          <Box>
-            <Hero
-              justify="center"
-              align="center"
-              backgroundColorIndex="dark"
-              background={
-                <Image
-                  fit="cover"
-                  full={true}
-                  src="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+      <div className={styles.container}>
+        <Hero
+          justify="center"
+          align="center"
+          backgroundColorIndex="dark"
+          background={
+            <Image
+              fit="cover"
+              full={true}
+              src="https://images.unsplash.com/photo-1543970256-c86ba45b0d9b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+            />
+          }
+          size="small"
+        >
+          <Box direction="row" justify="center" align="center">
+            <Box basis="1/2" align="end" pad="medium">
+              <Wrapper imageSize={200}>
+                <ThumbnailImage
+                  src={this.state.question.user.profile_picture}
                 />
-              }
-              size="small"
-            >
-              <Box direction="row" justify="center" align="center">
-                <Box basis="1/2" align="end" pad="medium">
-                  <Wrapper imageSize={200}>
-                    <ThumbnailImage src={this.state.user.profile_picture} />
-                  </Wrapper>
-                </Box>
-                <Box basis="1/2" align="start" pad="medium">
-                  <Heading margin="none">{this.state.user.name} - Question</Heading>
-                </Box>
-              </Box>
-            </Hero>
-            <Section align="center" justify="center">
-              <Columns size="large" align="center" justify="center">
-                <Box align="center" pad="medium" margin="small">
-                  {this.state.approved && (
-                    <div>
-                      {this.state.approved === "true" && (
-                        <Heading align="center" tag="h2">
-                          Approved
-                        </Heading>
-                      )}
-                      {this.state.approved === "false" && (
-                        <Heading align="center" tag="h2">
-                          Denied
-                        </Heading>
-                      )}
-                    </div>
-                  )}
-                  <HighchartsReact highcharts={Highcharts} options={options} />
-                  {this.state.approved === null && (
-                    <Heading align="center" tag="h3">
-                      Vote closes at{" "}
-                      <Timestamp
-                        value={this.state.question.closes}
-                        fields="date"
-                      />
-                    </Heading>
-                  )}
-                  {this.state.approved !== null && (
-                    <Heading align="center" tag="h3">
-                      Vote closed on{" "}
-                      <Timestamp
-                        value={this.state.question.closes}
-                        fields="date"
-                      />
-                    </Heading>
-                  )}
-                  {this.state.approved === null && (
-                    <div>
-                      {this.state.currentUser !== "None" && (
-                        <div>
+              </Wrapper>
+            </Box>
+            <Box basis="1/2" align="start" pad="medium">
+              <Heading margin="none">
+                {this.state.question.user.name} - Question
+              </Heading>
+            </Box>
+          </Box>
+        </Hero>
+        <Box>
+          <Section align="center" justify="center">
+            <Columns size="large" align="center" justify="center">
+              <Box align="center" pad="medium" margin="small">
+                {this.state.approved && (
+                  <div>
+                    {this.state.approved === "true" && (
+                      <Heading align="center" tag="h2">
+                        Approved
+                      </Heading>
+                    )}
+                    {this.state.approved === "false" && (
+                      <Heading align="center" tag="h2">
+                        Denied
+                      </Heading>
+                    )}
+                  </div>
+                )}
+                <HighchartsReact highcharts={Highcharts} options={options} />
+                {this.state.approved === null && (
+                  <Heading align="center" tag="h3">
+                    Vote closes at{" "}
+                    <Timestamp
+                      value={this.state.question.closes}
+                      fields="date"
+                    />
+                  </Heading>
+                )}
+                {this.state.approved !== null && (
+                  <Heading align="center" tag="h3">
+                    Vote closed on{" "}
+                    <Timestamp
+                      value={this.state.question.closes}
+                      fields="date"
+                    />
+                  </Heading>
+                )}
+                {this.state.approved === null && (
+                  <div>
+                    {this.state.currentUser !== "None" && (
+                      <div>
+                        {this.state.user_shares.user_shares > 0 && (
                           <div>
                             <div>
                               <br />
+                              <Paragraph>
+                                You have {this.state.user_shares.user_shares}{" "}
+                                shares.
+                              </Paragraph>
                               <br />
                               <Box>
                                 <FormField
@@ -514,149 +536,181 @@ class QuestionContainer extends Component {
                               </Box>
                             </div>
                           </div>
-                        </div>
-                      )}
-                      <br />
-                    </div>
-                  )}
-                </Box>
-                <Box align="left" pad="medium" margin="small">
-                  <div>
-                    <Heading tag="h2">{this.state.question.title}</Heading>
-                    {this.state.currentUser && (
-                      <div>
-                        {this.state.currentUser.role === "Admin" && (
-                          <Anchor
-                            href={`/questions/${this.state.question.id}/edit`}
-                          >
-                            Edit question
-                          </Anchor>
                         )}
                       </div>
                     )}
-                    <Heading tag="h4">
-                      Posted on:{" "}
-                      <Timestamp
-                        value={this.state.question.created_on}
-                        fields="date"
-                      />
-                    </Heading>
-                    <Markdown content={this.state.question.description} />
+                    <br />
+                  </div>
+                )}
+              </Box>
+              <Box align="left" pad="medium" margin="small">
+                <div>
+                  <Heading tag="h2">{this.state.question.title}</Heading>
+                  {this.state.currentUser && (
+                    <div>
+                      {this.state.question.user.id ===
+                        this.state.currentUser.id && (
+                        <Anchor
+                          href={`/questions/${this.state.question.id}/edit`}
+                        >
+                          Edit question
+                        </Anchor>
+                      )}
+                    </div>
+                  )}
+                  <Heading tag="h4">
+                    Posted on:{" "}
+                    <Timestamp
+                      value={this.state.question.created_on}
+                      fields="date"
+                    />
+                  </Heading>
+                  <Markdown content={this.state.question.description} />
+                  <Divider />
+                  <Columns size="medium" align="center" justify="center">
+                    <Box margin="small" justify="center">
+                      <Heading tag="h3" align="center">
+                        Yes - {this.state.yes_vote_count}
+                      </Heading>
+                      {yes_votes && (
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Shares</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {result.map(res => {
+                              return (
+                                <TableRow>
+                                  <td>
+                                    <Anchor
+                                      href={`/profile/${res.id}`}
+                                      label={`${res.name} ${
+                                        res.work_badge == true ? "💼" : ""
+                                      } ${
+                                        res.friend_badge == true ? "🙌" : ""
+                                      }`}
+                                    />
+                                  </td>
+                                  <td>{res.shares}</td>
+                                </TableRow>
+                              );
+                            })}
+                          </tbody>
+                        </Table>
+                      )}
+                    </Box>
+                    <Box margin="small" justify="center">
+                      <Heading tag="h3" align="center">
+                        No - {this.state.no_vote_count}
+                      </Heading>
+                      {no_votes && (
+                        <Table>
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Shares</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {no_result.map(res => {
+                              return (
+                                <TableRow>
+                                  <td>
+                                    <Anchor
+                                      href={`/profile/${res.id}`}
+                                      label={`${res.name} ${
+                                        res.work_badge == true ? "💼" : ""
+                                      } ${
+                                        res.friend_badge == true ? "🙌" : ""
+                                      }`}
+                                    />
+                                  </td>
+                                  <td>{res.shares}</td>
+                                </TableRow>
+                              );
+                            })}
+                          </tbody>
+                        </Table>
+                      )}
+                    </Box>
+                  </Columns>
+                  <div key={this.state.comment_counter}>
                     <Divider />
-                    <Columns size="medium" align="center" justify="center">
-                      <Box margin="small" justify="center">
-                        <Heading tag="h3" align="center">
-                          Yes - {this.state.yes_vote_count}
-                        </Heading>
-                        {yes_votes && (
-                          <Table>
-                            <thead>
-                              <tr>
-                                <th>Name</th>
-                                <th>Shares</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {result.map(res => {
+                    <Heading tag="h3">Comments</Heading>
+                    {this.state.comments !== "None" && (
+                      <div>
+                        {this.state.upper_comments.map((comment, i) => {
+                          var comment_replies = this.state.comments.filter(
+                            function(new_comment) {
+                              return new_comment
+                                ? parseInt(new_comment.reply_id) ===
+                                    parseInt(comment.id)
+                                : null;
+                            }
+                          );
+                          return (
+                            <Box key={i} className={styles.commentBox}>
+                              <Anchor href={`/profile/${comment.user.id}`}>
+                                {comment.user.name}
+                              </Anchor>
+                              <Heading tag="h5">
+                                Posted on:{" "}
+                                <Timestamp value={comment.created_at} />
+                              </Heading>
+                              <Heading tag="h5">{comment.body}</Heading>
+                              {this.state.currentUser && (
+                                <div>
+                                  {comment.user.id ===
+                                    this.state.currentUser.id && (
+                                    <Anchor
+                                      onClick={() =>
+                                        this._deleteComment(comment.id)
+                                      }
+                                    >
+                                      Delete comment
+                                    </Anchor>
+                                  )}
+                                  {this.state.currentUser.role === "Admin" && (
+                                    <div>
+                                      {comment.user.id !==
+                                        this.state.currentUser.id && (
+                                        <Anchor
+                                          onClick={() =>
+                                            this._deleteComment(comment.id)
+                                          }
+                                        >
+                                          Delete comment
+                                        </Anchor>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              <Anchor
+                                onClick={() =>
+                                  this.toggleReplyToComment(comment.id)
+                                }
+                              >
+                                Reply to comment
+                              </Anchor>
+                              {comment_replies.map((comment_info, n) => {
                                 return (
-                                  <TableRow>
-                                    <td>
-                                      <Anchor
-                                        href={`/profile/${res.id}`}
-                                        label={`${res.name} ${
-                                          res.work_badge == true ? "💼" : ""
-                                        } ${
-                                          res.friend_badge == true ? "🙌" : ""
-                                        }`}
-                                      />
-                                    </td>
-                                    <td>{res.shares}</td>
-                                  </TableRow>
-                                );
-                              })}
-                            </tbody>
-                          </Table>
-                        )}
-                      </Box>
-                      <Box margin="small" justify="center">
-                        <Heading tag="h3" align="center">
-                          No - {this.state.no_vote_count}
-                        </Heading>
-                        {no_votes && (
-                          <Table>
-                            <thead>
-                              <tr>
-                                <th>Name</th>
-                                <th>Shares</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {no_result.map(res => {
-                                return (
-                                  <TableRow>
-                                    <td>
-                                      <Anchor
-                                        href={`/profile/${res.id}`}
-                                        label={`${res.name} ${
-                                          res.work_badge == true ? "💼" : ""
-                                        } ${
-                                          res.friend_badge == true ? "🙌" : ""
-                                        }`}
-                                      />
-                                    </td>
-                                    <td>{res.shares}</td>
-                                  </TableRow>
-                                );
-                              })}
-                            </tbody>
-                          </Table>
-                        )}
-                      </Box>
-                    </Columns>
-                    <div key={this.state.comment_counter}>
-                      <Divider />
-                      <Heading tag="h3">Comments</Heading>
-                      {this.state.comments !== "None" && (
-                        <div>
-                          {this.state.upper_comments.map((comment, i) => {
-                            var comment_replies = this.state.comments.filter(
-                              function(new_comment) {
-                                return new_comment
-                                  ? parseInt(new_comment.reply_id) ===
-                                      parseInt(comment.id)
-                                  : null;
-                              }
-                            );
-                            return (
-                              <Box key={i} className={styles.commentBox}>
-                                <Anchor href={`/profile/${comment.user.id}`}>
-                                  {comment.user.name}
-                                </Anchor>
-                                <Heading tag="h5">
-                                  Posted on:{" "}
-                                  <Timestamp value={comment.created_at} />
-                                </Heading>
-                                <Heading tag="h5">{comment.body}</Heading>
-                                {this.state.currentUser && (
-                                  <div>
-                                    {comment.user.id ===
-                                      this.state.currentUser.id && (
-                                      <Anchor
-                                        onClick={() =>
-                                          this._deleteComment(comment.id)
-                                        }
-                                      >
-                                        Delete comment
-                                      </Anchor>
-                                    )}
-                                    {this.state.currentUser.role ===
-                                      "Admin" && (
+                                  <Box key={n} className={styles.commentReply}>
+                                    <Anchor
+                                      href={`/profile/${comment_info.user.id}`}
+                                    >
+                                      {comment_info.user.name}
+                                    </Anchor>
+                                    {this.state.currentUser && (
                                       <div>
                                         {comment.user.id !==
                                           this.state.currentUser.id && (
                                           <Anchor
                                             onClick={() =>
-                                              this._deleteComment(comment.id)
+                                              _deleteComment(comment.id)
                                             }
                                           >
                                             Delete comment
@@ -664,254 +718,215 @@ class QuestionContainer extends Component {
                                         )}
                                       </div>
                                     )}
-                                  </div>
-                                )}
-                                <Anchor
-                                  onClick={() =>
-                                    this.toggleReplyToComment(comment.id)
-                                  }
-                                >
-                                  Reply to comment
-                                </Anchor>
-                                {comment_replies.map((comment_info, n) => {
-                                  return (
-                                    <Box
-                                      key={n}
-                                      className={styles.commentReply}
-                                    >
-                                      <Anchor
-                                        href={`/profile/${
-                                          comment_info.user.id
-                                        }`}
-                                      >
-                                        {comment_info.user.name}
-                                      </Anchor>
-                                      {this.state.currentUser && (
-                                        <div>
-                                          {comment.user.id !==
-                                            this.state.currentUser.id && (
-                                            <Anchor
-                                              onClick={() =>
-                                                _deleteComment(comment.id)
-                                              }
-                                            >
-                                              Delete comment
-                                            </Anchor>
-                                          )}
-                                        </div>
-                                      )}
-                                      {this.state.currentUser.role ===
-                                        "Admin" && (
-                                        <div>
-                                          {comment_info.user.id !==
-                                            this.state.currentUser.id && (
-                                            <Anchor
-                                              onClick={() =>
-                                                _deleteComment(comment_info.id)
-                                              }
-                                            >
-                                              Delete comment
-                                            </Anchor>
-                                          )}
-                                        </div>
-                                      )}
-                                      <Heading tag="h5">
-                                        Posted on:{" "}
-                                        <Timestamp
-                                          value={comment_info.created_at}
-                                        />
-                                      </Heading>
-                                      <Heading tag="h5">
-                                        {comment_info.body}
-                                      </Heading>
-                                      {this.state.currentUser && (
-                                        <div>
-                                          {comment_info.user.id ===
-                                            this.state.currentUser.id && (
-                                            <Anchor
-                                              onClick={() =>
-                                                this._deleteComment(
-                                                  comment_info.id
-                                                )
-                                              }
-                                            >
-                                              Delete comment
-                                            </Anchor>
-                                          )}
-                                          {this.state.currentUser.role ===
-                                            "Admin" && (
-                                            <div>
-                                              {comment_info.user.id !==
-                                                this.state.currentUser.id && (
-                                                <Anchor
-                                                  onClick={() =>
-                                                    this._deleteComment(
-                                                      comment_info.id
-                                                    )
-                                                  }
-                                                >
-                                                  Delete comment
-                                                </Anchor>
-                                              )}
-                                            </div>
-                                          )}
-                                        </div>
-                                      )}
-                                    </Box>
-                                  );
-                                })}
-                                {this.state.approved === null && (
-                                  <div>
+                                    {this.state.currentUser.role ===
+                                      "Admin" && (
+                                      <div>
+                                        {comment_info.user.id !==
+                                          this.state.currentUser.id && (
+                                          <Anchor
+                                            onClick={() =>
+                                              _deleteComment(comment_info.id)
+                                            }
+                                          >
+                                            Delete comment
+                                          </Anchor>
+                                        )}
+                                      </div>
+                                    )}
+                                    <Heading tag="h5">
+                                      Posted on:{" "}
+                                      <Timestamp
+                                        value={comment_info.created_at}
+                                      />
+                                    </Heading>
+                                    <Heading tag="h5">
+                                      {comment_info.body}
+                                    </Heading>
                                     {this.state.currentUser && (
                                       <div>
-                                        {this.state.reply_id == comment.id && (
-                                          <div className={styles.commentReply}>
-                                            <FormField
-                                              help="Post comment on question"
-                                              label="Comment *"
-                                              htmlFor="commentInput"
-                                              className={styles.formField}
-                                              error={
-                                                this.state.comment_field
-                                                  ? this.state.comment_field
-                                                  : ""
-                                              }
-                                            >
-                                              <textarea
-                                                required
-                                                rows="5"
-                                                id="commentInput"
-                                                name="comment"
-                                                type="comment"
-                                                onChange={e =>
-                                                  this.setState({
-                                                    body: e.target.value
-                                                  })
-                                                }
-                                                className={styles.input}
-                                              />
-                                            </FormField>
-                                            <Footer
-                                              pad={{ vertical: "medium" }}
-                                              align="center"
-                                            >
-                                              <Button
-                                                label="Create"
-                                                type="submit"
-                                                primary
+                                        {comment_info.user.id ===
+                                          this.state.currentUser.id && (
+                                          <Anchor
+                                            onClick={() =>
+                                              this._deleteComment(
+                                                comment_info.id
+                                              )
+                                            }
+                                          >
+                                            Delete comment
+                                          </Anchor>
+                                        )}
+                                        {this.state.currentUser.role ===
+                                          "Admin" && (
+                                          <div>
+                                            {comment_info.user.id !==
+                                              this.state.currentUser.id && (
+                                              <Anchor
                                                 onClick={() =>
-                                                  this._submitComment(
-                                                    comment.id
+                                                  this._deleteComment(
+                                                    comment_info.id
                                                   )
                                                 }
-                                              />
-                                            </Footer>
+                                              >
+                                                Delete comment
+                                              </Anchor>
+                                            )}
                                           </div>
                                         )}
                                       </div>
                                     )}
-                                  </div>
-                                )}
-                              </Box>
-                            );
-                          })}
-                        </div>
-                      )}
-                      {this.state.question && (
-                        <div>
-                          {this.state.approved === null && (
-                            <div>
-                              {this.state.currentUser != "None" && (
+                                  </Box>
+                                );
+                              })}
+                              {this.state.approved === null && (
                                 <div>
-                                  <FormField
-                                    help="Post comment on question"
-                                    label="Comment *"
-                                    htmlFor="commentInput"
-                                    className={styles.formField}
-                                    error={
-                                      this.state.comment_field
-                                        ? this.state.comment_field
-                                        : ""
-                                    }
-                                  >
-                                    <textarea
-                                      required
-                                      rows="5"
-                                      id="commentInput"
-                                      name="comment"
-                                      type="comment"
-                                      onChange={e =>
-                                        this.setState({ body: e.target.value })
-                                      }
-                                      className={styles.input}
-                                    />
-                                  </FormField>
-                                  <Footer
-                                    pad={{ vertical: "medium" }}
-                                    align="center"
-                                  >
-                                    <Button
-                                      label="Create"
-                                      type="submit"
-                                      primary
-                                      onClick={() => this._submitComment()}
-                                    />
-                                  </Footer>
+                                  {this.state.currentUser && (
+                                    <div>
+                                      {this.state.reply_id == comment.id && (
+                                        <div className={styles.commentReply}>
+                                          <FormField
+                                            help="Post comment on question"
+                                            label="Comment *"
+                                            htmlFor="commentInput"
+                                            className={styles.formField}
+                                            error={
+                                              this.state.comment_field
+                                                ? this.state.comment_field
+                                                : ""
+                                            }
+                                          >
+                                            <textarea
+                                              required
+                                              rows="5"
+                                              id="commentInput"
+                                              name="comment"
+                                              type="comment"
+                                              onChange={e =>
+                                                this.setState({
+                                                  body: e.target.value
+                                                })
+                                              }
+                                              className={styles.input}
+                                            />
+                                          </FormField>
+                                          <Footer
+                                            pad={{ vertical: "medium" }}
+                                            align="center"
+                                          >
+                                            <Button
+                                              label="Create"
+                                              type="submit"
+                                              primary
+                                              onClick={() =>
+                                                this._submitComment(comment.id)
+                                              }
+                                            />
+                                          </Footer>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
                                 </div>
                               )}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                            </Box>
+                          );
+                        })}
+                      </div>
+                    )}
+                    {this.state.question && (
+                      <div>
+                        {this.state.approved === null && (
+                          <div>
+                            {this.state.currentUser != "None" && (
+                              <div>
+                                <FormField
+                                  help="Post comment on question"
+                                  label="Comment *"
+                                  htmlFor="commentInput"
+                                  className={styles.formField}
+                                  error={
+                                    this.state.comment_field
+                                      ? this.state.comment_field
+                                      : ""
+                                  }
+                                >
+                                  <textarea
+                                    required
+                                    rows="5"
+                                    id="commentInput"
+                                    name="comment"
+                                    type="comment"
+                                    onChange={e =>
+                                      this.setState({ body: e.target.value })
+                                    }
+                                    className={styles.input}
+                                  />
+                                </FormField>
+                                <Footer
+                                  pad={{ vertical: "medium" }}
+                                  align="center"
+                                >
+                                  <Button
+                                    label="Create"
+                                    type="submit"
+                                    primary
+                                    onClick={() => this._submitComment()}
+                                  />
+                                </Footer>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                </Box>
-              </Columns>
-            </Section>
-            {this.state.commentToast === true && (
-              <Toast
-                status="ok"
-                key={1}
-                onClose={() => {
-                  this.toggleCommentToast();
-                }}
-              >
-                Your comment has been created
-              </Toast>
-            )}
-            {this.state.deleteCommentToast === true && (
-              <Toast
-                status="ok"
-                key={1}
-                onClose={() => {
-                  this.toggleDeleteCommentToast();
-                }}
-              >
-                Your comment has been deleted
-              </Toast>
-            )}
-            {this.state.voteToast === true && (
-              <Toast
-                status="ok"
-                key={1}
-                onClose={() => {
-                  this.toggleVoteToast();
-                }}
-              >
-                Your vote has been submitted
-              </Toast>
-            )}
-            {this.state.errorToast === true && (
-              <Toast
-                status="ok"
-                onClose={() => {
-                  this.toggleErrorToast();
-                }}
-              >
-                {this.state.errors[0]}
-              </Toast>
-            )}
-          </Box>
+                </div>
+              </Box>
+            </Columns>
+          </Section>
+          {this.state.commentToast === true && (
+            <Toast
+              status="ok"
+              key={1}
+              onClose={() => {
+                this.toggleCommentToast();
+              }}
+            >
+              Your comment has been created
+            </Toast>
+          )}
+          {this.state.deleteCommentToast === true && (
+            <Toast
+              status="ok"
+              key={1}
+              onClose={() => {
+                this.toggleDeleteCommentToast();
+              }}
+            >
+              Your comment has been deleted
+            </Toast>
+          )}
+          {this.state.voteToast === true && (
+            <Toast
+              status="ok"
+              key={1}
+              onClose={() => {
+                this.toggleVoteToast();
+              }}
+            >
+              Your vote has been submitted
+            </Toast>
+          )}
+          {this.state.errorToast === true && (
+            <Toast
+              status="ok"
+              onClose={() => {
+                this.toggleErrorToast();
+              }}
+            >
+              {this.state.errors[0]}
+            </Toast>
+          )}
         </Box>
       </div>
     );
