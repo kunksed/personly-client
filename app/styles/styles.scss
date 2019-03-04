@@ -1,4 +1,5 @@
 // Included if you are using grommet.  Otherwise, just erase this next line.
+@import './app.defaults.scss';
 @import 'grommet/scss/grommet-core/index.scss';
 
 // Add globally used utility styles here.
@@ -10,24 +11,6 @@
 }
 <div className="my-style" />
 */
-
-.grommetux-button {
-  border-color: 2px solid #3536f7;
-  border: 2px solid #3536f7;
-}
-
-.grommetux-button--primary {
-  border-color: 2px solid #3536f7;
-  background-color: #3536f7;
-}
-
-.grommetux-button--primary:not(.grommetux-button--focus) {
-  border-color: #3536f7;
-}
-
-.grommetux-form-field--focus {
-  border-color: #3536f7
-}
 
 * {
   box-sizing: border-box;
@@ -68,6 +51,10 @@ a.active {
 
 a {
   color: #333333 !important;
+}
+
+.grommetux-box--separator-bottom, .grommetux-box--separator-horizontal, .grommetux-box--separator-all {
+  border-bottom: 0px !important;
 }
 
 .rc-pagination {

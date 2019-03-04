@@ -4,7 +4,6 @@ import Heading from "grommet/components/Heading";
 import Paragraph from "grommet/components/Paragraph";
 import Section from "grommet/components/Section";
 import Toast from "grommet/components/Toast";
-import Columns from "grommet/components/Columns";
 import Anchor from "grommet/components/Anchor";
 import Footer from "grommet/components/Footer";
 import Tabs from "grommet/components/Tabs";
@@ -21,8 +20,7 @@ import styles from "./index.module.scss";
 import { graphql, compose } from "react-apollo";
 import gql from "graphql-tag";
 import { FullSection, MainContent, MainBox } from "./styles";
-import { Divider, LoadingIndicator } from "components";
-import { Navbar, AppFooter } from "components";
+import { Divider } from "components";
 import regeneratorRuntime from "regenerator-runtime";
 
 class AdminContainer extends Component {
@@ -30,7 +28,7 @@ class AdminContainer extends Component {
     super();
     this.state = {
       getData: false,
-      currentPage: 1
+      currentPage: 1,
     };
   }
 
@@ -47,8 +45,8 @@ class AdminContainer extends Component {
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
       });
 
       const USER_QUERY = "{ getCurrentUser { id name role email } }";
@@ -61,12 +59,12 @@ class AdminContainer extends Component {
               : "https://api.jamesg.app/graphql"
           }`,
           {
-            query: USER_QUERY
-          }
+            query: USER_QUERY,
+          },
         )
         .then(result => {
           this.setState({
-            currentUser: result.data.data.getCurrentUser[0]
+            currentUser: result.data.data.getCurrentUser[0],
           });
         });
 
@@ -75,7 +73,7 @@ class AdminContainer extends Component {
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
             : "https://api.jamesg.app/graphql"
-        }`
+        }`,
       });
 
       const MAIN_QUERY = `{ getUsers(public: false) { id name shares twitter bio balance is_public shares_issued } }`;
@@ -87,16 +85,16 @@ class AdminContainer extends Component {
               ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
-          { query: MAIN_QUERY }
+          { query: MAIN_QUERY },
         )
         .then(result => {
           this.setState({
-            users: result.data.data.getUsers
+            users: result.data.data.getUsers,
           });
         })
         .catch(error => {
           this.setState({
-            users: []
+            users: [],
           });
         });
 
@@ -109,16 +107,16 @@ class AdminContainer extends Component {
               ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
-          { query: RAISING_USERS_QUERY }
+          { query: RAISING_USERS_QUERY },
         )
         .then(result => {
           this.setState({
-            public_users: result.data.data.getUsers
+            public_users: result.data.data.getUsers,
           });
         })
         .catch(error => {
           this.setState({
-            public_users: []
+            public_users: [],
           });
         });
     }
@@ -126,7 +124,7 @@ class AdminContainer extends Component {
 
   toggleUserDeleted() {
     this.setState({
-      userDeleted: !this.state.userDeleted
+      userDeleted: !this.state.userDeleted,
     });
   }
 
@@ -136,13 +134,13 @@ class AdminContainer extends Component {
       user: user,
       name: user.name,
       is_public: user.is_public,
-      shares_issued: user.shares_issued
+      shares_issued: user.shares_issued,
     });
   }
 
   toggleUpdateUserStatusToast() {
     this.setState({
-      userStatusToast: !this.state.userStatusToast
+      userStatusToast: !this.state.userStatusToast,
     });
   }
 
@@ -163,24 +161,24 @@ class AdminContainer extends Component {
     }
 
     return (
-      <MainBox alignContent="center" fill="horizontal" align="center">
-        <FullSection primary direction="row">
+      <MainBox alignContent='center' fill='horizontal' align='center'>
+        <FullSection primary direction='row'>
           <MainContent
-            align="center"
-            justify="start"
+            align='center'
+            justify='start'
             pad={{ vertical: "large" }}
           >
-            <Section align="center" justify="center">
-              <Heading tag="h2">Administration</Heading>
+            <Section align='center' justify='center'>
+              <Heading tag='h2'>Administration</Heading>
               <Divider />
               <Tabs>
-                <Tab title="Statistics">
+                <Tab title='Statistics'>
                   <Box
-                    direction="row"
-                    justify="center"
+                    direction='row'
+                    justify='center'
                     className={styles.tableItem}
                   >
-                    <Box align="center" pad="large">
+                    <Box align='center' pad='large'>
                       <Paragraph>
                         Current user count: {this.state.users.length}
                         <br />
@@ -191,9 +189,9 @@ class AdminContainer extends Component {
                     </Box>
                   </Box>
                 </Tab>
-                <Tab title="Users">
-                  <Box pad="large" className={styles.tableItem}>
-                    <Heading tag="h2" align="center">
+                <Tab title='Users'>
+                  <Box pad='large' className={styles.tableItem}>
+                    <Heading tag='h2' align='center'>
                       Users
                     </Heading>
                     {this.state.users && (
@@ -232,10 +230,8 @@ class AdminContainer extends Component {
                                   </td>
                                   <td>
                                     <Anchor
-                                      onClick={() =>
-                                        this.deleteUser(user.id)
-                                      }
-                                      label="Delete"
+                                      onClick={() => this.deleteUser(user.id)}
+                                      label='Delete'
                                     />
                                   </td>
                                   <td>
@@ -243,7 +239,7 @@ class AdminContainer extends Component {
                                       onClick={() =>
                                         this.toggleUpdateUserStatusLayer(user)
                                       }
-                                      label="Edit"
+                                      label='Edit'
                                     />
                                   </td>
                                 </TableRow>
@@ -254,7 +250,7 @@ class AdminContainer extends Component {
                       </div>
                     )}
                   </Box>
-                  <Footer align="center" justify="center" pad="medium">
+                  <Footer align='center' justify='center' pad='medium'>
                     <RCPagination
                       style={{ color: "white" }}
                       onChange={newPage => this.setNewPage(newPage)}
@@ -265,9 +261,9 @@ class AdminContainer extends Component {
                     />
                   </Footer>
                 </Tab>
-                <Tab title="Publicly Traded Users">
-                  <Box pad="large" className={styles.tableItem}>
-                    <Heading tag="h2" align="center">
+                <Tab title='Publicly Traded Users'>
+                  <Box pad='large' className={styles.tableItem}>
+                    <Heading tag='h2' align='center'>
                       Publicly Traded Users
                     </Heading>
                     {this.state.public_users && (
@@ -309,10 +305,8 @@ class AdminContainer extends Component {
                                   <td>{user.shares_issued}</td>
                                   <td>
                                     <Anchor
-                                      onClick={() =>
-                                        this.deleteUser(user.id)
-                                      }
-                                      label="Delete"
+                                      onClick={() => this.deleteUser(user.id)}
+                                      label='Delete'
                                     />
                                   </td>
                                   <td>
@@ -320,7 +314,7 @@ class AdminContainer extends Component {
                                       onClick={() =>
                                         this.toggleUpdateUserStatusLayer(user)
                                       }
-                                      label="Edit"
+                                      label='Edit'
                                     />
                                   </td>
                                 </TableRow>
@@ -331,7 +325,7 @@ class AdminContainer extends Component {
                       </div>
                     )}
                   </Box>
-                  <Footer align="center" justify="center" pad="medium">
+                  <Footer align='center' justify='center' pad='medium'>
                     <RCPagination
                       style={{ color: "white" }}
                       onChange={newPage => this.setNewPage(newPage)}
@@ -353,11 +347,11 @@ class AdminContainer extends Component {
                   this.toggleUpdateUserStatusLayer(this.state.user)
                 }
               >
-                <Box pad="large">
-                  <Heading tag="h2">Update {this.state.user.name}</Heading>
+                <Box pad='large'>
+                  <Heading tag='h2'>Update {this.state.user.name}</Heading>
                   <br />
                   <CheckBox
-                    label="Publicly Traded"
+                    label='Publicly Traded'
                     checked={this.state.is_public ? true : false}
                     onClick={() =>
                       this.setState({ is_public: !this.state.is_public })
@@ -365,8 +359,8 @@ class AdminContainer extends Component {
                   />
                   <br />
                   <FormField
-                    label="Shares Issued *"
-                    htmlFor="shares_issued"
+                    label='Shares Issued *'
+                    htmlFor='shares_issued'
                     className={styles.formField}
                     error={
                       this.state.shares_issued_field
@@ -376,9 +370,9 @@ class AdminContainer extends Component {
                   >
                     <input
                       required
-                      id="shares_issued"
-                      name="shares_issued"
-                      type="text"
+                      id='shares_issued'
+                      name='shares_issued'
+                      type='text'
                       onChange={e =>
                         this.setState({ shares_issued: e.target.value })
                       }
@@ -387,8 +381,8 @@ class AdminContainer extends Component {
                   </FormField>
                   <br />
                   <FormField
-                    label="Listing Description *"
-                    htmlFor="listing_description"
+                    label='Listing Description *'
+                    htmlFor='listing_description'
                     className={styles.formField}
                     error={
                       this.state.listing_description_field
@@ -397,11 +391,11 @@ class AdminContainer extends Component {
                     }
                   >
                     <textarea
-                      rows="15"
+                      rows='15'
                       required
-                      id="listing_description"
-                      name="listing_description"
-                      type="text"
+                      id='listing_description'
+                      name='listing_description'
+                      type='text'
                       onChange={e =>
                         this.setState({ listing_description: e.target.value })
                       }
@@ -411,8 +405,8 @@ class AdminContainer extends Component {
                   <br />
                   <Footer pad={{ vertical: "medium" }}>
                     <Button
-                      label="Update"
-                      type="submit"
+                      label='Update'
+                      type='submit'
                       primary={true}
                       onClick={() => this._updateUserStatus(this.state.user.id)}
                     />
@@ -421,13 +415,13 @@ class AdminContainer extends Component {
               </Layer>
             )}
             {this.state.userDeleted === true && (
-              <Toast status="ok" onClose={() => this.toggleUserDeleted()}>
+              <Toast status='ok' onClose={() => this.toggleUserDeleted()}>
                 The user has been deleted.
               </Toast>
             )}
             {this.state.userStatusToast === true && (
               <Toast
-                status="ok"
+                status='ok'
                 onClose={() => this.toggleUpdateUserStatusToast()}
               >
                 The user has been updated.
@@ -444,8 +438,8 @@ class AdminContainer extends Component {
     await this.props
       .deleteUser({
         variables: {
-          id
-        }
+          id,
+        },
       })
       .catch(res => {
         const errors = res.graphQLErrors.map(error => error);
@@ -454,7 +448,7 @@ class AdminContainer extends Component {
     if (this.state.errors) {
       {
         this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message })
+          this.setState({ [error.field]: error.message }),
         );
       }
     }
@@ -466,8 +460,8 @@ class AdminContainer extends Component {
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
       });
       const DELETE_UPDATE_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued } }`;
 
@@ -478,16 +472,16 @@ class AdminContainer extends Component {
               ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
-          { query: DELETE_UPDATE_QUERY }
+          { query: DELETE_UPDATE_QUERY },
         )
         .then(result => {
           this.setState({
-            users: result.data.data.getUsers
+            users: result.data.data.getUsers,
           });
         })
         .catch(error => {
           this.setState({
-            users: []
+            users: [],
           });
         });
       this.toggleUserDeleted();
@@ -504,8 +498,8 @@ class AdminContainer extends Component {
         variables: {
           id,
           is_public,
-          shares_issued
-        }
+          shares_issued,
+        },
       })
       .catch(res => {
         const errors = res.graphQLErrors.map(error => error);
@@ -514,7 +508,7 @@ class AdminContainer extends Component {
     if (this.state.errors) {
       {
         this.state.errors.map(error =>
-          this.setState({ [error.field]: error.message })
+          this.setState({ [error.field]: error.message }),
         );
       }
     }
@@ -526,8 +520,8 @@ class AdminContainer extends Component {
             : "https://api.jamesg.app/graphql"
         }`,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+        },
       });
       const ADMIN_PUBLIC_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued } }`;
 
@@ -538,16 +532,16 @@ class AdminContainer extends Component {
               ? "https://personly-api.herokuapp.com/graphql"
               : "https://api.jamesg.app/graphql"
           }`,
-          { query: ADMIN_PUBLIC_QUERY }
+          { query: ADMIN_PUBLIC_QUERY },
         )
         .then(result => {
           this.setState({
-            users: result.data.data.getUsers
+            users: result.data.data.getUsers,
           });
         })
         .catch(error => {
           this.setState({
-            users: []
+            users: [],
           });
         });
       this.toggleUpdateUserStatusLayer();
@@ -584,5 +578,5 @@ const ADMIN_SET_PUBLIC = gql`
 
 export default compose(
   graphql(DELETE_USER, { name: "deleteUser" }),
-  graphql(ADMIN_SET_PUBLIC, { name: "adminSetPublic" })
+  graphql(ADMIN_SET_PUBLIC, { name: "adminSetPublic" }),
 )(AdminContainer);

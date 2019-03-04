@@ -277,6 +277,30 @@ export const routes = {
           .catch(err => errorLoading(err));
       },
     },
+    {
+      path: '/faqs',
+      getComponent(location, callback) {
+        System.import('./pages/Faqpage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/faqs/investor',
+      getComponent(location, callback) {
+        System.import('./pages/InvestorFaqsPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/dashboard/listing',
+      getComponent(location, callback) {
+        System.import('./pages/UpdateListingPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
 /* GENERATOR: Newly generated Routes go here */
     {
       path: '*',

@@ -14,3 +14,44 @@
 .registerButton {
   color: white !important
 }
+
+.whiteHero {
+  background-color: #fff;
+  border-top-color: #eeeeee;
+  border-top-style: solid;
+  border-top-width: 1px;
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.cardStyled {
+  border: solid #E9E9E9 !important;
+  border-width: 0 1px 1px !important;
+  border-bottom-right-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+}
+
+.mailListStyles {
+  background-color: #f7f7f7;
+  padding-bottom: 64px;
+  padding-top: 64px;
+}
+
+.containerMiddle {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.bottomHero {
+  background-color: #7692FF;
+}
+
+.threeBox {
+  padding-top: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
+}
+
+.topBackground {
+  background-image: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+}

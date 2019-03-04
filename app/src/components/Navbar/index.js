@@ -7,9 +7,11 @@ import Anchor from 'grommet/components/Anchor';
 import Title from 'grommet/components/Title';
 import Menu from 'grommet/components/Menu';
 import Button from 'grommet/components/Button';
+import Image from 'grommet/components/Image';
 import Notification from 'grommet/components/Notification';
 import styles from './index.module.scss';
 import axios from 'axios';
+import logo from './logo_full.png';
 
 class Navbar extends Component {
   constructor() {
@@ -65,13 +67,11 @@ class Navbar extends Component {
       <div className={styles.navbar}>
         <Header justify="between" className="component">
           {process.env.NODE_ENV === 'development' && (
-            <Title className={styles.title}>
-              <Anchor href="/">Personly Development</Anchor>
-            </Title>
+            <Anchor href="/"><Image src={logo} className={styles.logoImage} /> Development</Anchor>
           )}
           {process.env.NODE_ENV !== 'development' && (
             <Title className={styles.title}>
-              <Anchor href="/">Personly</Anchor>
+              <Anchor href="/"><Image src={logo} className={styles.logoImage} /></Anchor>
             </Title>
           )}
           {this.state.currentUser === 0 && (

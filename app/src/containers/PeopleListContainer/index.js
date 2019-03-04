@@ -42,7 +42,7 @@ class PeopleListContainer extends Component {
       });
 
       const MAIN_QUERY =
-        "{ getUsers(public: true) { id name shares_issued bio profile_picture } }";
+        "{ getUsers(public: true, limit: 21) { id name shares_issued bio profile_picture } }";
 
       axiosGitHubGraphQL
         .post(
@@ -77,7 +77,7 @@ class PeopleListContainer extends Component {
             <Heading tag="h3">
               All people raising are thoroughly vetted and approved.
             </Heading>
-            <Box align="center" justify="center">
+            <Box>
               {this.state.users.length === 0 && (
                 <Title align="center" tag="h3">
                   No users are publicly traded yet.

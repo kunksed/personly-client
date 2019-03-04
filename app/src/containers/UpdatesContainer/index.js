@@ -391,7 +391,7 @@ class UpdatesContainer extends Component {
                   <div>
                       <div>
                         {this.state.currentUser != "None" && (
-                          <div>
+                          <div align="center" justify="center">
                             <FormField
                               help="Post comment on update"
                               label="Comment *"

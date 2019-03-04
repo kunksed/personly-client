@@ -1,4 +1,7 @@
 /* GENERATOR: Assemble all containers for export */
+export UpdateListingContainer from './UpdateListingContainer';
+export InvestorFaqsContainer from './InvestorFaqsContainer';
+export Faqcontainer from './Faqcontainer';
 export ContactContainer from './ContactContainer';
 export RisksContainer from './RisksContainer';
 export PrivacyContainer from './PrivacyContainer';

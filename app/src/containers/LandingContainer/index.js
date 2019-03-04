@@ -75,12 +75,18 @@ class LandingContainer extends Component {
               justify="center"
               align="center"
               backgroundColorIndex="dark"
-              className={styles.bottomHero}
+              background={
+                <Image
+                  fit="cover"
+                  full={true}
+                  src="https://images.unsplash.com/photo-1483389127117-b6a2102724ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+                />
+              }
             >
               <Box basis="1/2" align="left" justify="left" pad="medium">
                 <Box align="left" justify="left" pad="large">
-                  <Heading tag="h1">Invest in the future</Heading>
-                  <Heading tag="h4">
+                  <Heading tag="h1" strong={true}>Invest in the future</Heading>
+                  <Heading tag="h3">
                     Invest as little as $10 in the people you believe
                     <br /> in and earn a return if they succeed.
                   </Heading>
@@ -133,7 +139,7 @@ class LandingContainer extends Component {
                     </Tiles>
                   )}
                 </Box>
-                <Footer pad={{ vertical: "medium" }} align="center">
+                <Footer pad={{ vertical: "medium" }} align="center" justify="center">
                   <Button label="View all raising" href="/people" />
                 </Footer>
               </Section>
@@ -214,7 +220,7 @@ class LandingContainer extends Component {
             >
               <Box basis="1/2" align="center" justify="center" pad="medium">
                 <Box align="center" justify="center" pad="large">
-                  <Heading align="center" tag="h1">
+                  <Heading align="center" tag="h1" strong={true}>
                     How does it work?
                   </Heading>
                   <Heading align="center" tag="h3">
@@ -224,10 +230,12 @@ class LandingContainer extends Component {
                     education, start a business etc, in exchange for giving
                     investors the ability to vote on decisions in their life.
                     <br />
+                    <br />
                     If an individual succeeds, their share price will go up and
                     their shareholders will benefit, meaning that the interests
                     of both investors and publicly traded people are aligned.
                   </Heading>
+                  <br />
                   <Button
                     className={styles.registerButton}
                     href="/for-people"
