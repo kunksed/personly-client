@@ -697,6 +697,16 @@ class UpdateProfileContainer extends Component {
       }
     }
     if (!this.state.errors) {
+      const axiosGitHubGraphQL = axios.create({
+        baseURL: `${
+          process.env.NODE_ENV === "development"
+            ? "https://personly-api.herokuapp.com/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
+        }`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+        }
+      });
       const MAIN_QUERY = `{ getCurrentUser { id api_key } }`;
 
       axiosGitHubGraphQL
