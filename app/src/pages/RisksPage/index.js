@@ -1,10 +1,12 @@
 import React from 'react';
-import Box from 'grommet/components/Box';
+import cssModules from 'react-css-modules';
+import { RisksContainer } from 'containers';
+import styles from './index.module.scss';
 
-export default function RisksPage() {
-  return (
-    <Box>
-      Hello from RisksPage!
-    </Box>
-  );
-}
+const RisksPage = (props) => (
+  <div className={styles.container}>
+    <RisksContainer props={props} />
+  </div>
+);
+
+export default cssModules(RisksPage, styles);
