@@ -75,7 +75,7 @@ class DashboardContainer extends Component {
           });
         })
 
-      const SHAREHOLDERS_QUERY = `{ getShareholders { id name shares balance gender } }`;
+      const SHAREHOLDERS_QUERY = `{ getShareholders { id user { name balance gender } } }`;
 
       axiosGitHubGraphQL
         .post(
