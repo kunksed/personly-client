@@ -1,4 +1,6 @@
 /* GENERATOR: Assemble all containers for export */
+export NotificationsContainer from './NotificationsContainer';
+export SearchContainer from './SearchContainer';
 export UpdateListingContainer from './UpdateListingContainer';
 export InvestorFaqsContainer from './InvestorFaqsContainer';
 export Faqcontainer from './Faqcontainer';

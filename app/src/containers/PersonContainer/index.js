@@ -7,6 +7,7 @@ import Anchor from "grommet/components/Anchor";
 import Title from "grommet/components/Title";
 import Image from "grommet/components/Image";
 import Hero from "grommet/components/Hero";
+import Toast from "grommet/components/Toast";
 import Timestamp from "grommet/components/Timestamp";
 import Paragraph from "grommet/components/Paragraph";
 import FormField from "grommet/components/FormField";
@@ -26,7 +27,7 @@ import regeneratorRuntime from "regenerator-runtime";
 import gql from "graphql-tag";
 import axios from "axios";
 import { reduxForm } from "redux-form";
-import { ThumbnailImage, Wrapper } from './styles';
+import { ThumbnailImage, Wrapper } from "./styles";
 import { MainBox, FullSection } from "./styles";
 import { Navbar, AppFooter } from "components";
 import { NotFoundContainer } from "containers";
@@ -57,7 +58,7 @@ class PersonContainer extends Component {
 
       const PROFILE_QUERY = `{ getUsers(id: ${
         this.props.props.params.id
-      }) { id name listing_description profile_picture header_image_url } }`;
+      }) { id name listing_description profile_picture header_image_url shares_issued } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -282,7 +283,7 @@ class PersonContainer extends Component {
                   <ThumbnailImage src={this.state.user.profile_picture} />
                 </Wrapper>
               </Box>
-              <Box basis="1/2" align="start" pad="medium">
+              <Box basis="1/2" align="start" pad="medium" colorIndex="grey-2-a">
                 <Heading margin="none">{this.state.user.name}</Heading>
                 <br />
                 <Button
@@ -312,6 +313,16 @@ class PersonContainer extends Component {
                 {data.length > 0 && (
                   <Title tag="h1" align="center">
                     ${data[0][1]}
+                  </Title>
+                )}
+                {data.length > 0 && (
+                  <Title tag="h4" align="center">
+                    Market cap: ${this.state.user.shares_issued * data[0][1]}
+                  </Title>
+                )}
+                {data.length === 0 && (
+                  <Title tag="h4" align="center">
+                    Market cap: $0
                   </Title>
                 )}
                 {new_data.length > 1 && (
@@ -414,181 +425,188 @@ class PersonContainer extends Component {
                   </Box>
                 )}
                 {new_data.length === 0 && (
-                  <Box
-                    colorIndex="unknown"
-                    pad="small"
-                    align="center"
-                  >
+                  <Box colorIndex="unknown" pad="small" align="center">
                     <Anchor>$0 | 0%</Anchor>
                   </Box>
                 )}
               </Box>
             </Columns>
             <br />
-              <Columns size="large" justify="center">
+            <Columns size="large" justify="center">
               <Box>
-            <Title align="center" tag="h2">
-              Questions
-            </Title>
-            {this.state.questions.length === 0 && (
-              <Title align="center" tag="h5">
-                No questions have been posted yet.
-              </Title>
-            )}
-            {this.state.questions.length > 0 && (
-              <div>
-                {this.state.questions.map(question => {
-                  if (this.state.votes.length > 1) {
-                    var question_votes = this.state.votes.filter(function(
-                      vote
-                    ) {
-                      return vote ? vote.question.id === question.id : null;
-                    });
-                    var no_votes = question_votes.filter(function(vote) {
-                      return vote ? vote.vote_type === "No" : null;
-                    });
-                    var yes_votes = question_votes.filter(function(vote) {
-                      return vote ? vote.vote_type === "Yes" : null;
-                    });
-                    var abstain_votes = question_votes.filter(function(vote) {
-                      return vote ? vote.vote_type === "Abstain" : null;
-                    });
-                    var no_votes_array_new = [];
-                    var yes_votes_array_new = [];
-                    var abstain_votes_array_new = [];
-                    var no_votes_question = no_votes.map(function(vote) {
-                      no_votes_array_new.push(vote.shares);
-                      return vote.shares;
-                    });
-                    var yes_votes_question = yes_votes.map(function(vote) {
-                      yes_votes_array_new.push(vote.shares);
-                      return vote.shares;
-                    });
-                    var abstain_votes_question = abstain_votes.map(function(
-                      vote
-                    ) {
-                      abstain_votes_array_new.push(vote.shares);
-                      return vote.shares;
-                    });
-                    var no_vote_count = no_votes_array_new.reduce((vote, i) => {
-                      return i + vote;
-                    }, 0);
-                    var yes_vote_count = yes_votes_array_new.reduce(
-                      (vote, i) => {
-                        return i + vote;
-                      },
-                      0
-                    );
-                    var abstain_vote_count = abstain_votes_array_new.reduce(
-                      (vote, i) => {
-                        return i + vote;
-                      },
-                      0
-                    );
-                    var vote_count =
-                      no_vote_count + yes_vote_count + abstain_vote_count;
-                    if (yes_vote_count > 0) {
-                      var yes_question_votes_total =
-                        (yes_vote_count / vote_count) * 100;
-                    } else {
-                      var yes_question_votes_total = 0;
-                    }
-                    if (no_vote_count > 0) {
-                      var no_question_votes_total =
-                        (no_vote_count / vote_count) * 100;
-                    } else {
-                      var no_question_votes_total = 0;
-                    }
-                    if (abstain_vote_count > 0) {
-                      var abstain_question_votes_total =
-                        (abstain_vote_count / vote_count) * 100;
-                    } else {
-                      var abstain_question_votes_total = 0;
-                    }
-                  } else {
-                    var yes_question_votes_total = 0;
-                    var no_question_votes_total = 0;
-                    var abstain_question_votes_total = 0;
-                  }
-                  return (
-                    <div>
-                      <Box>
-                        {question.approved && (
-                          <div>
-                            {question.approved === "true" && (
-                              <Heading tag="h3">
-                                <Status value="ok" /> Q: {question.title} Closed{" "}
-                                <Timestamp
-                                  value={question.closes}
-                                  fields="date"
-                                />
-                              </Heading>
+                <Title align="center" tag="h2">
+                  Questions
+                </Title>
+                {this.state.questions.length === 0 && (
+                  <Title align="center" tag="h5">
+                    No questions have been posted yet.
+                  </Title>
+                )}
+                {this.state.questions.length > 0 && (
+                  <div>
+                    {this.state.questions.map(question => {
+                      if (this.state.votes.length > 1) {
+                        var question_votes = this.state.votes.filter(function(
+                          vote
+                        ) {
+                          return vote ? vote.question.id === question.id : null;
+                        });
+                        var no_votes = question_votes.filter(function(vote) {
+                          return vote ? vote.vote_type === "No" : null;
+                        });
+                        var yes_votes = question_votes.filter(function(vote) {
+                          return vote ? vote.vote_type === "Yes" : null;
+                        });
+                        var abstain_votes = question_votes.filter(function(
+                          vote
+                        ) {
+                          return vote ? vote.vote_type === "Abstain" : null;
+                        });
+                        var no_votes_array_new = [];
+                        var yes_votes_array_new = [];
+                        var abstain_votes_array_new = [];
+                        var no_votes_question = no_votes.map(function(vote) {
+                          no_votes_array_new.push(vote.shares);
+                          return vote.shares;
+                        });
+                        var yes_votes_question = yes_votes.map(function(vote) {
+                          yes_votes_array_new.push(vote.shares);
+                          return vote.shares;
+                        });
+                        var abstain_votes_question = abstain_votes.map(function(
+                          vote
+                        ) {
+                          abstain_votes_array_new.push(vote.shares);
+                          return vote.shares;
+                        });
+                        var no_vote_count = no_votes_array_new.reduce(
+                          (vote, i) => {
+                            return i + vote;
+                          },
+                          0
+                        );
+                        var yes_vote_count = yes_votes_array_new.reduce(
+                          (vote, i) => {
+                            return i + vote;
+                          },
+                          0
+                        );
+                        var abstain_vote_count = abstain_votes_array_new.reduce(
+                          (vote, i) => {
+                            return i + vote;
+                          },
+                          0
+                        );
+                        var vote_count =
+                          no_vote_count + yes_vote_count + abstain_vote_count;
+                        if (yes_vote_count > 0) {
+                          var yes_question_votes_total =
+                            (yes_vote_count / vote_count) * 100;
+                        } else {
+                          var yes_question_votes_total = 0;
+                        }
+                        if (no_vote_count > 0) {
+                          var no_question_votes_total =
+                            (no_vote_count / vote_count) * 100;
+                        } else {
+                          var no_question_votes_total = 0;
+                        }
+                        if (abstain_vote_count > 0) {
+                          var abstain_question_votes_total =
+                            (abstain_vote_count / vote_count) * 100;
+                        } else {
+                          var abstain_question_votes_total = 0;
+                        }
+                      } else {
+                        var yes_question_votes_total = 0;
+                        var no_question_votes_total = 0;
+                        var abstain_question_votes_total = 0;
+                      }
+                      return (
+                        <div>
+                          <Box>
+                            {question.approved && (
+                              <div>
+                                {question.approved === "true" && (
+                                  <Heading tag="h3">
+                                    <Status value="ok" /> Q: {question.title}{" "}
+                                    Closed{" "}
+                                    <Timestamp
+                                      value={question.closes}
+                                      fields="date"
+                                    />
+                                  </Heading>
+                                )}
+                                {question.approved === "false" && (
+                                  <Heading tag="h3">
+                                    <Status value="critical" /> Q:{" "}
+                                    {question.title} Closed{" "}
+                                    <Timestamp
+                                      value={question.closes}
+                                      fields="date"
+                                    />
+                                  </Heading>
+                                )}
+                              </div>
                             )}
-                            {question.approved === "false" && (
-                              <Heading tag="h3">
-                                <Status value="critical" /> Q: {question.title}{" "}
-                                Closed{" "}
-                                <Timestamp
-                                  value={question.closes}
-                                  fields="date"
-                                />
-                              </Heading>
+                            {!question.approved && (
+                              <div>
+                                <Heading tag="h3">
+                                  <Status value="unknown" /> Q: {question.title}{" "}
+                                  Closes{" "}
+                                  <Timestamp
+                                    value={question.closes}
+                                    fields="date"
+                                  />
+                                </Heading>
+                              </div>
                             )}
-                          </div>
-                        )}
-                        {!question.approved && (
+                            <Anchor href={`/questions/${question.id}`}>
+                              [ Yes:{" "}
+                              {parseFloat(yes_question_votes_total).toFixed(2)}%
+                              | No:{" "}
+                              {parseFloat(no_question_votes_total).toFixed(2)}%
+                              | Abstain:{" "}
+                              {parseFloat(abstain_question_votes_total).toFixed(
+                                2
+                              )}
+                              % ] Read more
+                            </Anchor>
+                          </Box>
+                          <br />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </Box>
+              <Box>
+                <Title align="center" tag="h2">
+                  Updates
+                </Title>
+                {this.state.updates.length === 0 && (
+                  <Title align="center" tag="h5">
+                    No updates have been posted yet.
+                  </Title>
+                )}
+                {this.state.updates.length > 0 && (
+                  <div>
+                    {this.state.updates.map(update => {
+                      return (
+                        <Box>
+                          <Timestamp value={update.created_on} fields="date" />
                           <div>
-                            <Heading tag="h3">
-                              <Status value="unknown" /> Q: {question.title}{" "}
-                              Closes{" "}
-                              <Timestamp
-                                value={question.closes}
-                                fields="date"
-                              />
-                            </Heading>
+                            <Heading tag="h3">{update.title}</Heading>
                           </div>
-                        )}
-                        <Anchor href={`/questions/${question.id}`}>
-                          [ Yes:{" "}
-                          {parseFloat(yes_question_votes_total).toFixed(2)}% |
-                          No: {parseFloat(no_question_votes_total).toFixed(2)}%
-                          | Abstain:{" "}
-                          {parseFloat(abstain_question_votes_total).toFixed(2)}%
-                          ] Read more
-                        </Anchor>
-                      </Box>
-                      <br />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            </Box>
-            <Box>
-            <Title align="center" tag="h2">
-              Updates
-            </Title>
-            {this.state.updates.length === 0 && (
-              <Title align="center" tag="h5">
-                No updates have been posted yet.
-              </Title>
-            )}
-            {this.state.updates.length > 0 && (
-              <div>
-                {this.state.updates.map(update => {
-                  return (
-                    <Box>
-                      <Timestamp value={update.created_on} fields="date" />
-                      <div>
-                        <Heading tag="h3">{update.title}</Heading>
-                      </div>
-                      <Anchor href={`/updates/${update.id}`}>Read more</Anchor>
-                    </Box>
-                  );
-                })}
-              </div>
-            )}
-            </Box>
+                          <Anchor href={`/updates/${update.id}`}>
+                            Read more
+                          </Anchor>
+                        </Box>
+                      );
+                    })}
+                  </div>
+                )}
+              </Box>
             </Columns>
           </Section>
         </Box>
@@ -619,70 +637,74 @@ class PersonContainer extends Component {
             overlayClose={true}
             onClose={() => this.toggleInvestModal()}
           >
-            <FormFields>
-              <Header>
-                <Heading>Create Order</Heading>
-              </Header>
-              <Section pad={{ vertical: "medium" }}>
-              <Paragraph align="center" justify="center">
-                Note: A trading fee of $0.02 is applied per share purchased
-              </Paragraph>
-                <Box size="medium">
-                  <FormField
-                    label="Order Type *"
-                    htmlFor="order_type"
-                    className={styles.formField}
-                    error={
-                      this.state.order_type_field
-                        ? this.state.order_type_field
-                        : ""
-                    }
-                  >
-                    <Select
-                      placeHolder=""
-                      options={["Buy", "Sell"]}
-                      value={this.state.order_type}
-                      onChange={e => this.setState({ order_type: e.option })}
-                      className={styles.input}
+            <Box pad="large">
+              <FormFields>
+                <Header>
+                  <Heading>Create Order</Heading>
+                </Header>
+                <Section pad={{ vertical: "medium" }}>
+                  <Paragraph align="center" justify="center">
+                    Note: A trading fee of $0.02 is applied per share purchased
+                  </Paragraph>
+                  <Box size="medium">
+                    <FormField
+                      label="Order Type *"
+                      htmlFor="order_type"
+                      className={styles.formField}
+                      error={
+                        this.state.order_type_field
+                          ? this.state.order_type_field
+                          : ""
+                      }
+                    >
+                      <Select
+                        placeHolder=""
+                        options={["Buy", "Sell"]}
+                        value={this.state.order_type}
+                        onChange={e => this.setState({ order_type: e.option })}
+                        className={styles.input}
+                      />
+                    </FormField>
+                  </Box>
+                </Section>
+                <Section pad={{ vertical: "medium" }}>
+                  <Box size="medium">
+                    <FormField
+                      label="Share Amount *"
+                      htmlFor="name"
+                      className={styles.formField}
+                      error={
+                        this.state.shares_field ? this.state.shares_field : ""
+                      }
+                    >
+                      <input
+                        required
+                        id="shares"
+                        name="shares"
+                        defaultValue={this.state.shares}
+                        type="number"
+                        onChange={e =>
+                          this.setState({ shares: e.target.value })
+                        }
+                        className={styles.input}
+                      />
+                    </FormField>
+                  </Box>
+                </Section>
+                <Footer>
+                  <Menu inline direction="row" responsive={false}>
+                    <Button
+                      label="Create Order"
+                      style={{ marginTop: 10, marginLeft: 5 }}
+                      onClick={() => {
+                        this._createOrder();
+                      }}
+                      icon={<CheckmarkIcon />}
                     />
-                  </FormField>
-                </Box>
-              </Section>
-              <Section pad={{ vertical: "medium" }}>
-                <Box size="medium">
-                  <FormField
-                    label="Share Amount *"
-                    htmlFor="name"
-                    className={styles.formField}
-                    error={
-                      this.state.shares_field ? this.state.shares_field : ""
-                    }
-                  >
-                    <input
-                      required
-                      id="shares"
-                      name="shares"
-                      defaultValue={this.state.shares}
-                      type="number"
-                      onChange={e => this.setState({ shares: e.target.value })}
-                      className={styles.input}
-                    />
-                  </FormField>
-                </Box>
-              </Section>
-              <Footer>
-                <Menu inline direction="row" responsive={false}>
-                  <Button
-                    label="Create Order"
-                    style={{ marginTop: 10, marginLeft: 5 }}
-                    onClick={() => {
-                      this._createOrder();
-                    }}
-                    icon={<CheckmarkIcon />}
-                  />
-                </Menu>
-              </Footer>
-            </FormFields>
+                  </Menu>
+                </Footer>
+              </FormFields>
+            </Box>
           </Layer>
         )}
       </div>
@@ -693,6 +715,7 @@ class PersonContainer extends Component {
     const new_shares = this.state.shares;
     const shares = parseInt(new_shares);
     const trade_type = this.state.order_type;
+    const user = parseInt(this.props.props.params.id);
     this.setState({
       shares_field: "",
       errors: ""
@@ -701,7 +724,8 @@ class PersonContainer extends Component {
       .placeOrder({
         variables: {
           shares,
-          trade_type
+          trade_type,
+          user
         }
       })
       .catch(res => {
@@ -762,8 +786,8 @@ class PersonContainer extends Component {
 }
 
 const PLACE_ORDER = gql`
-  mutation CreateTrade($trade_type: String!, $shares: Int) {
-    createTrade(trade_type: $trade_type, shares: $shares) {
+  mutation CreateTrade($trade_type: String!, $shares: Int, $user: Int) {
+    createTrade(trade_type: $trade_type, shares: $shares, user: $user) {
       id
     }
   }

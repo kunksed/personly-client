@@ -38,6 +38,9 @@ class EditQuestionContainer extends Component {
   }
 
   componentDidMount() {
+    if (!localStorage.getItem("auth_token")) {
+      window.location.replace("/login");
+    }
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
@@ -88,7 +91,7 @@ class EditQuestionContainer extends Component {
             question: result.data.data.getQuestions[0],
             title: result.data.data.getQuestions[0].title,
             description: result.data.data.getQuestions[0].description,
-            closes: Date.parse(result.data.data.getQuestions[0].closes),
+            closes: new Date(parseInt(result.data.data.getQuestions[0].closes)*1000),
             getData: true
           });
         });
@@ -145,6 +148,7 @@ class EditQuestionContainer extends Component {
                       id="title"
                       name="title"
                       type="text"
+                      value={this.state.title}
                       onChange={e => this.setState({ title: e.target.value })}
                       className={styles.input}
                     />
@@ -199,6 +203,7 @@ class EditQuestionContainer extends Component {
                       id="description"
                       name="description"
                       type="text"
+                      value={this.state.description}
                       onChange={e =>
                         this.setState({ description: e.target.value })
                       }
@@ -236,7 +241,7 @@ class EditQuestionContainer extends Component {
 
   _updateQuestion = async function() {
     const { title, description, closes } = this.state;
-    const id = this.props.props.params.id;
+    const id = parseInt(this.props.props.params.id);
     this.setState({
       title_field: "",
       description_field: "",

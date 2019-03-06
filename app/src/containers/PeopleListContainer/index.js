@@ -13,6 +13,7 @@ import Button from "grommet/components/Button";
 import Tiles from "grommet/components/Tiles";
 import Tile from "grommet/components/Tile";
 import FormField from "grommet/components/FormField";
+import Select from "grommet/components/Select";
 import Card from "grommet/components/Card";
 import axios from "axios";
 import { reduxForm } from "redux-form";
@@ -42,7 +43,7 @@ class PeopleListContainer extends Component {
       });
 
       const MAIN_QUERY =
-        "{ getUsers(public: true, limit: 21) { id name shares_issued bio profile_picture } }";
+        "{ getUsers(public: true, limit: 21) { id name shares_issued profile_picture listing_description amount_raised date_of_ipo } }";
 
       axiosGitHubGraphQL
         .post(
@@ -66,6 +67,10 @@ class PeopleListContainer extends Component {
       return <div />;
     }
 
+    function custom_sort(a, b) {
+      return new Date(a.date_of_ipo).getTime() - new Date(b.date_of_ipo).getTime();
+    }
+
     return (
       <div>
         <Box className={styles.container}>
@@ -77,6 +82,36 @@ class PeopleListContainer extends Component {
             <Heading tag="h3">
               All people raising are thoroughly vetted and approved.
             </Heading>
+              <FormField
+                align="right"
+                justify="right"
+                label="Order Type *"
+                htmlFor="order_by"
+                className={styles.formField}
+                error={
+                  this.state.order_by_field
+                    ? this.state.order_by_field
+                    : ""
+                }
+              >
+                <Select
+                  placeHolder=""
+                  options={["Date", "Shares Issued", "Amount Raised"]}
+                  value={this.state.order_by}
+                  onChange={e => {
+                    if (e.option === "Date") {
+                      this.setState({ users: this.state.users.sort((a, b) => new Date(a.date_of_ipo).getTime() - new Date(b.date_of_ipo).getTime()); })
+                    }
+                    if (e.option === "Shares Issued") {
+                      this.setState({ users: this.state.users.sort((a, b) => parseFloat(a.shares_issued) - parseFloat(b.shares_issued)); })
+                    }
+                    if (e.option === "Amount Raised") {
+                      this.setState({ users: this.state.users.sort((a, b) => parseFloat(a.amount_raised) - parseFloat(b.amount_raised)); })
+                    }
+                  }}
+                  className={styles.input}
+                />
+              </FormField>
             <Box>
               {this.state.users.length === 0 && (
                 <Title align="center" tag="h3">
@@ -94,7 +129,7 @@ class PeopleListContainer extends Component {
                           thumbnail={user.profile_picture}
                           heading={user.name}
                           label={`${user.shares_issued} shares available`}
-                          description={`${user.bio.substring(0,149)}...`}
+                          description={`${user.listing_description.substring(0,149)}...`}
                           link={<Anchor href={`/people/${user.id}`}
                             label='Learn more' />}
                         />

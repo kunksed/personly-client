@@ -232,3 +232,31 @@ a {
 .rc-pagination-simple .rc-pagination-simple-pager input:hover {
   border-color: #2db7f5;
 }
+
+.ais-Hits {
+  style: none !important;
+}
+
+.ais-Hits-list {
+  style: none !important;
+}
+
+.ais-Pagination-link {
+    padding: .3rem .6rem;
+    display: block;
+    border: 1px solid #c4c8d8;
+    border-radius: 5px;
+    transition: background-color .2s ease-out;
+}
+.ais-Breadcrumb-link, .ais-HierarchicalMenu-link, .ais-Menu-link, .ais-Pagination-link, .ais-RatingMenu-link {
+    color: #0096db;
+    transition: color .2s ease-out;
+}
+
+.ais-SearchBox-submit {
+  display: none;
+}
+
+.ais-SearchBox-reset {
+  display: none;
+}

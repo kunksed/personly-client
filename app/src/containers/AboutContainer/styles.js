@@ -10,31 +10,18 @@ export const FullSection = styled(Section)`
   justify-content: space-around;
 `;
 
-export const BoxWrapper = styled(Box)`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: row !important;
-  width: 100%;
-`;
-
 export const MainContent = styled(Box)`
   position: relative;
   margin-bottom: 14px;
   background: #fff;
-  box-shadow: 0 2px 4px 0 rgba(46,61,73,.2);
-  border: 1px solid #dbe2e8;
   @media screen and (max-width: 768px) {
     max-width: 100vw;
     box-sizing: border-box;
   }
-  padding: 60px 0;
-  width: 75%;
+  width: 65%;
 `;
 
-export const MainBox = styled(Box)`
-  background-color: #fff;
-`;
+export const MainBox = styled(Box)``;
 
 export const AsideButtonContainer = styled(Box)`
   position: absolute;

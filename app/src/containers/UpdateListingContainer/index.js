@@ -8,8 +8,8 @@ import Select from "grommet/components/Select";
 import CheckmarkIcon from "grommet/components/icons/base/Checkmark";
 import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
-import { graphql, compose } from "react-apollo";
 import Toast from "grommet/components/Toast";
+import { graphql, compose } from "react-apollo";
 import axios from "axios";
 import gql from "graphql-tag";
 import styles from "./index.module.scss";
@@ -48,7 +48,7 @@ class UpdateListingContainer extends Component {
         }
       });
 
-      const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture bio position location twitter is_public listing_description header_image_url } }`;
+      const MAIN_QUERY = `{ getCurrentUser { id name role email profile_picture is_public listing_description header_image_url } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -64,6 +64,7 @@ class UpdateListingContainer extends Component {
             currentUser: result.data.data.getCurrentUser[0],
             name: result.data.data.getCurrentUser[0].name,
             listing_description: result.data.data.getCurrentUser[0].listing_description,
+            header_image_url: result.data.data.getCurrentUser[0].header_image_url,
             getSecondData: true,
             getData: true,
             isLoading: false
@@ -101,6 +102,11 @@ class UpdateListingContainer extends Component {
     if (this.state.isLoading === true) {
       return <div />;
     }
+
+    if (this.state.currentUser.is_public === false) {
+      window.location.replace("/");
+    }
+
 
     return (
       <div>
@@ -161,6 +167,7 @@ class UpdateListingContainer extends Component {
                       id="listing_description"
                       name="listing_description"
                       type="text"
+                      value={this.state.listing_description}
                       onChange={e =>
                         this.setState({ listing_description: e.target.value })
                       }
@@ -204,7 +211,7 @@ class UpdateListingContainer extends Component {
       header_image_url_field: "",
     });
     await this.props
-      .updateUser({
+      .updateListing({
         variables: {
           listing_description,
           header_image_url

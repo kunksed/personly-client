@@ -7,6 +7,7 @@ import Anchor from "grommet/components/Anchor";
 import Timestamp from "grommet/components/Timestamp";
 import Paragraph from "grommet/components/Paragraph";
 import Table from "grommet/components/Table";
+import Button from "grommet/components/Button";
 import TableRow from "grommet/components/TableRow";
 import Columns from "grommet/components/Columns";
 import Highcharts from "highcharts/highstock";
@@ -181,7 +182,8 @@ class ProfileContainer extends Component {
                       />
                     </Heading>
                   )}
-                  {this.state.user.gender && (
+                  <br />
+                  {this.state.user.is_public === true && (
                     <Button
                       href={`/people/${this.state.user.id}`}
                       label="Invest"

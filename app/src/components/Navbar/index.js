@@ -9,6 +9,8 @@ import Menu from 'grommet/components/Menu';
 import Button from 'grommet/components/Button';
 import Image from 'grommet/components/Image';
 import Notification from 'grommet/components/Notification';
+import SearchIcon from 'grommet/components/icons/base/Search';
+import NotificationIcon from 'grommet/components/icons/base/Notification';
 import styles from './index.module.scss';
 import axios from 'axios';
 import logo from './logo_full.png';
@@ -67,12 +69,9 @@ class Navbar extends Component {
       <div className={styles.navbar}>
         <Header justify="between" className="component">
           {process.env.NODE_ENV === 'development' && (
-            <Anchor href="/"><Image src={logo} className={styles.logoImage} /> Development</Anchor>
-          )}
-          {process.env.NODE_ENV !== 'development' && (
-            <Title className={styles.title}>
-              <Anchor href="/"><Image src={logo} className={styles.logoImage} /></Anchor>
-            </Title>
+            <div>
+                <Anchor href="/"><Image src={logo} size="small" className={styles.titleImage} /></Anchor>
+            </div>
           )}
           {this.state.currentUser === 0 && (
             <div direction="row">
@@ -82,6 +81,12 @@ class Navbar extends Component {
                 responsive
                 className={styles.rightMenu}
               >
+                <Anchor
+                  href="/search"
+                  primary={false}
+                >
+                  <SearchIcon />
+                </Anchor>
                 <Anchor
                   href="/people"
                   primary={false}
@@ -130,6 +135,18 @@ class Navbar extends Component {
                 responsive
                 className={styles.leftMenu}
               >
+                  <Anchor
+                    href="/search"
+                    primary={false}
+                  >
+                    <SearchIcon />
+                  </Anchor>
+                  <Anchor
+                    href="/notifications"
+                    primary={false}
+                  >
+                    <NotificationIcon />
+                  </Anchor>
                   <Anchor
                     href="/people"
                     primary={false}

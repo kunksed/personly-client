@@ -162,11 +162,12 @@ class UpdatesContainer extends Component {
                 <ThumbnailImage src={this.state.update.user.profile_picture} />
               </Wrapper>
             </Box>
-            <Box basis="1/2" align="start" pad="medium">
+            <Box basis="1/2" align="start" pad="medium" colorIndex="grey-2-a">
               <Heading margin="none">{this.state.update.user.name}</Heading>
               <br />
               <Button
                 label="Invest"
+                className={styles.registerButton}
                 href={`/people/${this.state.update.user.id}`}
               />
             </Box>

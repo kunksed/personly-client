@@ -420,7 +420,7 @@ class QuestionContainer extends Component {
                 />
               </Wrapper>
             </Box>
-            <Box basis="1/2" align="start" pad="medium">
+            <Box basis="1/2" align="start" pad="medium" colorIndex="grey-2-a">
               <Heading margin="none">
                 {this.state.question.user.name} - Question
               </Heading>
@@ -960,43 +960,8 @@ class QuestionContainer extends Component {
       }
     }
     if (!this.state.errors) {
-      this.setState({ body: "" });
-      const axiosGitHubGraphQL = axios.create({
-        baseURL: `${
-          process.env.NODE_ENV === "development"
-            ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
-        }`,
-        headers: {
-          Authorization: `Bearer ${this.state.auth_token}`
-        }
-      });
-      const COMMENT_QUERY = `{ getComments(id: ${parseInt(
-        this.props.props.params.id
-      )}) { id user { id name shares } body created_at } }`;
-
-      axiosGitHubGraphQL
-        .post(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          { query: COMMENT_QUERY }
-        )
-        .then(result => {
-          this.setState({ comments: result.data.data.getComments });
-        })
-        .catch(error => {
-          this.setState({ comments: "None" });
-        });
-      const upper_comments = this.state.comments.filter(function(new_comment) {
-        return new_comment ? new_comment.reply_id === 0 : null;
-      });
-      location.reload();
-      this.setState({ upper_comments: upper_comments, reply_id: 0 });
-      this.commentCounter();
       this.toggleCommentToast();
+      location.reload();
     }
   };
 
@@ -1026,39 +991,7 @@ class QuestionContainer extends Component {
     }
     if (!this.state.errors) {
       this.toggleDeleteCommentToast();
-      const axiosGitHubGraphQL = axios.create({
-        baseURL: `${
-          process.env.NODE_ENV === "development"
-            ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
-        }`,
-        headers: {
-          Authorization: `Bearer ${this.state.auth_token}`
-        }
-      });
-      const COMMENT_QUERY = `{ getComments(id: ${parseInt(
-        this.props.props.params.id
-      )}) { id user { id name shares } body created_at } }`;
-
-      axiosGitHubGraphQL
-        .post(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
-          }`,
-          { query: COMMENT_QUERY }
-        )
-        .then(result => {
-          this.setState({ comments: result.data.data.getComments });
-        })
-        .catch(error => {
-          this.setState({ comments: "None" });
-        });
-      const upper_comments = this.state.comments.filter(function(new_comment) {
-        return new_comment ? new_comment.reply_id === 0 : null;
-      });
-      this.setState({ upper_comments: upper_comments });
+      location.reload();
     }
   };
 

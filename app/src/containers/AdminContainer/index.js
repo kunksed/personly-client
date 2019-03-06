@@ -76,7 +76,7 @@ class AdminContainer extends Component {
         }`,
       });
 
-      const MAIN_QUERY = `{ getUsers(public: false) { id name shares twitter bio balance is_public shares_issued } }`;
+      const MAIN_QUERY = `{ getUsers(public: false) { id name shares twitter bio balance is_public shares_issued listing_description } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -98,7 +98,7 @@ class AdminContainer extends Component {
           });
         });
 
-      const RAISING_USERS_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued } }`;
+      const RAISING_USERS_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued listing_description } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -135,7 +135,9 @@ class AdminContainer extends Component {
       name: user.name,
       is_public: user.is_public,
       shares_issued: user.shares_issued,
+      listing_description: user.listing_description
     });
+    console.log(this.state)
   }
 
   toggleUpdateUserStatusToast() {
@@ -156,6 +158,7 @@ class AdminContainer extends Component {
     if (this.state.currentUser === "None") {
       window.location.replace("/login");
     }
+
     if (this.state.currentUser.role !== "Admin") {
       window.location.replace("/login");
     }
@@ -373,6 +376,7 @@ class AdminContainer extends Component {
                       id='shares_issued'
                       name='shares_issued'
                       type='text'
+                      value={this.state.shares_issued}
                       onChange={e =>
                         this.setState({ shares_issued: e.target.value })
                       }
@@ -396,6 +400,7 @@ class AdminContainer extends Component {
                       id='listing_description'
                       name='listing_description'
                       type='text'
+                      value={this.state.listing_description}
                       onChange={e =>
                         this.setState({ listing_description: e.target.value })
                       }
@@ -492,13 +497,13 @@ class AdminContainer extends Component {
     var id = parseInt(id);
     var { is_public, listing_description } = this.state;
     var shares_issued = parseInt(this.state.shares_issued);
-    this.setState({ user: [], name: "", is_public: false, shares_issued: 0 });
     await this.props
       .adminSetPublic({
         variables: {
           id,
           is_public,
           shares_issued,
+          listing_description
         },
       })
       .catch(res => {
@@ -523,7 +528,7 @@ class AdminContainer extends Component {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
         },
       });
-      const ADMIN_PUBLIC_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued } }`;
+      const ADMIN_PUBLIC_QUERY = `{ getUsers(public: true) { id name shares twitter bio balance is_public shares_issued listing_description } }`;
 
       axiosGitHubGraphQLAuth
         .post(
@@ -544,8 +549,9 @@ class AdminContainer extends Component {
             users: [],
           });
         });
-      this.toggleUpdateUserStatusLayer();
+      this.toggleUpdateUserStatusLayer(this.state.user);
       this.toggleUpdateUserStatusToast();
+      this.setState({ user: [], name: "", is_public: false, shares_issued: 0, listing_description: "" });
     }
   };
 }

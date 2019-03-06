@@ -301,6 +301,22 @@ export const routes = {
           .catch(err => errorLoading(err));
       },
     },
+    {
+      path: '/search',
+      getComponent(location, callback) {
+        System.import('./pages/SearchPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
+    {
+      path: '/notifications',
+      getComponent(location, callback) {
+        System.import('./pages/NotificationsPage')  // eslint-disable-line block-scoped-var
+          .then(loadRoute(callback))
+          .catch(err => errorLoading(err));
+      },
+    },
 /* GENERATOR: Newly generated Routes go here */
     {
       path: '*',

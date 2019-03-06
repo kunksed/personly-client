@@ -152,6 +152,7 @@ class ShareholderRelationsContainer extends Component {
               <Heading tag="h2" align="center">
                 Questions
               </Heading>
+              <br />
               <Button align="center" label="Create Question" href="/new" />
               {this.state.questions.length > 0 && (
                 <Table>
@@ -171,7 +172,7 @@ class ShareholderRelationsContainer extends Component {
                         <td>#{question.id}</td>
                         <td><Anchor href={`/questions/${question.id}`} label={question.title}/></td>
                         <td className="secondary"><Timestamp value={question.created_on} /></td>
-                        <td><Anchor onClick={() => this._deleteQuestion(update.id)} label="Delete"/></td>
+                        <td><Anchor onClick={() => this._deleteQuestion(question.id)} label="Delete"/></td>
                         <td><Anchor href={`/questions/${question.id}/edit`} label="Edit"/></td>
                       </TableRow>
                     )
@@ -185,6 +186,7 @@ class ShareholderRelationsContainer extends Component {
                 <Heading tag="h2" align="center">
                   Updates
                 </Heading>
+                <br />
                 <Button align="center" label="Create Update" href="/new/update" />
                 {this.state.updates.length > 0 && (
                   <Table>

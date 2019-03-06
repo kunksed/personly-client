@@ -1,4 +1,6 @@
 /* GENERATOR: Assemble all pages for export */
+export NotificationsPage from './NotificationsPage';
+export SearchPage from './SearchPage';
 export UpdateListingPage from './UpdateListingPage';
 export InvestorFaqsPage from './InvestorFaqsPage';
 export Faqpage from './Faqpage';

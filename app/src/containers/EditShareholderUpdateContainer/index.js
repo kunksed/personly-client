@@ -212,7 +212,7 @@ class EditShareholderUpdateContainer extends Component {
 
   _updateShareholderUpdate = async function() {
     const { title, description } = this.state;
-    const id = this.props.props.params.id;
+    const id = parseInt(this.props.props.params.id);
     this.setState({
       title_field: "",
       description_field: "",
