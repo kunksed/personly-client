@@ -29,8 +29,48 @@ class PeopleListContainer extends Component {
       getData: false,
       votes: [],
       updates: null,
-      isLoading: true
+      isLoading: true,
+      order_by: "Date"
     };
+  }
+
+  orderData(option) {
+    if (option === "Date") {
+      this.setState({
+        users: this.state.users.sort(
+          (a, b) =>
+            new Date(a.date_of_ipo).getTime() -
+            new Date(b.date_of_ipo).getTime()
+        ),
+        order_by: option
+      });
+    }
+    if (option === "Shares Issued") {
+      this.setState({
+        users: this.state.users.sort(
+          (a, b) => parseFloat(a.shares_issued) - parseFloat(b.shares_issued)
+        ),
+        order_by: option
+      });
+    }
+    if (option === "Amount Raised") {
+      this.setState({
+        users: this.state.users.sort(
+          (a, b) => parseFloat(a.amount_raised) - parseFloat(b.amount_raised)
+        ),
+        order_by: option
+      });
+    }
+    if (option === "Popular") {
+      this.setState({
+        users: this.state.users.sort(
+          (a, b) =>
+            parseFloat(a.amount_total_raised) -
+            parseFloat(b.amount_total_raised)
+        ),
+        order_by: option
+      });
+    }
   }
   render() {
     if (this.state.getData === false) {
@@ -43,7 +83,7 @@ class PeopleListContainer extends Component {
       });
 
       const MAIN_QUERY =
-        "{ getUsers(public: true, limit: 21) { id name shares_issued profile_picture listing_description amount_raised date_of_ipo } }";
+        "{ getUsers(public: true, limit: 21) { id name shares_issued profile_picture listing_description amount_raised date_of_ipo amount_total_raised } }";
 
       axiosGitHubGraphQL
         .post(
@@ -67,51 +107,47 @@ class PeopleListContainer extends Component {
       return <div />;
     }
 
-    function custom_sort(a, b) {
-      return new Date(a.date_of_ipo).getTime() - new Date(b.date_of_ipo).getTime();
-    }
-
     return (
       <div>
         <Box className={styles.container}>
           <Section>
             <br />
-            <Heading tag="h2" strong={true}>
-              People raising right now
-            </Heading>
-            <Heading tag="h3">
-              All people raising are thoroughly vetted and approved.
-            </Heading>
-              <FormField
-                align="right"
-                justify="right"
-                label="Order Type *"
-                htmlFor="order_by"
-                className={styles.formField}
-                error={
-                  this.state.order_by_field
-                    ? this.state.order_by_field
-                    : ""
-                }
-              >
-                <Select
-                  placeHolder=""
-                  options={["Date", "Shares Issued", "Amount Raised"]}
-                  value={this.state.order_by}
-                  onChange={e => {
-                    if (e.option === "Date") {
-                      this.setState({ users: this.state.users.sort((a, b) => new Date(a.date_of_ipo).getTime() - new Date(b.date_of_ipo).getTime()); })
-                    }
-                    if (e.option === "Shares Issued") {
-                      this.setState({ users: this.state.users.sort((a, b) => parseFloat(a.shares_issued) - parseFloat(b.shares_issued)); })
-                    }
-                    if (e.option === "Amount Raised") {
-                      this.setState({ users: this.state.users.sort((a, b) => parseFloat(a.amount_raised) - parseFloat(b.amount_raised)); })
-                    }
-                  }}
-                  className={styles.input}
-                />
-              </FormField>
+            <Box direction="row">
+              <Box basis="3/4">
+                <Heading tag="h2" strong={true}>
+                  People raising right now
+                </Heading>
+                <Heading tag="h3">
+                  All people raising are thoroughly vetted and approved.
+                </Heading>
+              </Box>
+              <Box basis="1/4" align="right">
+                <FormField
+                  align="right"
+                  label="Order Type *"
+                  htmlFor="order_by"
+                  className={styles.formField}
+                  error={
+                    this.state.order_by_field ? this.state.order_by_field : ""
+                  }
+                >
+                  <Select
+                    placeHolder=""
+                    options={[
+                      "Popular",
+                      "Date",
+                      "Shares Issued",
+                      "Amount Raised"
+                    ]}
+                    value={this.state.order_by}
+                    onChange={e => {
+                      this.orderData(e.option);
+                    }}
+                    className={styles.input}
+                  />
+                </FormField>
+              </Box>
+            </Box>
             <Box>
               {this.state.users.length === 0 && (
                 <Title align="center" tag="h3">
@@ -122,16 +158,22 @@ class PeopleListContainer extends Component {
                 <Tiles flush={false}>
                   {this.state.users.map(user => {
                     return (
-                      <Tile
-                        className={styles.cardStyled}>
+                      <Tile className={styles.cardStyled}>
                         <Card
                           textSize="small"
                           thumbnail={user.profile_picture}
                           heading={user.name}
                           label={`${user.shares_issued} shares available`}
-                          description={`${user.listing_description.substring(0,149)}...`}
-                          link={<Anchor href={`/people/${user.id}`}
-                            label='Learn more' />}
+                          description={`${user.listing_description.substring(
+                            0,
+                            149
+                          )}...`}
+                          link={
+                            <Anchor
+                              href={`/people/${user.id}`}
+                              label="Learn more"
+                            />
+                          }
                         />
                       </Tile>
                     );
@@ -143,14 +185,12 @@ class PeopleListContainer extends Component {
         </Box>
         <Section align="center" className={styles.mailListStyles}>
           <Box>
-            <Title tag="h4">
-              Get emailed when a new person goes public.
-            </Title>
+            <Title tag="h4">Get emailed when a new person goes public.</Title>
             <FormField
               label="Email *"
               htmlFor="emailInput"
               className={styles.formField}
-              error={this.state.email_field ? this.state.email_field : ''}
+              error={this.state.email_field ? this.state.email_field : ""}
             >
               <input
                 required
@@ -161,12 +201,8 @@ class PeopleListContainer extends Component {
                 className={styles.input}
               />
             </FormField>
-            <Footer pad={{ vertical: 'medium' }} align="center">
-              <Button
-                fill
-                label="Join"
-                type="submit"
-              />
+            <Footer pad={{ vertical: "medium" }} align="center">
+              <Button fill label="Join" type="submit" />
             </Footer>
           </Box>
         </Section>

@@ -1,10 +1,12 @@
 import React from 'react';
-import Box from 'grommet/components/Box';
+import cssModules from 'react-css-modules';
+import { NotificationsContainer } from 'containers';
+import styles from './index.module.scss';
 
-export default function NotificationsPage() {
-  return (
-    <Box>
-      Hello from NotificationsPage!
-    </Box>
-  );
-}
+const NotificationsPage = (props) => (
+  <div className={styles.container}>
+    <NotificationsContainer props={props}/>
+  </div>
+);
+
+export default cssModules(NotificationsPage, styles);

@@ -5,7 +5,6 @@ import Status from "grommet/components/icons/Status";
 import Heading from "grommet/components/Heading";
 import Anchor from "grommet/components/Anchor";
 import Title from "grommet/components/Title";
-import Timestamp from "grommet/components/Timestamp";
 import Paragraph from "grommet/components/Paragraph";
 import Columns from "grommet/components/Columns";
 import Footer from "grommet/components/Footer";

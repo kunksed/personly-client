@@ -15,19 +15,19 @@
 }
 
 .cardStyled {
+  width: 50vw;
+  border-top: solid #E9E9E9 !important;
+  border-top-width: 0 1px 1px !important;
+  border-top-right-radius: 4px !important;
+  border-top-left-radius: 4px !important;
   border: solid #E9E9E9 !important;
   border-width: 0 1px 1px !important;
   border-bottom-right-radius: 4px !important;
   border-bottom-left-radius: 4px !important;
-  transition: min-height 0.2s ease-in-out, margin 0.2s ease-in-out;
 }
 
 .mailListStyles {
   background-color: #f7f7f7;
   padding-bottom: 64px;
   padding-top: 64px;
-}
-
-.formField {
-  width: auto;
 }

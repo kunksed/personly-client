@@ -1,4 +1,5 @@
 /* GENERATOR: Assemble all containers for export */
+export DividendsContainer from './DividendsContainer';
 export NotificationsContainer from './NotificationsContainer';
 export SearchContainer from './SearchContainer';
 export UpdateListingContainer from './UpdateListingContainer';

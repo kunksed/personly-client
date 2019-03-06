@@ -10,6 +10,9 @@ import Markdown from "grommet/components/Markdown";
 import List from "grommet/components/List";
 import ListItem from "grommet/components/ListItem";
 import Split from "grommet/components/Split";
+import Columns from "grommet/components/Columns";
+import Button from "grommet/components/Button";
+import Paragraph from "grommet/components/Paragraph";
 import SocialTwitterIcon from 'grommet/components/icons/base/SocialTwitter';
 import { FullSection, MainContent, MainBox } from "./styles";
 import { Navbar, AppFooter, Divider } from "components";
@@ -22,7 +25,7 @@ class AboutContainer extends Component {
       <MainBox alignContent="center" fill="horizontal" align="center">
         <FullSection primary direction="row">
           <MainContent align="center" justify="start">
-            <Box align="left" pad="medium" margin="small" pad="large">
+            <Box align="left" pad="medium" margin="small" pad="large" align="center" justify="center">
               <Heading tag="h2" strong={true} align="center" justify="center">
                 About Personly
               </Heading>
@@ -44,11 +47,12 @@ class AboutContainer extends Component {
                   src="https://pbs.twimg.com/profile_images/1074379859491729408/Bkl1xAGr_bigger.jpg"
                   className={styles.avatar}
                 />
-                <Heading tag="h3" align="center">
+                <br />
+                <Heading tag="h3" align="center" justify="center">
                   James Gallagher
                 </Heading>
-                <Paragraph>
-                  Chief Executive Officer; Pioneer. Editor at Maker Mag and publicly trade person.
+                <Paragraph align="center" justify="center">
+                  Chief Executive Officer; Pioneer. Editor at Maker Mag and publicly traded person.
                 </Paragraph>
                 <Anchor
                   icon={<SocialTwitterIcon />}
@@ -60,10 +64,10 @@ class AboutContainer extends Component {
               </Box>
               </Columns>
               <Divider />
-              <Heading tag="h3" align="center">
+              <Heading tag="h3" align="center" justify="center">
                 Interested in becoming a publicly traded person?
               </Heading>
-              <Button href="/for-people" label="Go public" />
+              <Button href="/for-people" label="Go public" align="center" justify="center" />
             </Box>
           </MainContent>
         </FullSection>

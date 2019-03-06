@@ -11,6 +11,7 @@ import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
 import Table from "grommet/components/Table";
 import TableRow from "grommet/components/TableRow";
+import Timestamp from "grommet/components/Timestamp";
 import { graphql, compose } from "react-apollo";
 import Toast from "grommet/components/Toast";
 import axios from "axios";
@@ -148,7 +149,7 @@ class ShareholdersContainer extends Component {
                       <td><Anchor href={`/profile/${shareholder.id}`} label={shareholder.name}/></td>
                       <td>{shareholder.shares}</td>
                       <td>{shareholder.balance}</td>
-                      <td className="secondary">{shareholder.created_on}</td>
+                      <td className="secondary"><Timestamp value={shareholder.created_on} /></td>
                     </TableRow>
                   })}
                   </tbody>

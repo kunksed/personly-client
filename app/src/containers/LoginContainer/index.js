@@ -26,7 +26,7 @@ class LoginContainer extends Component {
   }
 
   toggleLoggedInToast() {
-    window.location.replace('/questions');
+    window.location.replace('/dashboard');
   }
 
   toggleErrorToast() {
