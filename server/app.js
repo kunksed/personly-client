@@ -22,7 +22,7 @@ env(path.join(__dirname, '..', '.env'));
 
 const app = express();
 const serverUrl = process.env.BASE_URL || 'http://0.0.0.0:1337';
-const apiUrl = 'http://jamesg.herokuapp.com/';
+const apiUrl = 'https://personly-api.herokuapp.com/';
 const PORT = process.env.PORT | 1337;
 const IP = '0.0.0.0';
 const graphqlUrl = `${apiUrl}graphql`;

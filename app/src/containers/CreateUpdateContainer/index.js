@@ -38,7 +38,7 @@ class CreateUpdateContainer extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -47,7 +47,7 @@ class CreateUpdateContainer extends Component {
       const MAIN_QUERY = `{ getCurrentUser { id name is_public profile_picture } }`;
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`, { query: MAIN_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],

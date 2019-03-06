@@ -58,7 +58,7 @@ class QuestionContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`
       });
 
@@ -71,7 +71,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: MAIN_QUERY }
         )
@@ -91,7 +91,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: SECOND_QUERY }
         )
@@ -108,7 +108,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: COMMENT_QUERY }
         )
@@ -120,7 +120,7 @@ class QuestionContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
@@ -134,7 +134,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: THIRD_QUERY }
         )
@@ -333,7 +333,7 @@ class QuestionContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
@@ -356,7 +356,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: VOTED_QUERY }
         )
@@ -378,7 +378,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: SHARES_QUERY }
         )
@@ -1026,7 +1026,7 @@ class QuestionContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`
       });
       const YES_QUERY = `{ getVotes(id: ${parseInt(
@@ -1038,7 +1038,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: YES_QUERY }
         )
@@ -1049,7 +1049,7 @@ class QuestionContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
@@ -1075,7 +1075,7 @@ class QuestionContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: VOTED_QUERY }
         )

@@ -51,7 +51,7 @@ class DashboardContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
@@ -65,7 +65,7 @@ class DashboardContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: MAIN_QUERY }
         )
@@ -82,7 +82,7 @@ class DashboardContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: SHAREHOLDERS_QUERY }
         )
@@ -109,7 +109,7 @@ class DashboardContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: TODAY_QUERY }
         )
@@ -124,7 +124,7 @@ class DashboardContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: YESTERDAY_QUERY }
         )
@@ -142,7 +142,7 @@ class DashboardContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: TRADES_QUERY }
         )

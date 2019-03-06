@@ -48,7 +48,7 @@ class UpdatesContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`
       });
 
@@ -61,7 +61,7 @@ class UpdatesContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: UPDATES_QUERY }
         )
@@ -79,7 +79,7 @@ class UpdatesContainer extends Component {
             `${
               process.env.NODE_ENV === "development"
                 ? "https://personly-api.herokuapp.com/graphql"
-                : "https://api.jamesg.app/graphql"
+                : "https://personly-api.herokuapp.com/graphql"
             }`,
             { query: COMMENT_QUERY }
           )
@@ -504,7 +504,7 @@ class UpdatesContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${this.state.auth_token}`
@@ -519,7 +519,7 @@ class UpdatesContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: COMMENT_QUERY }
         )
@@ -569,7 +569,7 @@ class UpdatesContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${this.state.auth_token}`
@@ -584,7 +584,7 @@ class UpdatesContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: COMMENT_QUERY }
         )

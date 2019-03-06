@@ -42,7 +42,7 @@ class AdminContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
@@ -56,7 +56,7 @@ class AdminContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           {
             query: USER_QUERY,
@@ -72,7 +72,7 @@ class AdminContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
       });
 
@@ -83,7 +83,7 @@ class AdminContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: MAIN_QUERY },
         )
@@ -105,7 +105,7 @@ class AdminContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: RAISING_USERS_QUERY },
         )
@@ -462,7 +462,7 @@ class AdminContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
@@ -475,7 +475,7 @@ class AdminContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: DELETE_UPDATE_QUERY },
         )
@@ -522,7 +522,7 @@ class AdminContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
@@ -535,7 +535,7 @@ class AdminContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: ADMIN_PUBLIC_QUERY },
         )

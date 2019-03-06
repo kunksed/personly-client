@@ -52,7 +52,7 @@ class PersonContainer extends Component {
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`
       });
 
@@ -65,7 +65,7 @@ class PersonContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: PROFILE_QUERY }
         )
@@ -87,7 +87,7 @@ class PersonContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: MAIN_QUERY }
         )
@@ -106,7 +106,7 @@ class PersonContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: SECOND_QUERY }
         )
@@ -125,7 +125,7 @@ class PersonContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: TODAY_QUERY }
         )
@@ -142,7 +142,7 @@ class PersonContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: YESTERDAY_QUERY }
         )
@@ -161,7 +161,7 @@ class PersonContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: UPDATES_QUERY }
         )
@@ -180,7 +180,7 @@ class PersonContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: TRADES_QUERY }
         )

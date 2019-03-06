@@ -37,14 +37,14 @@ class MobileNav extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`
       });
 
       const MAIN_QUERY =
         "{ getTradesToday { id trade_type shares price share_price created_at } }";
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: MAIN_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`, { query: MAIN_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTradesToday });
         });
@@ -53,7 +53,7 @@ class MobileNav extends Component {
         "{ getTrades { id trade_type shares price share_price created_at } }";
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: TRADES_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`, { query: TRADES_QUERY })
         .then(result => {
           this.setState({ tradesAmount: result.data.data.getTrades });
         });
@@ -62,7 +62,7 @@ class MobileNav extends Component {
         "{ getTradesYesterday { id trade_type shares price share_price created_at } }";
 
       axiosGitHubGraphQL
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, {
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`, {
           query: YESTERDAY_QUERY
         })
         .then(result => {
@@ -72,7 +72,7 @@ class MobileNav extends Component {
         });
 
       const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
         }
@@ -81,7 +81,7 @@ class MobileNav extends Component {
       const USER_QUERY = "{ getCurrentUser { id name role balance shares } }";
 
       axiosGitHubGraphQLAuth
-        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: USER_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`, { query: USER_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],

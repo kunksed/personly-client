@@ -28,7 +28,7 @@ class Navbar extends Component {
   componentDidMount() {
     if (this.state.getData === false) {
       const axiosGitHubGraphQLAuth = axios.create({
-        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+        baseURL: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -37,7 +37,7 @@ class Navbar extends Component {
       const USER_QUERY = '{ getCurrentUser { id name role balance shares is_public } }';
 
       axiosGitHubGraphQLAuth
-        .post(`${process.env.NODE_ENV === 'development' ?'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, { query: USER_QUERY })
+        .post(`${process.env.NODE_ENV === 'development' ?'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`, { query: USER_QUERY })
         .then(result => {
           this.setState({
             currentUser: result.data.data.getCurrentUser[0],
@@ -68,11 +68,7 @@ class Navbar extends Component {
     return (
       <div className={styles.navbar}>
         <Header justify="between" className="component">
-          {process.env.NODE_ENV === 'development' && (
-            <div>
-                <Anchor href="/"><Image src={logo} size="small" className={styles.titleImage} /></Anchor>
-            </div>
-          )}
+          <Anchor href="/"><Image src={logo} size="small" className={styles.titleImage} /></Anchor>
           {this.state.currentUser === 0 && (
             <div direction="row">
               <Menu

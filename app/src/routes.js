@@ -102,14 +102,6 @@ export const routes = {
       },
     },
     {
-      path: '/trade',
-      getComponent(location, callback) {
-        System.import('./pages/TradePage')  // eslint-disable-line block-scoped-var
-          .then(loadRoute(callback))
-          .catch(err => errorLoading(err));
-      },
-    },
-    {
       path: '/profile/:id',
       getComponent(location, callback) {
         System.import('./pages/ProfilePage')  // eslint-disable-line block-scoped-var
@@ -217,14 +209,6 @@ export const routes = {
       path: '/for-investors',
       getComponent(location, callback) {
         System.import('./pages/ForInvestorsPage')  // eslint-disable-line block-scoped-var
-          .then(loadRoute(callback))
-          .catch(err => errorLoading(err));
-      },
-    },
-    {
-      path: '/leaderboard',
-      getComponent(location, callback) {
-        System.import('./pages/GlobalLeaderboard')  // eslint-disable-line block-scoped-var
           .then(loadRoute(callback))
           .catch(err => errorLoading(err));
       },

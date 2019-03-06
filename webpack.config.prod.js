@@ -176,7 +176,7 @@ module.exports = {
       'process.env.AUCTION': JSON.stringify(process.env.AUCTION || false),
       'process.env.NAME': JSON.stringify(process.env.NAME || "JamesG"),
       'process.env.STRIPE_API_KEY_PUBLIC': JSON.stringify(process.env.STRIPE_API_KEY_PUBLIC || "test"),
-      'process.env.API_URL': JSON.stringify(process.env.API_URL || 'https://api.jamesg.app/graphql')
+      'process.env.API_URL': JSON.stringify(process.env.API_URL || 'https://personly-api.herokuapp.com/graphql')
     }),
     new webpack.optimize.OccurrenceOrderPlugin(true),
     new webpack.optimize.UglifyJsPlugin({

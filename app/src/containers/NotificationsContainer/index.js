@@ -45,12 +45,15 @@ class NotificationsContainer extends Component {
   }
 
   componentDidMount() {
+    if (!localStorage.getItem("auth_token")) {
+      window.location.replace("/login");
+    }
     if (this.state.getData === false) {
       const axiosGitHubGraphQL = axios.create({
         baseURL: `${
           process.env.NODE_ENV === "development"
             ? "https://personly-api.herokuapp.com/graphql"
-            : "https://api.jamesg.app/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
         }`,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`
@@ -65,7 +68,7 @@ class NotificationsContainer extends Component {
           `${
             process.env.NODE_ENV === "development"
               ? "https://personly-api.herokuapp.com/graphql"
-              : "https://api.jamesg.app/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
           }`,
           { query: MAIN_QUERY }
         )
@@ -80,9 +83,6 @@ class NotificationsContainer extends Component {
     }
   }
   render() {
-    if (!localStorage.getItem("auth_token")) {
-      window.location.replace("/login");
-    }
     if (this.state.isLoading === true) {
       return <div />;
     }

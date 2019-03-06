@@ -8,8 +8,8 @@ import { AUTH_TOKEN } from './constants'
 import { ApolloLink } from 'apollo-client-preset'
 import { onError } from "apollo-link-error";
 
-const baseUrl = process.env.API_URL || `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`;
-const httpLink = new HttpLink({ uri: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`, fetch: fetch })
+const baseUrl = process.env.API_URL || `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`;
+const httpLink = new HttpLink({ uri: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`, fetch: fetch })
 
 const middlewareAuthLink = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem('auth_token')
@@ -25,7 +25,7 @@ const middlewareAuthLink = new ApolloLink((operation, forward) => {
 const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink)
 
 const networkInterface = createNetworkInterface({
-  uri: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://api.jamesg.app/graphql'}`,
+  uri: `${process.env.NODE_ENV === 'development' ? 'https://personly-api.herokuapp.com/graphql' : 'https://personly-api.herokuapp.com/graphql'}`,
 });
 
 networkInterface.use([
