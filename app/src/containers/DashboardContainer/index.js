@@ -38,7 +38,8 @@ class DashboardContainer extends Component {
       getSecondData: false,
       currentUser: "None",
       isLoading: true,
-      investments: []
+      investments: [],
+      shareholders: []
     };
   }
 
@@ -75,7 +76,7 @@ class DashboardContainer extends Component {
           });
         })
 
-      const SHAREHOLDERS_QUERY = `{ getShareholders { id user { name balance gender } } }`;
+      const SHAREHOLDERS_QUERY = `{ getShareholders { id user { name balance gender } shares } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -89,18 +90,9 @@ class DashboardContainer extends Component {
         .then(result => {
           this.setState({
             shareholders: result.data.data.getShareholders,
-            getSecondData: true,
-            getData: true,
-            isLoading: false
+            getSecondData: true
           });
         })
-        .catch(result => {
-          this.setState({
-            shareholders: [],
-            getData: true,
-            isLoading: false
-          });
-        });
 
       const TODAY_QUERY = `{ getTradesToday { id trade_type shares price share_price created_at } }`;
 
@@ -155,7 +147,6 @@ class DashboardContainer extends Component {
         })
         .catch(error => {
           this.setState({
-            trades: [],
             getData: true,
             isLoading: false
           });
@@ -174,8 +165,10 @@ class DashboardContainer extends Component {
 
     var sharesIssued = parseFloat(0);
 
-    for (var item, i = 0; (item = this.state.shareholders[i++]); ) {
-      var sharesIssued = parseFloat(totalShares) + parseFloat(item.shares);
+    if (this.state.shareholders.length > 0) {
+      for (var item, i = 0; (item = this.state.shareholders[i++]); ) {
+        var sharesIssued = parseFloat(totalShares) + parseFloat(item.shares);
+      }
     }
 
     var user_genders = [];
