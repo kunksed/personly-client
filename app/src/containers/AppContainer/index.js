@@ -7,6 +7,7 @@ import { AppContainer as ReactHotLoader } from "react-hot-loader";
 import { Navbar, AppFooter } from "components";
 import * as AppContainerActionCreators from "./actions";
 import { Elements, StripeProvider } from "react-stripe-elements-universal";
+import * as Sentry from '@sentry/browser';
 
 class AppContainer extends Component {
   // eslint-disable-line react/prefer-stateless-function
@@ -24,6 +25,7 @@ class AppContainer extends Component {
     this.setState({
       stripe: window.Stripe(process.env.STRIPE_API_KEY_PUBLIC)
     });
+    Sentry.init({ dsn: 'https://25a9ab9f95ac4b3d9b7b3e85a75a1d96@sentry.io/1409599' });
     console.clear();
     this.handleSetMobile();
   }
