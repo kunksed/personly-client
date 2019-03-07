@@ -264,3 +264,14 @@ a {
 .ais-SearchBox-input {
   width: 33vw;
 }
+
+.grommetux-tabs {
+    width: 75vw !important;
+    margin: 12px 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+}

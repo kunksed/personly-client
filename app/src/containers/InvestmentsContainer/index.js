@@ -10,6 +10,8 @@ import CheckmarkIcon from "grommet/components/icons/base/Checkmark";
 import Button from "grommet/components/Button";
 import Menu from "grommet/components/Menu";
 import Table from "grommet/components/Table";
+import Anchor from "grommet/components/Anchor";
+import Timestamp from "grommet/components/Timestamp";
 import TableRow from "grommet/components/TableRow";
 import { graphql, compose } from "react-apollo";
 import Toast from "grommet/components/Toast";
@@ -32,7 +34,8 @@ class InvestmentsContainer extends Component {
       getSecondData: false,
       currentUser: "None",
       isLoading: true,
-      investments: []
+      investments: [],
+      open_trades: []
     };
   }
 
@@ -65,16 +68,16 @@ class InvestmentsContainer extends Component {
         )
         .then(result => {
           this.setState({
-            currentUser: result.data.data.getCurrentUser[0],
+            currentUser: result.data.data.getCurrentUser[0]
           });
         })
         .catch(result => {
           this.setState({
-            currentUser: "None",
+            currentUser: "None"
           });
         });
 
-      const INVESTMENTS_QUERY = `{ getInvestments { id user { id name } amount created_on } }`;
+      const INVESTMENTS_QUERY = `{ getInvestments { id user { id name } price created_at } }`;
 
       axiosGitHubGraphQL
         .post(
@@ -87,20 +90,35 @@ class InvestmentsContainer extends Component {
         )
         .then(result => {
           this.setState({
-            investments: result.data.data.getInvestments,
-            getSecondData: true,
-            getData: true,
-            isLoading: false
+            investments: result.data.data.getInvestments
           });
         })
-        .catch(result => {
-          this.setState({
-            investments: [],
-            getData: true,
-            isLoading: false
-          });
+
+      const OPEN_TRADES_QUERY = `{ getOpenTrades(limit: 20) { id user { id name } trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
+          }`,
+          { query: OPEN_TRADES_QUERY }
+        )
+        .then(result => {
+          this.setState({ open_trades: result.data.data.getOpenTrades,
+          isLoading: false });
+        })
+        .catch(error => {
+          this.setState({ isLoading: false });
         });
     }
+  }
+
+  toggleOfferCompleted() {
+    this.setState({
+      offerCompleted: !this.state.offerCompleted
+    });
   }
 
   render() {
@@ -132,19 +150,65 @@ class InvestmentsContainer extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                  {this.state.investments.map(investment => {
-                    <TableRow>
-                      <td>#{investment.id}</td>
-                      <td><Anchor href={`/people/${investment.user.id}`} label={investment.user.name}/></td>
-                      <td>{investment.amount}</td>
-                      <td className="secondary">{investment.created_on}</td>
-                    </TableRow>
-                  })}
+                    {this.state.investments.map(investment => {
+                      return (
+                        <TableRow>
+                          <td>#{investment.id}</td>
+                          <td>
+                            <Anchor
+                              href={`/people/${investment.user.id}`}
+                              label={investment.user.name}
+                            />
+                          </td>
+                          <td>${investment.price}</td>
+                          <td className="secondary"><Timestamp value={investment.created_at} /></td>
+                        </TableRow>
+                      )
+                    })}
                   </tbody>
                 </Table>
               )}
               {this.state.investments.length === 0 && (
                 <Paragraph>You have made no investments yet.</Paragraph>
+              )}
+              <Heading tag="h2" align="center">
+                Open Orders
+              </Heading>
+              {this.state.open_trades.length > 0 && (
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Trade Type</th>
+                      <th>Investment</th>
+                      <th>Shares</th>
+                      <th>Share Price</th>
+                      <th>Price</th>
+                      <th />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.open_trades.map(trade => {
+                      return (
+                        <TableRow>
+                          <td>{trade.trade_type}</td>
+                          <td>
+                            <Anchor
+                              href={`/people/${trade.user.id}`}
+                              label={trade.user.name}
+                            />
+                          </td>
+                          <td>{trade.shares}</td>
+                          <td>${trade.share_price}</td>
+                          <td>${trade.price}</td>
+                          <td><Anchor onClick={() => this._completeOffer(trade.id)} label="Delete"/></td>
+                        </TableRow>
+                      )
+                    })}
+                  </tbody>
+                </Table>
+              )}
+              {this.state.open_trades.length === 0 && (
+                <Paragraph>You have no open secondary market orders.</Paragraph>
               )}
               <Footer align="center" justify="center">
                 <Menu inline direction="row" responsive={false}>
@@ -158,9 +222,81 @@ class InvestmentsContainer extends Component {
             </MainContent>
           </FullSection>
         </MainBox>
+        {this.state.offerCompleted == true && (
+          <Toast
+            status="ok"
+            key={1}
+            onClose={() => {
+              this.toggleOfferCompleted();
+            }}
+          >
+            Your offer has been canceled.
+          </Toast>
+        )}
       </div>
     );
   }
+
+  _completeOffer = async function(id) {
+    this.setState({
+      shares_field: "",
+      errors: ""
+    });
+    await this.props
+      .closeOrder({
+        variables: {
+          id
+        }
+      })
+      .catch(res => {
+        const errors = res.graphQLErrors.map(error => error);
+        this.setState({ errors });
+      });
+    if (this.state.errors) {
+      {
+        this.state.errors.map(error =>
+          this.setState({ [error.field]: error.message })
+        );
+      }
+      this.toggleErrorToast();
+    }
+    if (!this.state.errors) {
+      var axiosGitHubGraphQL = axios.create({
+        baseURL: "https://jamesg.herokuapp.com/graphql"
+      });
+
+    const OPEN_TRADES_QUERY = `{ getOpenTrades(limit: 20) { id user { id name } trade_type shares price share_price created_at } }`;
+
+    axiosGitHubGraphQL
+      .post(
+        `${
+          process.env.NODE_ENV === "development"
+            ? "https://personly-api.herokuapp.com/graphql"
+            : "https://personly-api.herokuapp.com/graphql"
+        }`,
+        { query: OPEN_TRADES_QUERY }
+      )
+      .then(result => {
+        this.setState({ open_trades: result.data.data.getOpenTrades,
+        isLoading: false });
+      })
+      .catch(error => {
+        this.setState({ isLoading: false });
+      });
+      this.toggleOfferCompleted();
+    }
+  };
 }
 
-export default InvestmentsContainer;
+const CLOSE_ORDER = gql`
+  mutation CloseOrder($id: String!) {
+    closeOrder(id: $id) {
+      id
+    }
+  }
+`;
+
+
+export default compose(
+  graphql(CLOSE_ORDER, { name: "closeOrder" })
+)(InvestmentsContainer);

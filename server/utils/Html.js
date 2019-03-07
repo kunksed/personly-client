@@ -26,6 +26,11 @@ function Html({ content, state, scriptHash, vendorHash, cssHash, styles }) {
         <meta property="twitter:description" content="" />
         <meta property="twitter:image" content="https://images.unsplash.com/photo-1518600506278-4e8ef466b810?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=858391bd28bf4aadaa5b3e0750edb485&auto=format&fit=crop&w=1293&q=80" />
         <script src="https://js.stripe.com/v3/"></script>
+        <script src="https://browser.sentry-cdn.com/4.6.4/bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.ravenjs.com/3.26.4/raven.min.js" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+          Raven.config('https://25a9ab9f95ac4b3d9b7b3e85a75a1d96@sentry.io/1409599', { release: '0-0-0', environment: 'production' }).install()
+        </script>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Raleway:400,300,700|Lato:400,300,700" rel="stylesheet" type="text/css" />
         <link href={`${cssHash}`} rel="stylesheet" />
         <style dangerouslySetInnerHTML={{ __html: styles }} />

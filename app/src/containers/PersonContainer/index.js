@@ -12,12 +12,15 @@ import Timestamp from "grommet/components/Timestamp";
 import Paragraph from "grommet/components/Paragraph";
 import FormField from "grommet/components/FormField";
 import FormFields from "grommet/components/FormFields";
+import Table from "grommet/components/Table";
+import TableRow from "grommet/components/TableRow";
 import Tabs from "grommet/components/Tabs";
 import Tab from "grommet/components/Tab";
 import Button from "grommet/components/Button";
 import Header from "grommet/components/Header";
 import Columns from "grommet/components/Columns";
 import Select from "grommet/components/Select";
+import Markdown from "grommet/components/Markdown";
 import Footer from "grommet/components/Footer";
 import Menu from "grommet/components/Menu";
 import Layer from "grommet/components/Layer";
@@ -200,6 +203,27 @@ class PersonContainer extends Component {
             isLoading: false
           });
         });
+
+      const OPEN_TRADES_QUERY = `{ getOpenTrades(limit: 20,
+        id: ${
+        this.props.props.params.id
+      }) { id trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
+          }`,
+          { query: OPEN_TRADES_QUERY }
+        )
+        .then(result => {
+          this.setState({ open_trades: result.data.data.getOpenTrades });
+        })
+        .catch(error => {
+          this.setState({ open_trades: [] });
+        });
     }
   }
 
@@ -212,6 +236,12 @@ class PersonContainer extends Component {
   toggleInvestToast() {
     this.setState({
       investToast: !this.state.investToast
+    });
+  }
+
+  toggleOrderCreated() {
+    this.setState({
+      orderCreated: !this.state.orderCreated
     });
   }
 
@@ -247,6 +277,14 @@ class PersonContainer extends Component {
     var yesterday_data = this.state.yesterday_trades.map(function(vote) {
       var date = Date.parse(vote.created_at);
       return [date, parseFloat(vote.share_price)];
+    });
+
+    var buy_trades = this.state.open_trades.filter(trade => {
+      return trade ? trade.trade_type == "Buy" : null;
+    });
+
+    var sell_trades = this.state.open_trades.filter(trade => {
+      return trade ? trade.trade_type == "Sell" : null;
     });
 
     const options = {
@@ -296,14 +334,14 @@ class PersonContainer extends Component {
             </Box>
           </Hero>
           <Section align="center" justify="center">
-            <Tabs>
-              <Tab title='About'>
-                <Columns size="large" justify="center">
+            <Tabs justify="left">
+              <Tab title="About">
+                <Columns size="large" justify="center" pad="large">
                   <Box>
                     <Title align="left" tag="h2">
                       About
                     </Title>
-                    <Paragraph>{this.state.user.listing_description}</Paragraph>
+                    <Markdown content={this.state.user.listing_description} />
                   </Box>
                   <Box>
                     <Title align="left" tag="h2">
@@ -315,23 +353,25 @@ class PersonContainer extends Component {
                       options={options}
                     />
                     {data.length > 0 && (
-                      <Title tag="h1" align="center">
+                      <Title tag="h1" align="center" justify="center">
                         ${data[0][1]}
                       </Title>
                     )}
                     {data.length > 0 && (
-                      <Title tag="h4" align="center">
-                        Market cap: ${this.state.user.shares_issued * data[0][1]}
+                      <Title tag="h4" align="center" justify="center">
+                        Market cap: $
+                        {this.state.user.shares_issued * data[0][1]}
                       </Title>
                     )}
                     {data.length === 0 && (
-                      <Title tag="h4" align="center">
+                      <Title tag="h4" align="center" justify="center">
                         Market cap: $0
                       </Title>
                     )}
                     {new_data.length > 1 && (
                       <Box align="center" justify="center">
-                        {new_data[0][1] - new_data[new_data.length - 1][1] > 0 && (
+                        {new_data[0][1] - new_data[new_data.length - 1][1] >
+                          0 && (
                           <Box colorIndex="ok" pad="small">
                             <Anchor>
                               +$
@@ -348,7 +388,8 @@ class PersonContainer extends Component {
                             </Anchor>
                           </Box>
                         )}
-                        {new_data[0][1] - new_data[new_data.length - 1][1] < 0 && (
+                        {new_data[0][1] - new_data[new_data.length - 1][1] <
+                          0 && (
                           <Box colorIndex="critical" pad="small">
                             <Anchor>
                               -$
@@ -436,8 +477,8 @@ class PersonContainer extends Component {
                   </Box>
                 </Columns>
               </Tab>
-              <Tab title='Questions'>
-                <Columns size="large" justify="center">
+              <Tab title="Questions">
+                <Columns size="large" justify="center" pad="large">
                   <Box>
                     <Title align="center" tag="h2">
                       Questions
@@ -451,15 +492,21 @@ class PersonContainer extends Component {
                       <div>
                         {this.state.questions.map(question => {
                           if (this.state.votes.length > 1) {
-                            var question_votes = this.state.votes.filter(function(
+                            var question_votes = this.state.votes.filter(
+                              function(vote) {
+                                return vote
+                                  ? vote.question.id === question.id
+                                  : null;
+                              }
+                            );
+                            var no_votes = question_votes.filter(function(
                               vote
                             ) {
-                              return vote ? vote.question.id === question.id : null;
-                            });
-                            var no_votes = question_votes.filter(function(vote) {
                               return vote ? vote.vote_type === "No" : null;
                             });
-                            var yes_votes = question_votes.filter(function(vote) {
+                            var yes_votes = question_votes.filter(function(
+                              vote
+                            ) {
                               return vote ? vote.vote_type === "Yes" : null;
                             });
                             var abstain_votes = question_votes.filter(function(
@@ -470,20 +517,24 @@ class PersonContainer extends Component {
                             var no_votes_array_new = [];
                             var yes_votes_array_new = [];
                             var abstain_votes_array_new = [];
-                            var no_votes_question = no_votes.map(function(vote) {
+                            var no_votes_question = no_votes.map(function(
+                              vote
+                            ) {
                               no_votes_array_new.push(vote.shares);
                               return vote.shares;
                             });
-                            var yes_votes_question = yes_votes.map(function(vote) {
+                            var yes_votes_question = yes_votes.map(function(
+                              vote
+                            ) {
                               yes_votes_array_new.push(vote.shares);
                               return vote.shares;
                             });
-                            var abstain_votes_question = abstain_votes.map(function(
-                              vote
-                            ) {
-                              abstain_votes_array_new.push(vote.shares);
-                              return vote.shares;
-                            });
+                            var abstain_votes_question = abstain_votes.map(
+                              function(vote) {
+                                abstain_votes_array_new.push(vote.shares);
+                                return vote.shares;
+                              }
+                            );
                             var no_vote_count = no_votes_array_new.reduce(
                               (vote, i) => {
                                 return i + vote;
@@ -503,7 +554,9 @@ class PersonContainer extends Component {
                               0
                             );
                             var vote_count =
-                              no_vote_count + yes_vote_count + abstain_vote_count;
+                              no_vote_count +
+                              yes_vote_count +
+                              abstain_vote_count;
                             if (yes_vote_count > 0) {
                               var yes_question_votes_total =
                                 (yes_vote_count / vote_count) * 100;
@@ -534,8 +587,8 @@ class PersonContainer extends Component {
                                   <div>
                                     {question.approved === "true" && (
                                       <Heading tag="h3">
-                                        <Status value="ok" /> Q: {question.title}{" "}
-                                        Closed{" "}
+                                        <Status value="ok" /> Q:{" "}
+                                        {question.title} Closed{" "}
                                         <Timestamp
                                           value={question.closes}
                                           fields="date"
@@ -557,8 +610,8 @@ class PersonContainer extends Component {
                                 {!question.approved && (
                                   <div>
                                     <Heading tag="h3">
-                                      <Status value="unknown" /> Q: {question.title}{" "}
-                                      Closes{" "}
+                                      <Status value="unknown" /> Q:{" "}
+                                      {question.title} Closes{" "}
                                       <Timestamp
                                         value={question.closes}
                                         fields="date"
@@ -568,13 +621,17 @@ class PersonContainer extends Component {
                                 )}
                                 <Anchor href={`/questions/${question.id}`}>
                                   [ Yes:{" "}
-                                  {parseFloat(yes_question_votes_total).toFixed(2)}%
-                                  | No:{" "}
-                                  {parseFloat(no_question_votes_total).toFixed(2)}%
-                                  | Abstain:{" "}
-                                  {parseFloat(abstain_question_votes_total).toFixed(
+                                  {parseFloat(yes_question_votes_total).toFixed(
                                     2
                                   )}
+                                  % | No:{" "}
+                                  {parseFloat(no_question_votes_total).toFixed(
+                                    2
+                                  )}
+                                  % | Abstain:{" "}
+                                  {parseFloat(
+                                    abstain_question_votes_total
+                                  ).toFixed(2)}
                                   % ] Read more
                                 </Anchor>
                               </Box>
@@ -599,7 +656,10 @@ class PersonContainer extends Component {
                         {this.state.updates.map(update => {
                           return (
                             <Box>
-                              <Timestamp value={update.created_on} fields="date" />
+                              <Timestamp
+                                value={update.created_on}
+                                fields="date"
+                              />
                               <div>
                                 <Heading tag="h3">{update.title}</Heading>
                               </div>
@@ -611,6 +671,239 @@ class PersonContainer extends Component {
                         })}
                       </div>
                     )}
+                  </Box>
+                </Columns>
+              </Tab>
+              <Tab title="Exchange">
+                <Columns
+                  size="large"
+                  align="center"
+                  justify="center"
+                  className={styles.bottomColumn}
+                >
+                  <Box align="left" margin="small" justify="center">
+                    <div>
+                      <Heading tag="h3">Buy shares</Heading>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>Shares</th>
+                            <th>Price per Share</th>
+                            <th>Trade Number</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <TableRow>
+                            <td>
+                              <FormField
+                                label="Trade Number *"
+                                htmlFor="name"
+                                className={styles.formField}
+                                error={
+                                  this.state.shares_field
+                                    ? this.state.shares_field
+                                    : ""
+                                }
+                              >
+                                <input
+                                  required
+                                  id="shares"
+                                  name="shares"
+                                  defaultValue={this.state.trade_id}
+                                  type="number"
+                                  onChange={e =>
+                                    this.setState({
+                                      trade_id: e.target.value
+                                    })
+                                  }
+                                  className={styles.input}
+                                />
+                              </FormField>
+                            </td>
+                            <td />
+                            <td>
+                              <Button
+                                label="Buy"
+                                style={{ marginTop: 10, marginLeft: 5 }}
+                                onClick={() => {
+                                  this._completeOffer();
+                                }}
+                                icon={<CheckmarkIcon />}
+                              />
+                            </td>
+                          </TableRow>
+                          {buy_trades.length === 0 && (
+                            <Paragraph>
+                              There are no secondary buy orders available right
+                              now.
+                            </Paragraph>
+                          )}
+                          {buy_trades.map(trades => {
+                            return (
+                              <TableRow>
+                                <td>{trades.shares}</td>
+                                <td>
+                                  ${parseFloat(trades.share_price).toFixed(2)}
+                                </td>
+                                <td>#{trades.id}</td>
+                              </TableRow>
+                            );
+                          })}
+                        </tbody>
+                      </Table>
+                    </div>
+                    <Heading tag="h3">Create a buy offer</Heading>
+                    <Paragraph>
+                      Offer to buy shares from shareholders.
+                    </Paragraph>
+                    <Section pad={{ vertical: "medium" }}>
+                      <Box size="medium">
+                        <FormField
+                          label="Share Amount *"
+                          htmlFor="name"
+                          className={styles.formField}
+                          error={
+                            this.state.shares_field
+                              ? this.state.shares_field
+                              : ""
+                          }
+                        >
+                          <input
+                            required
+                            id="shares"
+                            name="shares"
+                            defaultValue={this.state.shares}
+                            type="number"
+                            onChange={e =>
+                              this.setState({ shares: e.target.value })
+                            }
+                            className={styles.input}
+                          />
+                        </FormField>
+                      </Box>
+                    </Section>
+                    <Footer>
+                      <Menu inline direction="row" responsive={false}>
+                        <Button
+                          label="Create Buy Offer"
+                          style={{ marginTop: 10, marginLeft: 5 }}
+                          onClick={() => {
+                            this._buyShares();
+                          }}
+                          icon={<CheckmarkIcon />}
+                        />
+                      </Menu>
+                    </Footer>
+                  </Box>
+                  <Box align="left" margin="small">
+                    <Heading tag="h3">Sell shares</Heading>
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th>Shares</th>
+                          <th>Price per Share</th>
+                          <th>Trade Number</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <TableRow>
+                          <td>
+                            <FormField
+                              label="Trade Number *"
+                              htmlFor="name"
+                              className={styles.formField}
+                              error={
+                                this.state.shares_field
+                                  ? this.state.shares_field
+                                  : ""
+                              }
+                            >
+                              <input
+                                required
+                                id="shares"
+                                name="shares"
+                                defaultValue={this.state.trade_id}
+                                type="number"
+                                onChange={e =>
+                                  this.setState({ trade_id: e.target.value })
+                                }
+                                className={styles.input}
+                              />
+                            </FormField>
+                          </td>
+                          <td />
+                          <td>
+                            <Button
+                              label="Sell"
+                              style={{ marginTop: 10, marginLeft: 5 }}
+                              onClick={() => {
+                                this._completeOffer();
+                              }}
+                              icon={<CheckmarkIcon />}
+                            />
+                          </td>
+                        </TableRow>
+                        {sell_trades.length === 0 && (
+                          <Paragraph>
+                            There are no secondary buy orders available right
+                            now.
+                          </Paragraph>
+                        )}
+                        {sell_trades.map(trades => {
+                          return (
+                            <TableRow>
+                              <td>{trades.shares}</td>
+                              <td>
+                                ${parseFloat(trades.share_price).toFixed(2)}
+                              </td>
+                              <td>#{trades.id}</td>
+                            </TableRow>
+                          );
+                        })}
+                      </tbody>
+                    </Table>
+                    <Heading tag="h3">Create a sell offer</Heading>
+                    <Paragraph>
+                      Offer to sell shares in your account to shareholders.
+                    </Paragraph>
+                    <Section pad={{ vertical: "medium" }}>
+                      <Box size="medium">
+                        <FormField
+                          label="Share Amount *"
+                          htmlFor="name"
+                          className={styles.formField}
+                          error={
+                            this.state.shares_field
+                              ? this.state.shares_field
+                              : ""
+                          }
+                        >
+                          <input
+                            required
+                            id="shares"
+                            name="shares"
+                            defaultValue={this.state.shares}
+                            type="number"
+                            onChange={e =>
+                              this.setState({ shares: e.target.value })
+                            }
+                            className={styles.input}
+                          />
+                        </FormField>
+                      </Box>
+                    </Section>
+                    <Footer>
+                      <Menu inline direction="row" responsive={false}>
+                        <Button
+                          label="Create Sell Offer"
+                          style={{ marginTop: 10, marginLeft: 5 }}
+                          onClick={() => {
+                            this._sellShares("Sell");
+                          }}
+                          icon={<CheckmarkIcon />}
+                        />
+                      </Menu>
+                    </Footer>
                   </Box>
                 </Columns>
               </Tab>
@@ -628,6 +921,28 @@ class PersonContainer extends Component {
             Your order has been submitted
           </Toast>
         )}
+        {this.state.orderCreated == true && (
+          <Toast
+            status="ok"
+            key={1}
+            onClose={() => {
+              this.toggleOrderCreated();
+            }}
+          >
+            Your order has been submitted
+          </Toast>
+        )}
+        {this.state.offerCreated == true && (
+          <Toast
+            status="ok"
+            key={1}
+            onClose={() => {
+              this.toggleOfferCreated();
+            }}
+          >
+            Your offer has been submitted
+          </Toast>
+        )}
         {this.state.errorToast == true && (
           <Toast
             status="critical"
@@ -635,7 +950,7 @@ class PersonContainer extends Component {
               this.toggleErrorToast();
             }}
           >
-            You have insufficient funds / shares to make this transaction.
+            You have insufficient funds to make this transaction.
           </Toast>
         )}
         {this.state.investModal === true && (
@@ -752,42 +1067,190 @@ class PersonContainer extends Component {
         baseURL: "https://personly-api.herokuapp.com/graphql"
       });
 
-      const TRADES_QUERY = `{ getTrades { id trade_type shares price share_price created_at } }`;
+      const OPEN_TRADES_QUERY = `{ getOpenTrades(limit: 20) { id trade_type shares price share_price created_at } }`;
 
       axiosGitHubGraphQL
-        .post("https://personly-api.herokuapp.com/graphql", {
-          query: TRADES_QUERY
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
+          }`,
+          { query: OPEN_TRADES_QUERY }
+        )
+        .then(result => {
+          this.setState({ open_trades: result.data.data.getOpenTrades });
         })
+        .catch(error => {
+          this.setState({ open_trades: [] });
+        });
+      this.toggleInvestToast();
+      this.toggleInvestModal();
+      location.reload();
+    }
+  };
+
+  _buyShares = async function() {
+    const new_shares = this.state.shares;
+    const shares = parseInt(new_shares);
+    const trade_type = "Buy";
+    const user = parseInt(this.props.props.params.id);
+    this.setState({
+      shares_field: "",
+      errors: ""
+    });
+    await this.props
+      .placeSecondaryOrder({
+        variables: {
+          shares,
+          trade_type,
+          user
+        }
+      })
+      .catch(res => {
+        const errors = res.graphQLErrors.map(error => error);
+        this.setState({ errors });
+      });
+    if (this.state.errors) {
+      {
+        this.state.errors.map(error =>
+          this.setState({ [error.field]: error.message })
+        );
+      }
+      this.toggleErrorToast();
+    }
+    if (!this.state.errors) {
+      var axiosGitHubGraphQL = axios.create({
+        baseURL: "https://jamesg.herokuapp.com/graphql"
+      });
+
+      const OPEN_TRADES_QUERY = `{ getOpenTrades(limit: 20) { id trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
+          }`,
+          { query: OPEN_TRADES_QUERY }
+        )
+        .then(result => {
+          this.setState({ open_trades: result.data.data.getOpenTrades });
+        })
+        .catch(error => {
+          this.setState({ open_trades: [] });
+        });
+      this.toggleOrderCreated();
+    }
+  };
+
+  _sellShares = async function() {
+    const new_shares = this.state.shares;
+    const shares = parseInt(new_shares);
+    const trade_type = "Sell";
+    const user = parseInt(this.props.props.params.id);
+    this.setState({
+      shares_field: "",
+      errors: ""
+    });
+    await this.props
+      .placeSecondaryOrder({
+        variables: {
+          shares,
+          trade_type,
+          user
+        }
+      })
+      .catch(res => {
+        const errors = res.graphQLErrors.map(error => error);
+        this.setState({ errors });
+      });
+    if (this.state.errors) {
+      {
+        this.state.errors.map(error =>
+          this.setState({ [error.field]: error.message })
+        );
+      }
+      this.toggleErrorToast();
+    }
+    if (!this.state.errors) {
+      var axiosGitHubGraphQL = axios.create({
+        baseURL: "https://jamesg.herokuapp.com/graphql"
+      });
+
+      const OPEN_TRADES_QUERY = `{ getOpenTrades(limit: 20) { id trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "https://personly-api.herokuapp.com/graphql"
+              : "https://personly-api.herokuapp.com/graphql"
+          }`,
+          { query: OPEN_TRADES_QUERY }
+        )
+        .then(result => {
+          this.setState({ open_trades: result.data.data.getOpenTrades });
+        })
+        .catch(error => {
+          this.setState({ open_trades: [] });
+        });
+
+      this.toggleOrderCreated();
+    }
+  };
+
+  _completeOffer = async function() {
+    const id = this.state.trade_id;
+    this.setState({
+      shares_field: "",
+      errors: ""
+    });
+    await this.props
+      .completeOrder({
+        variables: {
+          id
+        }
+      })
+      .catch(res => {
+        const errors = res.graphQLErrors.map(error => error);
+        this.setState({ errors });
+      });
+    if (this.state.errors) {
+      {
+        this.state.errors.map(error =>
+          this.setState({ [error.field]: error.message })
+        );
+      }
+      this.toggleErrorToast();
+    }
+    if (!this.state.errors) {
+
+  var axiosGitHubGraphQLAuth = axios.create({
+    baseURL: "https://jamesg.herokuapp.com/graphql",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("auth_token")}`
+    }
+  });
+      var axiosGitHubGraphQLAuth = axios.create({
+        baseURL: "https://personly-api.herokuapp.com/graphql"
+      });
+
+      const TRADES_QUERY = `{ getTrades(user: ${
+        this.props.props.params.id
+      }) { id trade_type shares price share_price created_at } }`;
+
+      axiosGitHubGraphQL
+        .post("https://jamesg.herokuapp.com/graphql", { query: TRADES_QUERY })
         .then(result => {
           this.setState({ trades: result.data.data.getTrades, getData: true });
         })
         .catch(error => {
           this.setState({ trades: [], getData: true });
         });
-
-      var axiosGitHubGraphQLAuth = axios.create({
-        baseURL: "https://personly-api.herokuapp.com/graphql",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`
-        }
-      });
-
-      const THIRD_QUERY = `{ getCurrentUser { id name balance shares } }`;
-
-      axiosGitHubGraphQLAuth
-        .post("https://personly-api.herokuapp.com/graphql", {
-          query: THIRD_QUERY
-        })
-        .then(result => {
-          this.setState({
-            currentUser: result.data.data.getCurrentUser[0],
-            getData: true
-          });
-        })
-        .catch(error => {
-          this.setState({ currentUser: "none", getData: true });
-        });
-      this.toggleInvestToast();
+      this.toggleOfferCreated();
+      location.reload();
     }
   };
 }
@@ -800,6 +1263,24 @@ const PLACE_ORDER = gql`
   }
 `;
 
-export default compose(graphql(PLACE_ORDER, { name: "placeOrder" }))(
-  PersonContainer
-);
+const PLACE_SECONDARY_ORDER = gql`
+  mutation CreateSecondaryTrade($trade_type: String!, $shares: Int, $user: Int) {
+    createSecondaryTrade(trade_type: $trade_type, shares: $shares, user: $user) {
+      id
+    }
+  }
+`;
+
+const COMPLETE_ORDER = gql`
+  mutation CompleteOrder($id: String!) {
+    completeOrder(id: $id) {
+      id
+    }
+  }
+`;
+
+export default compose(
+  graphql(PLACE_ORDER, { name: "placeOrder" }),
+  graphql(PLACE_SECONDARY_ORDER, { name: "placeSecondaryOrder" }),
+  graphql(COMPLETE_ORDER, { name: "completeOrder" }),
+)(PersonContainer);
