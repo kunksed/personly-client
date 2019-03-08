@@ -683,6 +683,9 @@ class PersonContainer extends Component {
                 >
                   <Box align="left" margin="small" justify="center">
                     <div>
+                      <Paragraph align="center" justify="center">
+                        Note: A trading fee of 5% is applied per share purchased.
+                      </Paragraph>
                       <Heading tag="h3">Buy shares</Heading>
                       <Table>
                         <thead>
@@ -966,7 +969,7 @@ class PersonContainer extends Component {
                 </Header>
                 <Section pad={{ vertical: "medium" }}>
                   <Paragraph align="center" justify="center">
-                    Note: A trading fee of $0.05 is applied per share purchased
+                    Note: A trading fee of 5% is applied per share purchased.
                   </Paragraph>
                   <Box size="medium">
                     <FormField
