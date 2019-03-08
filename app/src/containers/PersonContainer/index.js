@@ -966,7 +966,7 @@ class PersonContainer extends Component {
                 </Header>
                 <Section pad={{ vertical: "medium" }}>
                   <Paragraph align="center" justify="center">
-                    Note: A trading fee of $0.02 is applied per share purchased
+                    Note: A trading fee of $0.05 is applied per share purchased
                   </Paragraph>
                   <Box size="medium">
                     <FormField

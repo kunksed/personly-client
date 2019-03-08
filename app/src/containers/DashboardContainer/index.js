@@ -167,7 +167,7 @@ class DashboardContainer extends Component {
 
     if (this.state.shareholders.length > 0) {
       for (var item, i = 0; (item = this.state.shareholders[i++]); ) {
-        var sharesIssued = parseFloat(totalShares) + parseFloat(item.shares);
+        var sharesIssued = parseFloat(sharesIssued) + parseFloat(item.shares);
       }
     }
 
