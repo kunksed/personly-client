@@ -1,8 +1,7 @@
-# JamesG Trading Client
-JamesG Trading is a platform developed by James Gallagher that facilitates and processes investments in him, as a publicly traded person.
+# Personly Trading Platform
+Personly is a platform developed by James Gallagher that allows anyone to become a publicly traded person and process investments in themselves.
 
-If you are interested in the accompanying API, you can view it [here](https://github.com/jamesgallagher432/jamesg-trading-api).
-You can also view the Command Line Interface (CLI) for the JamesG Trading platform [here](https://github.com/jamesgallagher432/jamesg-trading-cli).
+You can view the accompanying API for this project [here](https://github.com/jamesgallagher432/jamesg-trading-api).
 
 # Documentation
 
@@ -11,7 +10,7 @@ There are two options for installation:
 
 1. **Clone repo**
 
-    `git clone https://github.com/jamesgallagher432/jamesg-trading-client.git`
+    `git clone https://github.com/jamesgallagher432/personly-client.git`
 
 2. **Install dependencies**
 
@@ -173,5 +172,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](https://gi
 ## Acknowledgments
 
 Thank you to the [Scalable React Boilerplate](https://github.com/scalable-react/scalable-react-boilerplate) community for developing such a useful and swift starting point for building an application with React, Grommet, and GraphQL. This README includes content from the Scalable React Boilerplate to make it easy for you to understand how to get started with this project.
-
-Thanks to [Mike Merrill](https://twitter.com/kmikeym), the world's first publicly traded person, for providing me with advice on how to execute this project, and being a true inspiration to me.
