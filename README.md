@@ -1,4 +1,6 @@
 # Personly Trading Platform
+[![CircleCI](https://circleci.com/gh/jamesgallagher432/personly-client.svg?style=svg&circle-token=ccf69a9626f2b0a51f065dc25a950eb26954e57d)](https://circleci.com/gh/jamesgallagher432/personly-client)
+
 Personly is a platform developed by James Gallagher that allows anyone to become a publicly traded person and process investments in themselves.
 
 You can view the accompanying API for this project [here](https://github.com/jamesgallagher432/jamesg-trading-api).
